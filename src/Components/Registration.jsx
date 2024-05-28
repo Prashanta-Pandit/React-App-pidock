@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState} from 'react'; // useState and useEffect hooks.
 import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
@@ -8,11 +8,19 @@ import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-fire
 
 export default function Registration(){
 
+/***********************************************************/
+    const navigate = useNavigate();
     // navigate to create page
-    const goToCreatePage = useNavigate();
     function handleIHaveAccount(){
-        goToCreatePage('/');  // this is a path for Sign in page in the App.jsx
+        navigate('/');  // this is a path for Sign in page in the App.jsx
     };
+
+    // handle redirection to Portal after a signin.
+    function redirectToPortal(){
+        navigate('/portal');
+        
+    }
+/********************************************************* */
 
     // users inputs
     const [firstName, setFirstName] = useState('');
@@ -25,8 +33,36 @@ export default function Registration(){
     function handleCreateAccountOnSubmit(e){
         e.preventDefault();
 
-       // if only the users put the same password in the form, we direct to submit the form and store the data in the firestore. 
-       if(setPasswordRegistration == setVerify_PasswordRegistration){
+      // firebase create user with email and password. 
+        createUserWithEmailAndPassword(auth, emailRegistration, passwordRegistration)
+        .then((userCredential)=>{
+          //sign up successfully
+            var user = userCredential.user;
+            const userLoginId = user.uid; // get user login Id. 
+        
+            //adding user inputs in the firestore. add all these items in firestore.
+            return addDoc(fireStoreCollectionReference, {
+                        userLogiId: userLoginId,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: emailRegistration
+                    })
+            })
+            .then(()=>{
+                // redirect user to the Portal.
+                redirectToPortal();
+            })
+            .catch((error) => {
+                // Handle sign-up errors
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error("Sign up error:", errorMessage);
+            })
+
+    {/* 
+
+      // if only the users put the same password in the form, we direct to submit the form and store the data in the firestore. 
+       if(setPasswordRegistration === setVerify_PasswordRegistration){
              
              // firebase create user with email and password. 
              createUserWithEmailAndPassword(auth, emailRegistration, passwordRegistration)
@@ -59,6 +95,9 @@ export default function Registration(){
           console.log(setPasswordRegistration);
           console.log(setVerify_PasswordRegistration);
        }
+    
+    
+    */}
        
     }
     return(

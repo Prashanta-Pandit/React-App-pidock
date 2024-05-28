@@ -7,20 +7,26 @@ import { signInWithEmailAndPassword, onAuthStateChanged  } from 'https://www.gst
 
 export default function SignIn(){
 
+    //****************************************************** */
+    const navigate = useNavigate(); // use navigate 
+
     // handle navigation to create account page.
-    const toCreatePage = useNavigate();
     function handleCreateAccount(){
-        toCreatePage('./register');  // this is a path for Registration Page in the App.jsx
+        navigate('./register');  // this is a path for Registration Page in the App.jsx
     }
     
-
     //handle navigation to forgot password page.
-    const toForgotPasswordPage = useNavigate();
-
     function handleForgotPassword(event){
         event.preventDefault(); // Prevents the default form submission
-        toForgotPasswordPage('./forgotPassword');
+        navigate('./forgotPassword');
     }
+
+    // handle redirection to Portal after a signin.
+    function redirectToPortal(){
+        navigate('/portal');
+    
+    }
+    /********************************************************* */
 
     //use useState :
     const [email, setEmail] = useState('');
@@ -31,24 +37,23 @@ export default function SignIn(){
        e.preventDefault();
        signInWithEmailAndPassword(auth, email, password)
        .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log('User logged in:', user);
-        // You can redirect or do any action after successful login
-        window.location.href = 'https://www.magpies.online/';
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error('Login error:', errorCode, errorMessage);
-        // Display error message to user
-        if (errorCode === 'auth/invalid-credential') {
-            alert('invalid email or password.');
-        }
+           // Signed in
+           const user = userCredential.user;
+           console.log('User logged in:', user);
+           // You can redirect or do any action after successful login
+           redirectToPortal();
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Login error:', errorCode, errorMessage);
+            // Display error message to user
+            if (errorCode === 'auth/invalid-credential') {
+                alert('invalid email or password.');
+            }
       });
     }
     
-
     return(
         <>
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
