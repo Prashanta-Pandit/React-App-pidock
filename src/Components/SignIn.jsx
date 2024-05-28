@@ -1,19 +1,53 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
 
-export default function SignIn(){
-    const toCreatePage = useNavigate();
+//import from firebase
+import { auth } from './FirebaseInitialisation';
+import { signInWithEmailAndPassword, onAuthStateChanged  } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
+export default function SignIn(){
+
+    // handle navigation to create account page.
+    const toCreatePage = useNavigate();
     function handleCreateAccount(){
         toCreatePage('./register');  // this is a path for Registration Page in the App.jsx
     }
+    
 
+    //handle navigation to forgot password page.
     const toForgotPasswordPage = useNavigate();
 
     function handleForgotPassword(event){
         event.preventDefault(); // Prevents the default form submission
         toForgotPasswordPage('./forgotPassword');
     }
+
+    //use useState :
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    //handle Sigin button and authenticate on firebase.
+    function handleSignInOnSubmit(e){
+       e.preventDefault();
+       signInWithEmailAndPassword(auth, email, password)
+       .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log('User logged in:', user);
+        // You can redirect or do any action after successful login
+        window.location.href = 'https://www.magpies.online/';
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('Login error:', errorCode, errorMessage);
+        // Display error message to user
+        if (errorCode === 'auth/invalid-credential') {
+            alert('invalid email or password.');
+        }
+      });
+    }
+    
 
     return(
         <>
@@ -23,13 +57,14 @@ export default function SignIn(){
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6">
+                {/* handle the onsubmit on form. */}
+                    <form className="space-y-6" onSubmit={handleSignInOnSubmit}>
                         <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                             </div>
                             <div className="mt-2">
-                                <input id="email" name="email" type="email" autoComplete="current-email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                                <input id="email" name="email" type="email" autoComplete="current-email" required onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                             </div>
                         </div>
 
@@ -44,7 +79,7 @@ export default function SignIn(){
                                 </button>
                             </div>
                             <div className="mt-2">
-                                <input id="password" name="password" type="password" autoComplete="current-password" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                                <input id="password" name="password" type="password" autoComplete="current-password" required onChange={(e) => setPassword(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                             </div>
                         </div>
 
