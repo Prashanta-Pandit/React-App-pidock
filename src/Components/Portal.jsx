@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'; // useState and useEffect hooks.
-import Signout from './Signout'; // Ensure this path is correct
 
 export default function Portal() {
   const [signedInUserEmail, setSignedInUserEmail] = useState('');

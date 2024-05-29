@@ -25,7 +25,6 @@ export default function SignIn(){
     function redirectToPortal(signedInUser){
         
         localStorage.setItem('signedInUserEmail', signedInUser.email)
-        console.log('Signed in User email:',signedInUser.email);
         navigate('/portal');
     
     }
