@@ -84,14 +84,6 @@ export default function Navbar() {
                   About
                 </a>
               </li>
-              <li>
-                <a
-                  onClick={handleSignOutButton}
-                  className="block text-sm font-semibold text-gray-800 hover:text-gray-900"
-                >
-                  Signout
-                </a>
-              </li>
               {/* Add more Items later: */}
             </ul>
           </div>
