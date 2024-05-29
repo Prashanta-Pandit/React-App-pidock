@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignIn from './Components/SignIn'
 import Registration from './Components/Registration';
 import ForgotPassword from './Components/ForgotPassword';
-import Portal from './Components/Portal';
+import Portal from './Components/Portal/Portal';
 import Signout from './Components/SignOut/Signout';
 
 export default function App() {

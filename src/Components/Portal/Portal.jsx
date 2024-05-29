@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'; // useState and useEffect hooks.
+import SignoutButton from '../SignOut/SignoutButton';
 
 export default function Portal() {
   const [signedInUserEmail, setSignedInUserEmail] = useState('');
@@ -16,6 +17,7 @@ export default function Portal() {
     <>
     <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
           <p>{signedInUserEmail}, you are on the Portal now.</p>
+          <SignoutButton />
     </div>
   </>
   );

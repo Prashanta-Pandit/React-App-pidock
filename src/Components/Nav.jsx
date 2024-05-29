@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import SignOutButton from './SignOut/SignoutButton';
 
 export default function Navbar() {
-  // declare the navigate 
-  const navigate = useNavigate(); 
+  // manage the menu toggle button in Small screen.
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   function toggleMenu(){
     setIsMenuOpen(!isMenuOpen);
   }
-
-
   return (
     <>
       <div className="fixed top-0 w-full bg-gray-200 shadow-md">
@@ -48,11 +42,9 @@ export default function Navbar() {
               {/* Add more Items later: */}
             </ul>
           </div>
-          {/* Signout Button */}
           <div className="hidden lg:block">
-            <SignOutButton />
+            {/* add any button here */}
           </div>
-          {/* End Signout Button */}
           <div className="lg:hidden">
             <svg
               onClick={toggleMenu}
