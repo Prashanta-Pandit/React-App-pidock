@@ -113,7 +113,7 @@ export default function SignIn(){
                         className="font-light text-black hover:text-slate-700 focus:outline-none mt-4" 
                         onClick={handleCreateAccount}
                     >
-                        Create account
+                        no account? create
                     </button>
                 </div>
             </div>
