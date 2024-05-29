@@ -64,8 +64,23 @@ export default function Registration() {
             .then((result) => {
                 const user = result.user;
                 console.log('User logged in with Google:', user);
-                redirectToPortalPage(user);
-            }).catch((error) => {
+
+                // Retrieve additional user information from user
+                const { displayName, email, uid } = user;
+                const [firstName, lastName] = displayName.split(" ");
+
+                // Add user information to Firestore
+                return addDoc(fireStoreCollectionReference, {
+                      userLoginId: uid, // Use UID as a unique identifier
+                      firstName: firstName,
+                      lastName: lastName,
+                      email: email
+                })
+            })
+            .then(() => {
+                redirectToPortalPage(user); // Redirect the user or perform other actions
+            })
+            .catch((error) => {
                 console.error('Google sign-in error:', error);
             });
         }
@@ -79,7 +94,7 @@ export default function Registration() {
                         onClick={handleSignInWithGoogle}
                     >
                         <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                        Sign in with Google
+                        Sign up with Google
                     </button>
                 </div>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm my-3">

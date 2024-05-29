@@ -9,7 +9,7 @@ export default function SignoutButton(){
         signOut(auth)
         .then(() => {
           
-          localStorage.removeItem('signedInUserEmail'); // removing the signed in user's email. 
+          localStorage.removeItem('signedInUserUid'); // removing the signed in unique user's id. 
           navigate('/signout'); // navigate to Signout page.
           console.log('Signed out Successfull')
     

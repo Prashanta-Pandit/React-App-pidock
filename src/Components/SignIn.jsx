@@ -20,7 +20,9 @@ export default function SignIn() {
     }
 
     function redirectToPortal(signedInUser) {
-        localStorage.setItem('signedInUserEmail', signedInUser.email)
+        // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
+        //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
+        localStorage.setItem('signedInUserUid', signedInUser.uid)
         navigate('/portal');
     }
 
