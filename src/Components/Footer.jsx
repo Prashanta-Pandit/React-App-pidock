@@ -1,13 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-export default function Footer(){
+export default function Footer() {
+  const getCurrentYear = () => {
+    return new Date().getFullYear();
+  };
+
   return (
     <>
-    <footer className="fixed bottom-0 left-0 w-full z-50 bg-black ">
-          <div className="text-center py-5">
-            <span className="ml-4 text-lg font-normal text-white ">magpies.online | All right reserved</span>
-          </div>
-     </footer>
+      <footer className="fixed bottom-0 left-0 w-full z-50 bg-black">
+        <div className="text-center py-3">
+          <span className="ml-4 text-lg font-normal text-white">
+                {getCurrentYear()} © magpies.online | All rights reserved 
+          </span>
+        </div>
+      </footer>
     </>
-  )
+  );
 }
+

@@ -33,36 +33,8 @@ export default function Registration(){
     function handleCreateAccountOnSubmit(e){
         e.preventDefault();
 
-      // firebase create user with email and password. 
-        createUserWithEmailAndPassword(auth, emailRegistration, passwordRegistration)
-        .then((userCredential)=>{
-          //sign up successfully
-            var user = userCredential.user;
-            const userLoginId = user.uid; // get user login Id. 
-        
-            //adding user inputs in the firestore. add all these items in firestore.
-            return addDoc(fireStoreCollectionReference, {
-                        userLogiId: userLoginId,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: emailRegistration
-                    })
-            })
-            .then(()=>{
-                // redirect user to the Portal.
-                redirectToPortal();
-            })
-            .catch((error) => {
-                // Handle sign-up errors
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.error("Sign up error:", errorMessage);
-            })
-
-    {/* 
-
       // if only the users put the same password in the form, we direct to submit the form and store the data in the firestore. 
-       if(setPasswordRegistration === setVerify_PasswordRegistration){
+       if(passwordRegistration === verify_PasswordRegistration){
              
              // firebase create user with email and password. 
              createUserWithEmailAndPassword(auth, emailRegistration, passwordRegistration)
@@ -83,21 +55,23 @@ export default function Registration(){
                 // redirect user to the another page.
                 window.location.href = 'https://www.magpies.online/';
             })
-            .catch((error) => {
+           .catch((error) => {
                 // Handle sign-up errors
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.error("Sign up error:", errorMessage);
+                if(errorMessage){
+                   alert('Email address is already in use. Please use different email to get started.');
+                }
+  
             })
 
        } else{
           alert('Passwords doesnot match.')
-          console.log(setPasswordRegistration);
-          console.log(setVerify_PasswordRegistration);
+          console.log(passwordRegistration);
+          console.log(verify_PasswordRegistration);
        }
     
-    
-    */}
        
     }
     return(
