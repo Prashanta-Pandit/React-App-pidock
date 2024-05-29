@@ -1,8 +1,12 @@
 import React, { useState } from 'react'; // useState and useEffect hooks.
 import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
-import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+
+//favicon icons and fontawesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export default function Registration() {
     const navigate = useNavigate();
@@ -53,11 +57,36 @@ export default function Registration() {
         }
     }
 
+        // Function to handle signing in with Google
+        function handleSignInWithGoogle() {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                console.log('User logged in with Google:', user);
+                redirectToPortalPage(user);
+            }).catch((error) => {
+                console.error('Google sign-in error:', error);
+            });
+        }
+
     return (
         <>
-            <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="mt-24 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>
+                <button 
+                        className="mt-4 flex items-center w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={handleSignInWithGoogle}
+                    >
+                        <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                        Sign in with Google
+                    </button>
+                </div>
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm my-3">
+                    <a className="text-center text-sm font-light text-gray-600"> Or </a>
+                </div>
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

@@ -1,77 +1,73 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
-
-//import from firebase
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { auth } from './FirebaseInitialisation';
-import { signInWithEmailAndPassword, onAuthStateChanged  } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
-export default function SignIn(){
+//favicon icons and fontawesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
-    //****************************************************** */
-    const navigate = useNavigate(); // use navigate 
+export default function SignIn() {
+    const navigate = useNavigate(); 
 
-    // handle navigation to create account page.
-    function handleCreateAccount(){
-        navigate('./register');  // this is a path for Registration Page in the App.jsx
+    function handleCreateAccount() {
+        navigate('./register');
     }
     
-    //handle navigation to forgot password page.
-    function handleForgotPassword(event){
-        event.preventDefault(); // Prevents the default form submission
+    function handleForgotPassword(event) {
+        event.preventDefault(); 
         navigate('./forgotPassword');
     }
 
-    // handle redirection to Portal after a signin and storing users details in local Storage.
-    function redirectToPortal(signedInUser){
-        
+    function redirectToPortal(signedInUser) {
         localStorage.setItem('signedInUserEmail', signedInUser.email)
         navigate('/portal');
-    
     }
-    /********************************************************* */
 
-
-    /********************************************************** */
-    //detect the user who is logged in and havent signed out. Redirect the page directly to portal, and skip the signin page. 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is signed in, pass user info and redirect
             redirectToPortal(user);
         } else {
-            // User is signed out
             console.log('No user is signed in.');
         }
     });
 
-    /*********************************************************** */
-
-    //use useState :
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    //handle Sigin button and authenticate on firebase.
-    function handleSignInOnSubmit(e){
-       e.preventDefault();
-       signInWithEmailAndPassword(auth, email, password)
-       .then((userCredential) => {
-           // Signed in
-           const user = userCredential.user;
-           console.log('User logged in:', user);
-           // redirect user to Portal and passdown the user details on it.
-           redirectToPortal(user);
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error('Login error:', errorCode, errorMessage);
-            // Display error message to user
-            if (errorCode === 'auth/invalid-credential') {
-                alert('invalid email or password.');
-            }
-      });
+    function handleSignInOnSubmit(e) {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                redirectToPortal(user);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error('Login error:', errorCode, errorMessage);
+                if (errorCode === 'auth/invalid-credential') {
+                    alert('Invalid email or password.');
+                }
+            });
     }
     
-    return(
+    //handle sign in with google 
+    function handleGoogleSignIn() {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                redirectToPortal(user);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error('Google sign-in error:', errorCode, errorMessage);
+            });
+    }
+
+    return (
         <>
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -79,7 +75,6 @@ export default function SignIn(){
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                {/* handle the onsubmit on form. */}
                     <form className="space-y-6" onSubmit={handleSignInOnSubmit}>
                         <div>
                             <div className="flex items-center justify-between">
@@ -97,7 +92,7 @@ export default function SignIn(){
                                     className="font-light text-black hover:text-slate-700 focus:outline-none mt-4" 
                                     onClick={handleForgotPassword}
                                 >
-                                    forgot password?
+                                    Forgot password?
                                 </button>
                             </div>
                             <div className="mt-2">
@@ -109,11 +104,24 @@ export default function SignIn(){
                             <button type="submit" className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
                         </div>
                     </form>
+
                     <button 
                         className="font-light text-black hover:text-slate-700 focus:outline-none mt-4" 
                         onClick={handleCreateAccount}
                     >
-                        no account? create
+                        No account? Create
+                    </button>
+
+                    <div className="sm:mx-auto sm:w-full sm:max-w-sm my-3">
+                         <a className="text-center text-sm font-light text-gray-600"> Or </a>
+                    </div>
+
+                    <button 
+                        className="mt-4 flex items-center w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={handleGoogleSignIn}
+                    >
+                        <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                        Sign in with Google
                     </button>
                 </div>
             </div>

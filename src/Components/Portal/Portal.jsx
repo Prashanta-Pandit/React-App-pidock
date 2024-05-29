@@ -15,7 +15,7 @@ export default function Portal() {
 
   return (
     <>
-    <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="mt-24 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
           <p>{signedInUserEmail}, you are on the Portal now.</p>
           <SignoutButton />
     </div>
