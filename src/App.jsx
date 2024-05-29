@@ -5,7 +5,7 @@ import SignIn from './Components/SignIn'
 import Registration from './Components/Registration';
 import ForgotPassword from './Components/ForgotPassword';
 import Portal from './Components/Portal';
-import Signout from './Components/Signout';
+import Signout from './Components/SignOut/Signout';
 
 export default function App() {
   return (

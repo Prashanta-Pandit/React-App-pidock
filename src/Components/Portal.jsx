@@ -14,23 +14,9 @@ export default function Portal() {
 
   return (
     <>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />      
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>You are in Portal now. {signedInUserEmail}</p>
-    </>
+    <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+          <p>{signedInUserEmail}, you are on the Portal now.</p>
+    </div>
+  </>
   );
 }
