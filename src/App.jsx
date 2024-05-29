@@ -5,6 +5,7 @@ import SignIn from './Components/SignIn'
 import Registration from './Components/Registration';
 import ForgotPassword from './Components/ForgotPassword';
 import Portal from './Components/Portal';
+import Signout from './Components/Signout';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
              <Route path="/register" element={<Registration />} />
              <Route path="/forgotPassword" element={<ForgotPassword />} />
              <Route path="/portal" element={<Portal />} />
+             <Route path='/signout' element={<Signout />} />
           </Route>
         </Routes>
       </Router>

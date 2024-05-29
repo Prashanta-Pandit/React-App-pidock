@@ -21,12 +21,30 @@ export default function SignIn(){
         navigate('./forgotPassword');
     }
 
-    // handle redirection to Portal after a signin.
-    function redirectToPortal(){
+    // handle redirection to Portal after a signin and storing users details in local Storage.
+    function redirectToPortal(signedInUser){
+        
+        localStorage.setItem('signedInUserEmail', signedInUser.email)
+        console.log('Signed in User email:',signedInUser.email);
         navigate('/portal');
     
     }
     /********************************************************* */
+
+
+    /********************************************************** */
+    //detect the user who is logged in and havent signed out. Redirect the page directly to portal, and skip the signin page. 
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, pass user info and redirect
+            redirectToPortal(user);
+        } else {
+            // User is signed out
+            console.log('No user is signed in.');
+        }
+    });
+
+    /*********************************************************** */
 
     //use useState :
     const [email, setEmail] = useState('');
@@ -40,8 +58,8 @@ export default function SignIn(){
            // Signed in
            const user = userCredential.user;
            console.log('User logged in:', user);
-           // You can redirect or do any action after successful login
-           redirectToPortal();
+           // redirect user to Portal and passdown the user details on it.
+           redirectToPortal(user);
         })
         .catch((error) => {
             const errorCode = error.code;
