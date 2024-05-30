@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 export default function Spinner(){
 
     return(
@@ -9,27 +12,8 @@ export default function Spinner(){
              className="bg-white text-xl font-bold text-gray-500 flex items-center justify-center" 
              disabled
             >
-            <svg 
-                className="animate-spin h-12 w-12 mr-4 text-gray-500" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-            >
-            <circle 
-                cx="12" 
-                cy="12" 
-                r="10" 
-                stroke="currentColor" 
-                strokeWidth="4" 
-                />
-                <path 
-                d="M4 12a8 8 0 018-8" 
-                stroke="currentColor" 
-                strokeWidth="4" 
-                strokeLinecap="round" 
-                />
-            </svg>
-           Processing...
+            <FontAwesomeIcon className='mr-5' icon={faSpinner} spinPulse size='2xl' style={{color: "#6b6b6b",}} />
+           <span className="relative">Processing...</span>
          </button>
         </>
     )
