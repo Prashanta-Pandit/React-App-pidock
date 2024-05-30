@@ -25,13 +25,20 @@ export default function SignoutButton(){
 
     return(
         <>
+        <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <button
               type="button"
               onClick={handleSignOutButton}
-              className="rounded-md bg-black mt-20 ml-80 mr-80 px-3 py-2 text-sm text-white font-bold shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+              className="rounded-md bg-black py-2 px-2 text-sm text-white font-bold shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
             >
               Signout
             </button>
+                
+          </div>
+
+        </div>
+
         </>
     )
 }
