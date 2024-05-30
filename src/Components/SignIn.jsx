@@ -123,7 +123,7 @@ export default function SignIn() {
                         onClick={handleGoogleSignIn}
                     >
                         <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                        Sign in with Google
+                        Continue with Google
                     </button>
                 </div>
             </div>
