@@ -10,6 +10,8 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 export default function SignIn() {
     const navigate = useNavigate(); 
 
+    const [loading, setLoading] = useState(false);
+
     function handleCreateAccount() {
         navigate('./register');
     }
@@ -20,6 +22,7 @@ export default function SignIn() {
     }
 
     function redirectToDashboard(signedInUser) {
+
         // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
         //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
         localStorage.setItem('signedInUserUid', signedInUser.uid)
