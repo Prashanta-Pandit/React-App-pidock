@@ -49,7 +49,7 @@ export default function SignIn() {
                 const errorMessage = error.message;
                 console.error('Login error:', errorCode, errorMessage);
                 if (errorCode === 'auth/invalid-credential') {
-                    alert('Wrong email or password. Or, if this is a google account, try sign in with google option.');
+                    alert('Wrong email or password. Or, if this is a google account, try Continue with google option.');
                 }
             });
     }
