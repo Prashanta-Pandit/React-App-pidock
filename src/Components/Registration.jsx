@@ -15,8 +15,8 @@ export default function Registration() {
         navigate('/'); // '/' from the App.jsx
     }
 
-    function redirectToPortalPage() {
-        navigate('/portal'); // '/' from the App.jsx
+    function redirectToDashboardPage() {
+        navigate('/dashboard'); // '/' from the App.jsx
     }
 
     const [firstName, setFirstName] = useState('');
@@ -43,7 +43,7 @@ export default function Registration() {
                     });
                 })
                 .then(() => {
-                    redirectToPortalPage();
+                    redirectToDashboardPage();
                 })
                 .catch((error) => {
                     var errorMessage = error.message;
@@ -65,23 +65,13 @@ export default function Registration() {
                 const user = result.user;
                 console.log('User logged in with Google:', user);
                 
-                //***** NOTE: we need to make sure that the data doesnot save double in firbase.  */
-                // Retrieve additional user information from user
-                const { displayName, email, uid } = user;
-                const [firstName, lastName] = displayName.split(" ");
-
-                // Add user information to Firestore
-                return addDoc(fireStoreCollectionReference, {
-                      userLoginId: uid, // Use UID as a unique identifier
-                      firstName: firstName,
-                      lastName: lastName,
-                      email: email
-                })
             })
             .then(() => {
-                redirectToPortalPage(user); // Redirect the user or perform other actions
+                redirectToDashboardPage(user); // Redirect the user or perform other actions
             })
             .catch((error) => {
+                var errorMessage = error.message;
+                console.log(errorMessage);
                 console.error('Google sign-in error:', error);
             });
         }

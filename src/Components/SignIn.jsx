@@ -19,16 +19,16 @@ export default function SignIn() {
         navigate('./forgotPassword');
     }
 
-    function redirectToPortal(signedInUser) {
+    function redirectToDashboard(signedInUser) {
         // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
         //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
         localStorage.setItem('signedInUserUid', signedInUser.uid)
-        navigate('/portal');
+        navigate('/dashboard');
     }
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            redirectToPortal(user);
+            redirectToDashboard(user);
         } else {
             console.log('No user is signed in.');
         }
@@ -42,14 +42,14 @@ export default function SignIn() {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                redirectToPortal(user);
+                redirectToDashboard(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.error('Login error:', errorCode, errorMessage);
                 if (errorCode === 'auth/invalid-credential') {
-                    alert('Invalid email or password.');
+                    alert('Wrong email or password. Or, if this is a google account, try sign in with google option.');
                 }
             });
     }
@@ -60,7 +60,7 @@ export default function SignIn() {
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
-                redirectToPortal(user);
+                redirectToDashboard(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
