@@ -114,8 +114,10 @@ export default function SignIn() {
                         No account? Create
                     </button>
 
-                    <div className="sm:mx-auto sm:w-full sm:max-w-sm my-3">
-                         <a className="text-center text-sm font-light text-gray-600"> Or </a>
+                    <div className="flex items-center sm:mx-auto sm:w-full sm:max-w-sm my-3">
+                        <hr className="flex-grow border-t border-gray-600"></hr>
+                        <span className="mx-2 text-center text-sm font-light text-gray-600">or</span>
+                        <hr className="flex-grow border-t border-gray-600"></hr>
                     </div>
 
                     <button 
