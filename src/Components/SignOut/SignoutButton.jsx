@@ -3,7 +3,10 @@ import {auth} from '../FirebaseInitialisation';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function SignoutButton(){
-   const navigate = useNavigate();
+
+    //use dom function, useNavigate() to naviagate to pages.
+    const navigate = useNavigate();
+    
     function handleSignOutButton(){
 
         signOut(auth)
