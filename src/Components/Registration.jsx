@@ -79,6 +79,20 @@ export default function Registration() {
         <>
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <button 
+                        className="mt-4 flex items-center w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={handleSignInWithGoogle}
+                    >
+                        <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                        Continue with Google
+                    </button>
+                </div>
+                <div className="flex items-center sm:mx-auto sm:w-full sm:max-w-sm my-3">
+                        <hr className="flex-grow border-t border-gray-600"></hr>
+                        <span className="mx-2 text-center text-sm font-light text-gray-600">or</span>
+                        <hr className="flex-grow border-t border-gray-600"></hr>
+                </div>
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>
                 </div>
 
@@ -132,20 +146,6 @@ export default function Registration() {
                     </form>
                     <button className="font-light text-black hover:text-slate-700 focus:outline-none mt-4" onClick={redirectToLoginPage}>
                         I have an account
-                    </button>
-                </div>
-                <div className="flex items-center sm:mx-auto sm:w-full sm:max-w-sm my-3">
-                        <hr className="flex-grow border-t border-gray-600"></hr>
-                        <span className="mx-2 text-center text-sm font-light text-gray-600">or</span>
-                        <hr className="flex-grow border-t border-gray-600"></hr>
-                    </div>
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <button 
-                        className="mt-4 flex items-center w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        onClick={handleSignInWithGoogle}
-                    >
-                        <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                        Continue with Google
                     </button>
                 </div>
             </div>
