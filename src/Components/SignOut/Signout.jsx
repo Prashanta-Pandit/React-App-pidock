@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 export default function Signout(){
@@ -7,7 +7,7 @@ export default function Signout(){
    function handleSignInAgainButton(){
        navigate('/');
    }
-
+   
    return(
       <>
         <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,6 +19,7 @@ export default function Signout(){
               back to Sign in
             </button>
         </div>
+
       </>
    )
 }
