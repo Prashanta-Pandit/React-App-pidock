@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CircleHelp } from 'lucide-react';
 
 export default function Navbar() {
@@ -17,7 +17,7 @@ export default function Navbar() {
               />
             </span>
           </div>
-          <div className="hidden lg:block">
+          <div>  {/** choose: hidden lg:block if you want to hide */}
             <ul className="inline-flex space-x-8">
               <li>
                 <a

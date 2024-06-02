@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart, UserRound, Settings, Menu, LogOut } from 'lucide-react'; 
+import { BarChart, UserRound, Settings, Menu, CircleChevronRight } from 'lucide-react'; 
 import SignoutButton from '../SignOut/SignoutButton';
 import Profile from './Profile';
 import UserSettings from './Settings';
@@ -9,7 +9,8 @@ import UserDashboard from './UserDashboard';
 export default function SidebarNav() {
     const [showProfile, setShowProfile] = useState(false);
     const [showUserSettings, setUserShowSettings] = useState(false);
-    const [showUserDashboard, setShowUserDashboard] = useState(false);
+    // by default 
+    const [showUserDashboard, setShowUserDashboard] = useState(true);
     const [activeButton, setActiveButton] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -39,16 +40,17 @@ export default function SidebarNav() {
 
     return (
         <>
-            <div className=" fixed mt-24 flex">
+            <div className=" flex left-0 z-30 w-full text-black h-full">
                 {/* Mobile menu button */}
                 <button 
-                    className="lg:hidden p-4"
+                    className="lg:hidden px-6 fixed mt-36" 
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 >
                     <div className=' flex flex-1 flex-col justify-between '>
                         <nav className="-mx-3 space-y-6 ">
-                            <div className="space-y-3">
+                            <div className="space-y-3 ">
                                 <Menu />
+                                <CircleChevronRight />
                             </div>
                         </nav>
                     </div>
