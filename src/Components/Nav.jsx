@@ -1,4 +1,5 @@
 import React from 'react';
+import { CircleHelp } from 'lucide-react';
 
 export default function Navbar() {
 
@@ -20,21 +21,18 @@ export default function Navbar() {
             <ul className="inline-flex space-x-8">
               <li>
                 <a
-                  href="#"
-                  className="text-sm font-semibold text-gray-800 hover:text-gray-900"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
                   className="text-sm font-semibold text-gray-800 hover:text-gray-900"
                 >
                   About
                 </a>
               </li>
-              {/* Add more Items later: */}
+              <li>
+                <button
+                  className=" text-sm font-semibold text-gray-800 hover:text-gray-900"
+                >
+                  <CircleHelp />
+                </button>
+              </li>
             </ul>
           </div>
         </div>
