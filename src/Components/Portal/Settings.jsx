@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Profile() {
+export default function Settings() {
     const [signedInUserId, setSignedInUserId] = useState('');
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export default function Profile() {
 
   return (
     <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <p>Your user id is: {signedInUserId}, & you are on the Profile now.</p>
+        <p>Your user id is: {signedInUserId}, & you are on the Settings now.</p>
     </div>
   );
 }
