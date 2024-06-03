@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { CircleHelp } from 'lucide-react';
 
+import ProfileTab from './Portal/ProfileTab';
+
 export default function Navbar() {
 
   return (
@@ -17,7 +19,7 @@ export default function Navbar() {
               />
             </span>
           </div>
-          <div>  {/** choose: hidden lg:block if you want to hide */}
+          <div className="hidden lg:block">
             <ul className="inline-flex space-x-8">
               <li>
                 <a
@@ -33,6 +35,13 @@ export default function Navbar() {
                   <CircleHelp />
                 </button>
               </li>
+              <li>
+                <button
+                  className=" text-sm font-semibold text-gray-800 hover:text-gray-900"
+                >
+                  <ProfileTab />
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -40,3 +49,4 @@ export default function Navbar() {
     </>
   );
 }
+
