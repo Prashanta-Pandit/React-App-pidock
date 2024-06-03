@@ -56,8 +56,7 @@ export default function SidebarNav() {
                 </button>
 
                 {/* Left Fixed Container */}
-                <div className={`fixed mt-24 inset-y-0 left-0 z-30 w-64 transform lg:transform-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 transition-transform duration-300 ease-in-out bg-slate-800 text-white h-full px-5 py-10`}>
-                    <div className="mt-6 flex flex-1 flex-col justify-between">
+                <div className={` flex flex-1 flex-col justify-between fixed mt-24 inset-y-0 left-0 z-30 w-48 transform lg:transform-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 transition-transform duration-300 ease-in-out bg-slate-800 text-white h-full px-5 py-10`}>
                         <nav className="-mx-3 space-y-6">
                             <div className="space-y-3">
                                 <a className={`flex items-center rounded-lg px-4 py-2 text-white transition-colors duration-300 hover:text-black hover:bg-gray-200 ${activeButton === 'dashboard' ? 'bg-gray-700' : ''}`} onClick={handleDashboardClick}>
@@ -75,7 +74,6 @@ export default function SidebarNav() {
                             </div>
                         </nav>
                     </div>
-                </div>
 
                 {/* Right Container with details*/}
                 <div className="flex-1 flex flex-col lg:ml-64">

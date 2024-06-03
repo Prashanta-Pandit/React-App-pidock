@@ -3,12 +3,10 @@ import { CircleHelp } from 'lucide-react';
 import ProfileTab from './Portal/ProfileTab';
 
 export default function Navbar() {
-  
-  //to make a state of Profile tab disapperar when no user logged in, and appear when the user is logged in.
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full z-50 h-28 bg-gray-300">
+      <div className="fixed top-0 left-0 w-full z-50 h-24 bg-gray-300">
         <div className="ml-2 flex items-center justify-between py-5 sm:px-6 lg:px-8">
           <div className="inline-flex items-center space-x-2">
             <span>
