@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { CircleUserRound } from 'lucide-react';
+import SignoutButton from '../SignOut/SignoutButton';
 
 export default function ProfileTab() {
   const [isTabClicked, setIsTabClicked] = useState(false);
 
   const showTabWhenClicked = () => {
     setIsTabClicked(!isTabClicked);
+  };
+
+  const hideTab = () => {
+    setIsTabClicked(false);
   };
 
   return (
@@ -18,14 +23,15 @@ export default function ProfileTab() {
         }`}
         style={{ width: '250px', transformOrigin: 'top right' }}
       >
-        <ul className="space-y-2">
-          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200">Profile</li>
-          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200">Manage Account</li>
-          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200">Sign Out</li>
+        <ul className="space-y-2 text-left">
+          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200" onClick={hideTab}>Profile</li>
+          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200" onClick={hideTab}>Manage Account</li>
+          <li className="rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200" onClick={hideTab}><SignoutButton/></li>
         </ul>
       </div>
     </div>
   );
 }
+
 
 

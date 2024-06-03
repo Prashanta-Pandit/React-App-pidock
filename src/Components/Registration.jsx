@@ -4,12 +4,7 @@ import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 
-import Spinner from './Design/Spinner';
-
 export default function Registration() {
-
-    //declaring a variable for the state of spinner as a loading. 
-    const [loading, setLoading] = useState(false);
     
     //use dom function, useNavigate() to naviagate to pages.
     const navigate = useNavigate();
@@ -30,9 +25,6 @@ export default function Registration() {
 
     function handleCreateAccountOnSubmit(e) {
         e.preventDefault();
-
-        // set loading as true.
-        setLoading(true);
         
         // check if the user input password matches. 
         if (passwordRegistration === verify_PasswordRegistration) {
@@ -58,20 +50,11 @@ export default function Registration() {
                         alert('Email address is already in use. Please use a different email to get started.');
                     }
                 })
-                .finally(()=>{
-                    setLoading(false); //// Set loading state to false after sign-in attempt completes
-                })
         } else {
             alert('Passwords do not match.');
         }
     }
     return (
-    <> {loading ? (
-            <div className="mt-36 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-                <Spinner />
-            </div>
-        ):(
-
         <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>
@@ -130,7 +113,5 @@ export default function Registration() {
                 </button>
             </div>
         </div> 
-        )}
-  </>
     )
 }

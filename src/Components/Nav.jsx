@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { CircleHelp } from 'lucide-react';
-
 import ProfileTab from './Portal/ProfileTab';
 
 export default function Navbar() {
-
   return (
     <>
       <div className="fixed top-0 left-0 w-full z-50 h-28 bg-gray-300">

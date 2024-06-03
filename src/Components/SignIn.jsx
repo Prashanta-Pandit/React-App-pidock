@@ -7,12 +7,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, Google
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
-import Spinner from './Design/Spinner';
-
 export default function SignIn() {
-    
-    //declaring a variable for the state of spinner as a loading. 
-    const [loading, setLoading] = useState(false);
 
     //use dom function, useNavigate() to naviagate to pages.
     const navigate = useNavigate(); 
@@ -48,9 +43,6 @@ export default function SignIn() {
     function handleSignInOnSubmit(e) {
         e.preventDefault();
 
-        // set loading as true.
-        setLoading(true);
-
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -63,9 +55,6 @@ export default function SignIn() {
                 if (errorCode === 'auth/invalid-credential') {
                     alert('Wrong email or password. Or, if this is a google account, try Continue with google option.');
                 }
-            })
-            .finally(()=>{
-                setLoading(false); //// Set loading state to false after sign-in attempt completes
             })
     }
     
@@ -87,12 +76,6 @@ export default function SignIn() {
 
     return (
         // making sure that the loading spinner run before retriving to dashboard.jsx
-        <>{loading ? 
-            (  
-                <div className="mt-36 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-                    <Spinner />
-                </div>
-            ):(
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in</h2>
@@ -153,8 +136,5 @@ export default function SignIn() {
 
                 </div>
             </div>
-                
-            )}
-        </>
     )
 }

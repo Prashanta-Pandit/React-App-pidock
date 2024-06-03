@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BarChart, UserRound, Settings, Menu, CircleChevronRight } from 'lucide-react'; 
-import SignoutButton from '../SignOut/SignoutButton';
 import Profile from './Profile';
 import UserSettings from './Settings';
 import UserDashboard from './UserDashboard';
@@ -72,9 +71,6 @@ export default function SidebarNav() {
                                 <a className={`flex items-center rounded-lg px-4 py-2 text-white transition-colors duration-300 hover:text-black hover:bg-gray-200 ${activeButton === 'settings' ? 'bg-gray-700' : ''}`} onClick={handleSettingsClick}>
                                     <Settings className="h-5 w-5" aria-hidden="true" />
                                     <span className="mx-2 text-sm font-medium">Settings</span>
-                                </a>
-                                <a className={`flex items-center rounded-lg px-3 py-2 text-white transition-colors duration-300 hover:text-black hover:bg-gray-200 ${activeButton === 'settings' ? 'bg-gray-700' : ''}`}>
-                                    <SignoutButton className="h-5 w-5" aria-hidden="true" />
                                 </a>
                             </div>
                         </nav>

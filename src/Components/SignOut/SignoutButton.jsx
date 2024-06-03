@@ -30,22 +30,9 @@ export default function SignoutButton(){
       }
 
     return(
-        <>
-        {
-          loading ? (
-            <div className="mt-36 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-               <Spinner />
-            </div>
-
-          ):(
-            <>
-              <div className='flex flex-row' onClick={handleSignOutButton}>
-                 <LogOut/>
-                 <span className="mx-2 text-sm font-medium">Sign Out</span>
-              </div>
-            </>
-          )
-        }
-        </>
-    )
+      <div className='flex flex-row items-center' onClick={handleSignOutButton}>
+          <LogOut/>
+          <span className="mx-2 text-sm font-medium">Sign Out</span>
+      </div>
+        )
 }
