@@ -34,7 +34,7 @@ export default function Registration() {
                     const userLoginId = user.uid;
 
                     return addDoc(fireStoreCollectionReference, {
-                        userLogiId: userLoginId,
+                        userLoginId: userLoginId,
                         firstName: firstName,
                         lastName: lastName,
                         email: emailRegistration
