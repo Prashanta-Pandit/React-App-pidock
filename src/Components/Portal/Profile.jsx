@@ -19,7 +19,7 @@ export default function Profile() {
             const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId)); // q stores the query matching the Logged in User ID.
             const unsubscribe = onSnapshot(q, (snapshot) => {
                 const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-                setUserDetails(details);
+                setUserDetails(details); // get the details in array.
             });
             return () => unsubscribe(); // Clean up the subscription on unmount
         }
@@ -36,13 +36,13 @@ export default function Profile() {
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900"><CircleUserRound/> <span className="ml-2">Full Name</span></dt>
                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {userDetails.length > 0 ? userDetails[0].firstName : "Loading..."} {userDetails.length > 0 ? userDetails[0].lastName : "Loading..."}
+                                {userDetails.length > 0 ? userDetails[0].firstName : "No name recorded"} {userDetails.length > 0 ? userDetails[0].lastName : ""}
                             </dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className=" flex flex-row text-sm font-bold leading-6 text-gray-900"><Mail /><span className="ml-2">Email address</span></dt>
                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {userDetails.length > 0 ? userDetails[0].email : "Loading..."}
+                                {userDetails.length > 0 ? userDetails[0].email : "No email recorded"}
                             </dd>
                         </div>
                     </dl>
