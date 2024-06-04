@@ -18,8 +18,8 @@ export default function Profile() {
         if (signedInUserId) {
             const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId)); // q stores the query matching the Logged in User ID.
             const unsubscribe = onSnapshot(q, (snapshot) => {
-                const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-                setUserDetails(details); // get the details in array.
+                const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })); // get the details in array.
+                setUserDetails(details); 
             });
             return () => unsubscribe(); // Clean up the subscription on unmount
         }

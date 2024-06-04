@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; // useState and useEffect hooks.
-import SideNavBar from '../Portal/SideNavBar';
+import SideNavBar from './SideNavBar';
 import Spinner from '../Design/Spinner';
 import ProfileTab from './ProfileTab';
 

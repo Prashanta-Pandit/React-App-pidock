@@ -22,17 +22,17 @@ export default function Signout() {
   return (
     <>
       {loading ? (
-          <div className="mt-36 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+          <div className="mt-36 flex min-h-full justify-center px-6 py-12 lg:px-8">
               <Spinner />
           </div>
       ) : (
-        <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
           <p>You are signed out.</p>
           <button
             onClick={handleSignInAgainButton}
             className="font-light underline text-black hover:text-slate-700 focus:outline-none mt-4"
           >
-            back to Sign in
+           Sign in again
           </button>
         </div>
       )}
