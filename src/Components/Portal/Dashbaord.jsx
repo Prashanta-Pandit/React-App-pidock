@@ -24,7 +24,7 @@ export default function Portal() {
       ) : (
         <div className="flex">
           <SideNavBar className="flex-shrink-0" />
-          <div className="flex-grow flex justify-end items-center pr-8">
+          <div className="flex-grow flex justify-end pr-8">
             <ProfileTab />
           </div>
         </div>

@@ -17,7 +17,7 @@ export default function ProfileTab() {
   };
 
   return (
-      <div className="relative inline-block">
+      <div className="relative inline-block mt-28">
         <CircleUserRound className="cursor-pointer" onClick={showProfileTabWhenClicked} />
         <div
           className={`absolute mt-2 right-0 bg-white p-4 rounded shadow-md transition-transform duration-300 ease-in-out ${
