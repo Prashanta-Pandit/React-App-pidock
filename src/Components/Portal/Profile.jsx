@@ -26,7 +26,7 @@ export default function Profile() {
     }, [signedInUserId]); // Re-run this effect when signedInUserId changes
 
     return (
-        <div className="mt-40 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div>
                 <div className="px-4 sm:px-0">
                     <h3 className="text-base font-semibold leading-7 text-gray-900">Your Details</h3>
