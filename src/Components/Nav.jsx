@@ -34,13 +34,6 @@ export default function Navbar() {
                   <CircleHelp />
                 </button>
               </li>
-              <li>
-                <button
-                  className=" text-sm font-semibold text-gray-800 hover:text-gray-900"
-                >
-                  <ProfileTab />
-                </button>
-              </li>
             </ul>
           </div>
         </div>
