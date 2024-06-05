@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mail, User } from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import Profile from './Profile';
+import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
     const [signedInUserId, setSignedInUserId] = useState('');
@@ -27,7 +27,7 @@ export default function EditUserDetails() {
 
     return (
         isCancelButtonClicked ? (
-            <Profile />
+            <UserDetails />
         ) : (
             <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleEditUserDetails}>
@@ -62,7 +62,7 @@ export default function EditUserDetails() {
                                 <div className="sm:col-span-2"></div> 
                                 <dd className="flex flex-col sm:flex-row sm:space-x-4 justify-end text-sm font-normal leading-6">
                                     <button 
-                                        className="flex items-center justify-center bg-black text-white rounded-md px-4 py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50 mb-2 sm:mb-0"
+                                        className="flex items-center justify-center bg-black text-white rounded-md px-4 py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
                                         type="submit"
                                     >
                                         Update

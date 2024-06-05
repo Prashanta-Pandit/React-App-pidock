@@ -7,7 +7,7 @@ import ForgotPassword from './Components/ForgotPassword';
 import Dashboard from './Components/Portal/Dashbaord';
 import Signout from './Components/SignOut/Signout';
 import Spinner from './Components/Design/Spinner';
-import Profile from './Components/Portal/Profile';
+import UserDetails from './Components/Portal/UserDetails';
 
 export default function App() {
   return (
@@ -21,7 +21,7 @@ export default function App() {
              <Route path="/dashboard" element={<Dashboard />} />
              <Route path='/signout' element={<Signout />} />
              <Route path='/spinner' element={<Spinner />} />
-             <Route path='/profile' element={<Profile />}/>
+             <Route path='/profile' element={<UserDetails />}/>
           </Route>
         </Routes>
       </Router>

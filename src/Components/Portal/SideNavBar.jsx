@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { BarChart, UserRound, Settings, Menu, CircleChevronRight } from 'lucide-react'; 
-import Profile from './Profile';
+import { BarChart, UserRound, Settings, Menu } from 'lucide-react'; 
+import UserDetails from './UserDetails';
 import UserSettings from './Settings';
 import UserDashboard from './UserDashboard';
 
@@ -76,7 +76,7 @@ export default function SidebarNav() {
 
                 {/* Right Container with details*/}
                 <div className="flex-1 flex flex-col ml-4 lg:ml-64">
-                    {showProfile && <Profile />}
+                    {showProfile && <UserDetails />}
                     {showUserDashboard && <UserDashboard />}
                     {showUserSettings && <UserSettings />}
                 </div>
