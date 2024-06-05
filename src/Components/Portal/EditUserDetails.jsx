@@ -6,6 +6,7 @@ import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
     const [signedInUserId, setSignedInUserId] = useState('');
+    const [userDetails, setUserDetails] = useState([]);
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
 
     useEffect(() => {
@@ -14,10 +15,21 @@ export default function EditUserDetails() {
             setSignedInUserId(userId);
         }
     }, []); // Empty dependency array means this runs once on mount
+
+    useEffect(() => {
+        if (signedInUserId) {
+            const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId)); // q stores the query matching the Logged in User ID.
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })); // get the details in array.
+                setUserDetails(details); 
+            });
+            return () => unsubscribe(); // Clean up the subscription on unmount
+        }
+    }, [signedInUserId]); // Re-run this effect when signedInUserId changes
+
     
     function handleEditUserDetails(e) {
         e.preventDefault(); // stop the page reload when clicked
-        
     }
 
     function handleCancel(e) {
@@ -39,11 +51,24 @@ export default function EditUserDetails() {
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
-                                    <span className="ml-2">Full Name</span>
+                                    <span className="ml-2">First Name</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     <input 
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}
+                                    />
+                                </dd>
+                            </div>
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <User />
+                                    <span className="ml-2">Last Name</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    <input 
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}
                                     />
                                 </dd>
                             </div>
@@ -54,7 +79,8 @@ export default function EditUserDetails() {
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     <input 
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}
                                     />
                                 </dd>
                             </div>
@@ -62,7 +88,7 @@ export default function EditUserDetails() {
                                 <div className="sm:col-span-2"></div> 
                                 <dd className="flex flex-col sm:flex-row sm:space-x-4 justify-end text-sm font-normal leading-6">
                                     <button 
-                                        className="flex items-center justify-center bg-black text-white rounded-md px-4 py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
+                                        className="flex items-center justify-center bg-black text-white rounded-md px-4 py-2 hover:bg-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
                                         type="submit"
                                     >
                                         Update
@@ -82,4 +108,3 @@ export default function EditUserDetails() {
         )
     );
 }
-

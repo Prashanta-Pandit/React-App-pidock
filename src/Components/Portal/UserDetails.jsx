@@ -40,7 +40,7 @@ export default function Profile() {
                 <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                     <div>
                         <div className="px-4 sm:px-0">
-                            <h3 className="text-base font-semibold leading-7 text-gray-900">Your details</h3>
+                            <h3 className="text-base font-bold leading-7 text-gray-900">Your details</h3>
                         </div>
                         <div className="mt-6 border-t border-gray-100">
                             <dl className="divide-y divide-gray-100">
