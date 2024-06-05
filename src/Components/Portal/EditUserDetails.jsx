@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User } from 'lucide-react';
+import { Mail, User, Pencil } from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
@@ -8,7 +8,9 @@ export default function EditUserDetails() {
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
-    const [showInput, setShowInput] = useState(false); // Add state to track input visibility in the form when user try to edit.
+    const [firstNameInputClicked, setfirstNameInputClicked] = useState(false); // Add state to track input visibility in the form when user try to edit.
+    const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
+    const [emailInputClicked, setEmailInputClicked] = useState(false);
 
     useEffect(() => {
         const userId = localStorage.getItem('signedInUserUid'); // this is user id that is stored after signing in from signin page.
@@ -38,8 +40,16 @@ export default function EditUserDetails() {
     }
     
     //if the user click the form inputs.
-    function handleInputClick() {
-        setShowInput(true); // Show input when paragraph is clicked
+    function handleFirstNameInputClicked() {
+        setfirstNameInputClicked(true); // Show input when firstname pencil clicked.
+    }
+
+    function handleLastNameInputClicked() {
+        setLastNameInputClicked(true); // Show input when lastname is pencil clicked
+    }
+
+    function handleEmailInputClicked() {
+        setEmailInputClicked(true); // Show input when email pencil is clicked
     }
 
     return (
@@ -50,7 +60,6 @@ export default function EditUserDetails() {
                 <form className="space-y-6" onSubmit={handleEditUserDetails}>
                     <div className="px-4 sm:px-0">
                         <h3 className="text-base font-bold leading-7 text-gray-900">Update your details</h3>
-                        <p className='text-sm font-light text-gray-600 pl-6'><span className='text-red-600'>* </span>Click to edit</p>
                     </div>
                     <div className="mt-6 border-t border-gray-100">
                         <dl className="divide-y divide-gray-100">
@@ -61,13 +70,16 @@ export default function EditUserDetails() {
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     {/*conditional render when the user click input field.*/}
-                                    {showInput ? (
+                                    {firstNameInputClicked ? (
                                         <input 
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}
                                         />
                                     ) : (
-                                        <p onClick={handleInputClick}>{userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}</p>
+                                        <div className='flex flex-row p-3 justify-between'>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}</p>
+                                            <Pencil className=" size-4 text-blue-500 hover:size-6" onClick={handleFirstNameInputClicked}/>
+                                        </div>
                                     )}
                                 </dd>
                             </div>
@@ -78,13 +90,16 @@ export default function EditUserDetails() {
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     {/*conditional render when the user click input field.*/}
-                                    {showInput ? (
+                                    {lastNameInputClicked ? (
                                         <input 
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}
                                         />
                                     ) : (
-                                        <p onClick={handleInputClick}>{userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}</p>
+                                        <div className='flex flex-row p-3 justify-between'>
+                                        <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}</p>
+                                        <Pencil className=" size-4 text-blue-500 hover:size-6" onClick={handleLastNameInputClicked}/>
+                                    </div>
                                     )}
                                 </dd>
                             </div>
@@ -95,13 +110,16 @@ export default function EditUserDetails() {
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     {/*conditional render when the user click input field.*/}
-                                    {showInput ? (
+                                    {emailInputClicked ? (
                                         <input 
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}
                                         />
                                     ) : (
-                                        <p onClick={handleInputClick}>{userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}</p>
+                                        <div className='flex flex-row p-3 justify-between'>
+                                        <p>{userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}</p>
+                                        <Pencil className=" size-4 text-blue-500 hover:size-6" onClick={handleEmailInputClicked}/>
+                                    </div>
                                     )}
                                 </dd>
                             </div>

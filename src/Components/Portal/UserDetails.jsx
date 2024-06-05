@@ -39,9 +39,13 @@ export default function Profile() {
             ) : (
                 <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                     <div>
-                        <div className="px-4 sm:px-0">
+                        <div className=" flex flex-row justify-between px-4 sm:px-0 ">
                             <h3 className="text-base font-bold leading-7 text-gray-900">Your details</h3>
-                        </div>
+                            <button className="flex flex-row text-sm font-normal leading-6 text-blue-600" onClick={editButtonClick}>
+                                    <Pencil className='size-5 hover:size-6'/>
+                                    <p>edit</p>
+                            </button>
+                        </div>                             
                         <div className="mt-6 border-t border-gray-100">
                             <dl className="divide-y divide-gray-100">
                                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -60,15 +64,6 @@ export default function Profile() {
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                         {userDetails.length > 0 ? userDetails[0].email : "loading..."}
-                                    </dd>
-                                </div>
-                                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <div className="sm:col-span-2"></div> 
-                                    <dd className="flex justify-end text-sm font-normal leading-6 text-blue-600">
-                                        <button className="flex flex-row hover:text-black hover:bg-slate-200" onClick={editButtonClick}>
-                                        <Pencil className=" size-5"/>
-                                        <p>edit</p>
-                                        </button>
                                     </dd>
                                 </div>
                             </dl>
