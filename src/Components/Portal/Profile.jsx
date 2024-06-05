@@ -65,9 +65,9 @@ export default function Profile() {
                                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <div className="sm:col-span-2"></div> 
                                     <dd className="flex justify-end text-sm font-normal leading-6 text-blue-600">
-                                        <button className="flex flex-row" onClick={editButtonClick}>
-                                            <Pencil />
-                                            <span className="ml-2">edit</span>
+                                        <button className="flex flex-row hover:text-black hover:bg-slate-200" onClick={editButtonClick}>
+                                        <Pencil className=" size-5"/>
+                                        <p>edit</p>
                                         </button>
                                     </dd>
                                 </div>

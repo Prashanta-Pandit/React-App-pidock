@@ -48,8 +48,7 @@ export default function SidebarNav() {
                     <div className=' flex flex-1 flex-col justify-between '>
                         <nav className="-mx-3 space-y-6 ">
                             <div className="space-y-3 ">
-                                <Menu />
-                                <CircleChevronRight />
+                                <Menu className='hover:bg-slate-200'/>
                             </div>
                         </nav>
                     </div>
@@ -76,7 +75,7 @@ export default function SidebarNav() {
                     </div>
 
                 {/* Right Container with details*/}
-                <div className="flex-1 flex flex-col lg:ml-64">
+                <div className="flex-1 flex flex-col ml-4 lg:ml-64">
                     {showProfile && <Profile />}
                     {showUserDashboard && <UserDashboard />}
                     {showUserSettings && <UserSettings />}

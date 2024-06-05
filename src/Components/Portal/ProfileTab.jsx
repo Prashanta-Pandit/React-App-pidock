@@ -20,7 +20,7 @@ export default function ProfileTab() {
       <div className="relative inline-block mt-28">
         <CircleUserRound className="cursor-pointer" onClick={showProfileTabWhenClicked} />
         <div
-          className={`absolute mt-2 right-0 bg-white p-4 rounded shadow-md transition-transform duration-300 ease-in-out ${
+          className={`absolute mt-2 right-0 bg-white p-2 rounded shadow-md transition-transform duration-300 ease-in-out ${
             isProfileTabClicked ? 'transform scale-100' : 'transform scale-0'
           }`}
           style={{ width: '250px', transformOrigin: 'top right', zIndex: 50 }}
