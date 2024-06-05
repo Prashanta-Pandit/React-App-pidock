@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, CircleUserRound } from 'lucide-react';
+import { Mail, User, Pencil } from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 
@@ -25,6 +25,11 @@ export default function Profile() {
         }
     }, [signedInUserId]); // Re-run this effect when signedInUserId changes
 
+
+    function editTheUserDetails(){
+        // something goes here
+    }
+
     return (
         <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div>
@@ -34,19 +39,36 @@ export default function Profile() {
                 <div className="mt-6 border-t border-gray-100">
                     <dl className="divide-y divide-gray-100">
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900"><CircleUserRound/> <span className="ml-2">Full Name</span></dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {userDetails.length > 0 ? userDetails[0].firstName : "No name recorded"} {userDetails.length > 0 ? userDetails[0].lastName : ""}
-                            </dd>
+                        <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                            <User />
+                            <span className="ml-2">Full Name</span>
+                        </dt>
+                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {userDetails.length > 0 ? userDetails[0].firstName : "loading...."} {userDetails.length > 0 ? userDetails[0].lastName : ""}
+                        </dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt className=" flex flex-row text-sm font-bold leading-6 text-gray-900"><Mail /><span className="ml-2">Email address</span></dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                {userDetails.length > 0 ? userDetails[0].email : "No email recorded"}
-                            </dd>
+                        <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                            <Mail />
+                            <span className="ml-2">Email address</span>
+                        </dt>
+                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {userDetails.length > 0 ? userDetails[0].email : "loading...."}
+                        </dd>
+                        </div>
+                        <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <div className="sm:col-span-2"></div> 
+                        <dd className="flex  justify-end text-sm font-normal leading-6 text-blue-600">
+                            <button className='flex flex-row'
+                                     onClick={editTheUserDetails}
+                            >
+                               <Pencil />
+                               <span className="ml-2">Edit</span>
+                            </button>
+                        </dd>
                         </div>
                     </dl>
-                </div>
+               </div>
             </div>
         </div>
     );

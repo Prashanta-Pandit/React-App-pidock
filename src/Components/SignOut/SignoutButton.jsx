@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {auth} from '../FirebaseInitialisation';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import Spinner from '../Design/Spinner'
-import { LogOut } from 'lucide-react'; 
 
 export default function SignoutButton(){
 
@@ -30,9 +29,8 @@ export default function SignoutButton(){
       }
 
     return(
-      <div className='flex flex-row items-center' onClick={handleSignOutButton}>
-          <LogOut/>
-          <span className="mx-2 text-sm font-medium">Sign Out</span>
+      <div className='flex flex-row items-center ' onClick={handleSignOutButton}>
+          <span className="mx-2">Sign Out</span>
       </div>
         )
 }

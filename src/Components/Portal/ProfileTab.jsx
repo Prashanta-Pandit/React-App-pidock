@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CircleUserRound } from 'lucide-react';
+import { CircleUserRound, Headset, UserCog, LogOut } from 'lucide-react';
 import SignoutButton from '../SignOut/SignoutButton';
 
 export default function ProfileTab() {
@@ -28,25 +28,28 @@ export default function ProfileTab() {
           <ul className="space-y-2 text-left">
             <li>
               <button
-                className="w-full rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
+                className="w-full flex flex-row justify-start rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
                 onClick={hideProfileTab}
               >
-                Profile
+                <UserCog/> 
+                <span className="mx-2">Manage Account</span>
               </button>
             </li>
             <li>
               <button
-                className="w-full rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
+                className="w-full flex flex-row justify-start  rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
                 onClick={hideProfileTab}
               >
-                Manage Account
+                <Headset /> 
+                <span className="mx-2">Contact Support</span>
               </button>
             </li>
             <li>
               <button
-                className="w-full rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
+                className="w-full flex flex-row justify-start rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
                 onClick={hideProfileTab}
               >
+                <LogOut />
                 <SignoutButton />
               </button>
             </li>

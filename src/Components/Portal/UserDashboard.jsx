@@ -29,7 +29,7 @@ export default function UserDashboard() {
     <div className="mt-16 flex min-h-full flex-col justify-center px-12 py-12 lg:px-2">
       <h2 className="text-2xl font-semibold">
         {/** userdetails is an array now, if the array is greater than 0, and the searched item of array is always the matching user details. */}
-        Welcome {userDetails.length > 0 ? userDetails[0].firstName : " "} 
+        Welcome {userDetails.length > 0 ? userDetails[0].firstName : "loading...."} 
       </h2>
     </div>
   );

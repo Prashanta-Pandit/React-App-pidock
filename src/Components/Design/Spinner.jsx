@@ -12,7 +12,7 @@ export default function Spinner(){
              style={{color: "#6b6b6b",}}
             >
             <FontAwesomeIcon className='mr-5' icon={faSpinner} spinPulse size='2xl' style={{color: "#6b6b6b",}} />
-            <span className="relative">Processing...</span>
+            <span className="relative">Connecting to server....</span>
          </div>
         </>
     )
