@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Mail, User, Pencil, Loader } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import { updateEmail } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
@@ -45,7 +44,7 @@ export default function EditUserDetails() {
 
     //format the user input to proper form
     const formatInput = (str) =>{
-       return str.chatAt[0].toUpperCase() + str.slice(1).toLowerCase();
+       return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
     // Function to handle form submission and update user details
