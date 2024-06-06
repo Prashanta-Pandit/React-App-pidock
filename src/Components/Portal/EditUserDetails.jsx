@@ -52,21 +52,25 @@ export default function EditUserDetails() {
         e.preventDefault();
         setIsUpdateButtonClicked(true); // Indicate update in progress
         if (userDetails.length > 0) {
-            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
+
+            // refernce the document that you want to update. 
+            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
             const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
 
-            updateDoc(userDoc, {
+            const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
                 email: formattedEmail
-            })
+            };
+
+            updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
             .then(() => {
                 // Indicate update success and show "Done" for 2 seconds
                 setTimeout(() => {
                     setIsUpdateButtonClicked(false);
-                }, 2000);
+                }, 2000); // 2 sec
             })
             .catch((error) => {
                 // Handle errors and reset the update button state
