@@ -40,10 +40,18 @@ export default function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const formatEmail = (str) => {
+       return str.toLowerCase();
+    }
+
     function handleSignInOnSubmit(e) {
+
         e.preventDefault();
 
-        signInWithEmailAndPassword(auth, email, password)
+        // submit the formatted email.
+        const formatedEmail = formatEmail(email);
+
+        signInWithEmailAndPassword(auth, formatedEmail, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 redirectToDashboard(user);

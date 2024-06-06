@@ -43,20 +43,25 @@ export default function EditUserDetails() {
         }
     }, [signedInUserId]);
 
+    //format the user input to proper form
+    const formatInput = (str) =>{
+       return str.chatAt[0].toUpperCase() + str.slice(1).toLowerCase();
+    };
+
     // Function to handle form submission and update user details
     function handleOnSubmitEditUserDetails(e) {
         e.preventDefault();
         setIsUpdateButtonClicked(true); // Indicate update in progress
         if (userDetails.length > 0) {
             const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
+            const formattedFirstName = formatInput(firstName);
+            const formattedLastName = formatInput(lastName);
+            const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
+
             updateDoc(userDoc, {
-                firstName,
-                lastName,
-                email
-            })
-            .then(() => {
-                // After updating Firestore, update the Firebase Auth email
-                return updateEmail(auth.currentUser, email);
+                firstName: formattedFirstName,
+                lastName: formattedLastName,
+                email: formattedEmail
             })
             .then(() => {
                 // Indicate update success and show "Done" for 2 seconds
@@ -98,7 +103,7 @@ export default function EditUserDetails() {
             <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
                     <div className="px-4 sm:px-0">
-                        <h3 className="text-base font-bold leading-7 text-gray-900">Update your details</h3>
+                        <h3 className="text-2xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
                     <div className="mt-6 border-t border-gray-100">
                         <dl className="divide-y divide-gray-100">
