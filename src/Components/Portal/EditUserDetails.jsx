@@ -28,6 +28,8 @@ export default function EditUserDetails() {
         }
     }, []);
 
+    console.log("On Profile edit page");
+
     useEffect(() => {
         if (signedInUserId) {
             const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId));

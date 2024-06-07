@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Spinner from '../Design/Spinner';
+import { LoaderCircle } from 'lucide-react';
 
 export default function Signout() {
   const navigate = useNavigate();
@@ -22,9 +22,11 @@ export default function Signout() {
   return (
     <>
       {loading ? (
-          <div className="mt-36 flex min-h-full justify-center px-6 py-12 lg:px-8">
-              <Spinner />
-          </div>
+          // Show loading spinner while 'loading' state is true
+        <div className="mt-36 flex flex-row items-center justify-center px-6 py-12 lg:px-8 space-x-4">
+           <LoaderCircle className='animate-spin w-12 h-12 text-gray-500 font-semibold' />
+        <span className="relative text-lg text-gray-500 font-semibold">Signing you out...</span>
+     </div>
       ) : (
         <div className="flex min-h-screen flex-col justify-center items-center px-6 py-8 lg:px-8">
           <p>You are signed out.</p>

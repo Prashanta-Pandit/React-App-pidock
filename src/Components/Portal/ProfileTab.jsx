@@ -24,8 +24,7 @@ export default function ProfileTab() {
 
   function handleContactSupport() {
     hideProfileTab();
-    // Assuming there's navigation or action for contacting support
-    navigate("/portal/contactsupport"); // Adjust this to the correct path or action
+    
   }
 
   return (

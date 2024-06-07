@@ -11,7 +11,7 @@ import { UserX } from 'lucide-react';
     }
     return(
         <div className="flex min-h-screen flex-col justify-center items-center px-6 py-8 lg:px-8">
-           <UserX className='size-16 my-7 animate-bounce'/>
+           <UserX className='size-16 my-7 animate-bounce text-red-600'/>
           <p>No user found. Please sign in to continue.</p>
           <button
                   onClick={handleSignInButton}

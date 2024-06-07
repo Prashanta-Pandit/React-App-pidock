@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoaderCircle } from 'lucide-react';
 import SideNavBar from './SideNavBar';
-import Spinner from '../Design/Spinner';
 import ProfileTab from './ProfileTab';
 import { auth } from '../FirebaseInitialisation';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
@@ -42,9 +42,11 @@ export default function Dashboard() {
     <>
       {loading ? (
         // Show loading spinner while 'loading' state is true
-        <div className="mt-36 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-          <Spinner />
+        <div className="mt-36 flex flex-row items-center justify-center px-6 py-12 lg:px-8 space-x-4">
+           <LoaderCircle className='animate-spin w-12 h-12 text-red-500 font-semibold' />
+           <span className="relative text-lg text-gray-500 font-semibold">Connecting to server...</span>
         </div>
+      
       ) : (
         // Show the main content once 'loading' state is false
         <div className="flex">
