@@ -6,8 +6,11 @@ import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, Google
 //favicon icons and fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { LoaderCircle } from 'lucide-react'
 
 export default function SignIn() {
+
+    const [isSignInButtonClicked, setIsSignInButtonClicked] = useState(false);
 
     //use dom function, useNavigate() to naviagate to pages.
     const navigate = useNavigate(); 
@@ -45,8 +48,10 @@ export default function SignIn() {
     }
 
     function handleSignInOnSubmit(e) {
-
         e.preventDefault();
+        
+        // make it true when clciked.
+        setIsSignInButtonClicked(true);
 
         // submit the formatted email.
         const formatedEmail = formatEmail(email);
@@ -116,7 +121,19 @@ export default function SignIn() {
                         </div>
 
                         <div>
-                            <button type="submit" className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black">Sign in</button>
+                          <button
+                            type="submit"
+                            className="flex w-full items-center justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black"
+                            >
+                            {isSignInButtonClicked ? (
+                                <div className="flex items-center space-x-2">
+                                   <LoaderCircle className="animate-spin" />
+                                   <span>Signing in...</span>
+                                </div>
+                            ) : (
+                                "Sign In"
+                            )}
+                          </button>
                         </div>
                     </form>
 

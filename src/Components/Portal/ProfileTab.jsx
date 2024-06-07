@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircleUserRound, Headset, UserCog, LogOut } from 'lucide-react';
+import { CircleUserRound, Headset, UserCog, LogOut, LoaderCircle } from 'lucide-react';
 import SignoutButton from '../SignOut/SignoutButton';
 
 export default function ProfileTab() {

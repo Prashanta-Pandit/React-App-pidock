@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, Loader } from 'lucide-react';
+import { Mail, User, Pencil, LoaderCircle } from 'lucide-react';
 import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { updateEmail, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
@@ -186,7 +186,7 @@ export default function EditUserDetails() {
                                         <button
                                             className="flex items-center justify-center bg-green-900 text-white rounded-md px-4 py-2 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
                                         >
-                                            <Loader className="animate-spin mr-2" size={16} />
+                                            <LoaderCircle className="animate-spin mr-2" size={16} />
                                             Updating...
                                         </button>
                                     ) : (

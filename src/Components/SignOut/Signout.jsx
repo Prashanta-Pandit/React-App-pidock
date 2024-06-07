@@ -26,7 +26,7 @@ export default function Signout() {
               <Spinner />
           </div>
       ) : (
-        <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex min-h-screen flex-col justify-center items-center px-6 py-8 lg:px-8">
           <p>You are signed out.</p>
           <button
             onClick={handleSignInAgainButton}

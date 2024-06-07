@@ -1,11 +1,14 @@
 import React, { useState } from 'react'; // useState and useEffect hooks.
 import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { LoaderCircle } from 'lucide-react'
 
 
 export default function Registration() {
+
+    const [isCreateButtonClicked, setIsCreateButtonClicked] = useState(false);
     
     const navigate = useNavigate();
 
@@ -29,7 +32,9 @@ export default function Registration() {
 
     function handleCreateAccountOnSubmit(e) {
         e.preventDefault();
-        
+
+        setIsCreateButtonClicked(true);
+
         if (passwordRegistration === verifyPasswordRegistration) {
             
             const formattedFirstName = formatInput(firstName);
@@ -114,7 +119,16 @@ export default function Registration() {
                     </div>
 
                     <div>
-                        <button type="submit" className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black">Create account</button>
+                        <button type="submit" className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black">
+                        {isCreateButtonClicked ? (
+                                <div className="flex items-center space-x-2">
+                                    <LoaderCircle className="animate-spin" />
+                                    <span>Creating...</span>
+                                </div>
+                            ) : (
+                                "Create account"
+                            )}
+                        </button>
                     </div>
                 </form>
                 <button className="font-light text-black hover:text-slate-700 focus:outline-none mt-4" onClick={redirectToLoginPage}>

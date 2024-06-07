@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil } from 'lucide-react';
+import { Mail, User, Pencil, LoaderCircle } from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 
@@ -54,7 +54,7 @@ export default function Profile() {
                                         <span className="ml-2">Full Name</span>
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        {userDetails.length > 0 ? `${userDetails[0].firstName} ${userDetails[0].lastName}` : "loading..."}
+                                        {userDetails.length > 0 ? `${userDetails[0].firstName} ${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' /> }
                                     </dd>
                                 </div>
                                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -63,7 +63,7 @@ export default function Profile() {
                                         <span className="ml-2">Email address</span>
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        {userDetails.length > 0 ? userDetails[0].email : "loading..."}
+                                        {userDetails.length > 0 ? userDetails[0].email : <LoaderCircle className='text-gray-500 animate-spin' />}
                                     </dd>
                                 </div>
                             </dl>
