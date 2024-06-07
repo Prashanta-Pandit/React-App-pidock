@@ -16,12 +16,12 @@ export default function SignIn() {
     const navigate = useNavigate(); 
 
     function handleCreateAccount() {
-        navigate('./register');
+        navigate('/register');
     }
     
     function handleForgotPassword(event) {
         event.preventDefault(); 
-        navigate('./forgotPassword');
+        navigate('/forgotPassword');
     }
 
     function redirectToDashboard(signedInUser) {
@@ -29,7 +29,7 @@ export default function SignIn() {
         // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
         //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
         localStorage.setItem('signedInUserUid', signedInUser.uid)
-        navigate('/dashboard');
+        navigate('/portal/dashboard');
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -128,7 +128,7 @@ export default function SignIn() {
                             {isSignInButtonClicked ? (
                                 <div className="flex items-center space-x-2">
                                    <LoaderCircle className="animate-spin" />
-                                   <span>Signing in...</span>
+                                   <span>Signing you in...</span>
                                 </div>
                             ) : (
                                 "Sign In"

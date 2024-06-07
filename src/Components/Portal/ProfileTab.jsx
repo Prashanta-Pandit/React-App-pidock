@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { CircleUserRound, Headset, UserCog, LogOut, LoaderCircle } from 'lucide-react';
+import { CircleUserRound, Headset, UserCog, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import SignoutButton from '../SignOut/SignoutButton';
 
 export default function ProfileTab() {
   const [isProfileTabClicked, setIsProfileTabClicked] = useState(false);
+  const navigate = useNavigate();
 
   // Toggle the profile tab visibility
   const showProfileTabWhenClicked = () => {
@@ -14,6 +16,17 @@ export default function ProfileTab() {
   const hideProfileTab = () => {
     setIsProfileTabClicked(false);
   };
+
+  function handleManageAccount() {
+    hideProfileTab();
+    navigate("/portal/edituserdetails");
+  }
+
+  function handleContactSupport() {
+    hideProfileTab();
+    // Assuming there's navigation or action for contacting support
+    navigate("/portal/contactsupport"); // Adjust this to the correct path or action
+  }
 
   return (
     <div className="relative inline-block mt-28">
@@ -28,7 +41,7 @@ export default function ProfileTab() {
           <li>
             <button
               className="w-full flex flex-row justify-start rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
-              onClick={hideProfileTab}
+              onClick={handleManageAccount}
             >
               <UserCog /> 
               <span className="mx-2">Manage Account</span>
@@ -37,7 +50,7 @@ export default function ProfileTab() {
           <li>
             <button
               className="w-full flex flex-row justify-start rounded-lg p-2 transition-colors duration-300 hover:text-black hover:bg-gray-200 text-left"
-              onClick={hideProfileTab}
+              onClick={handleContactSupport}
             >
               <Headset /> 
               <span className="mx-2">Contact Support</span>
@@ -57,6 +70,7 @@ export default function ProfileTab() {
     </div>
   );
 }
+
 
 
 

@@ -9,7 +9,7 @@ export default function SidebarNav() {
     const [showProfile, setShowProfile] = useState(false);
     const [showUserSettings, setUserShowSettings] = useState(false);
     // by default 
-    const [showUserDashboard, setShowUserDashboard] = useState(true);
+    const [showUserDashboard, setShowUserDashboard] = useState(true); //********** */
     const [activeButton, setActiveButton] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

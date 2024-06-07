@@ -17,7 +17,7 @@ export default function Registration() {
     }
 
     function redirectToDashboardPage() {
-        navigate('/dashboard'); 
+        navigate('/portal/dashboard'); 
     }
 
     const [firstName, setFirstName] = useState('');
@@ -123,7 +123,7 @@ export default function Registration() {
                         {isCreateButtonClicked ? (
                                 <div className="flex items-center space-x-2">
                                     <LoaderCircle className="animate-spin" />
-                                    <span>Creating...</span>
+                                    <span>Creating your account...</span>
                                 </div>
                             ) : (
                                 "Create account"

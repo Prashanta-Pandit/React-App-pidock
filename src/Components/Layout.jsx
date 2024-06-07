@@ -8,7 +8,7 @@ export default function Layout(){
     return(
        <>
          <Navbar />
-           <Outlet />
+           <Outlet /> {/* This is a section where all other compoments we call viua App.jsx */}
          <Footer />
        </>
     )
