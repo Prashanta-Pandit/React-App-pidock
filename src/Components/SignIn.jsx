@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
 import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
-import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { onSnapshot ,addDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 
+import { LoaderCircle } from 'lucide-react'
 //favicon icons and fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { LoaderCircle } from 'lucide-react'
 
 export default function SignIn() {
 
@@ -79,28 +79,39 @@ export default function SignIn() {
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;  // retrive the user details in an array of Objects. 
-
                 console.log(user);
 
-                // Extracting user's first name, last name, and email from Google 
-                const firstNameFromGoogle = user.displayName.split(' ')[0];
-                const lastNameFromGoogle = user.displayName.split(' ')[1];
-                const emailFromGoogle = user.email;
-                const userLoginId = user.uid;
-                
-                // this returns the add the details in firbase store.
-                return addDoc(fireStoreCollectionReference,{
-                     userLoginId: userLoginId,
-                    firstName: firstNameFromGoogle,
-                    lastName: lastNameFromGoogle,
-                    email:emailFromGoogle
-                })
-                .then(
-                    redirectToDashboard(user)
-                )
-                .catch((error) =>{
-                    console.error('Error updating user details:', error);
-                })
+                const q = query(fireStoreCollectionReference, where("userLoginId", "==", user.uid))
+                onSnapshot(q, (snapshot) => {
+                    const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })); // get the details in array.
+                    
+                    
+                    if(details.length === 0){
+                        // Extracting user's first name, last name, and email from Google 
+                        const firstNameFromGoogle = user.displayName.split(' ')[0];
+                        const lastNameFromGoogle = user.displayName.split(' ')[1];
+                        const emailFromGoogle = user.email;
+                        const userLoginId = user.uid;
+                        
+                        // this returns the add the details in firbase store.
+                        return addDoc(fireStoreCollectionReference,{
+                            userLoginId: userLoginId,
+                            firstName: firstNameFromGoogle,
+                            lastName: lastNameFromGoogle,
+                            email:emailFromGoogle
+                        })
+                        .then(
+                            redirectToDashboard(user)
+                        )
+                        .catch((error) =>{
+                            console.error('Error updating user details:', error);
+                        })
+                    }
+                    else{
+                        redirectToDashboard(user); // if the array is not empty than, redirect to dashboard. 
+                        console.log('User already exist, in firestore db.');
+                    }
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;

@@ -59,7 +59,7 @@ export default function EditUserDetails() {
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
             const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
-
+            
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
