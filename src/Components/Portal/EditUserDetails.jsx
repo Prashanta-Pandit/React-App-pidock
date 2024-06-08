@@ -164,20 +164,9 @@ export default function EditUserDetails() {
                                     <span className="ml-2">Email</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {/* using conditional rendering */}
-                                    {emailInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].email}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row p-3 justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleEmailInputClicked}/>
-                                        </div>
-                                    )}
+                                    <div className='flex flex-row p-3 justify-between'>
+                                        <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                    </div>
                                 </dd>
                             </div>
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
