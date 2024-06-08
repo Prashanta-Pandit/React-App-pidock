@@ -58,12 +58,12 @@ export default function EditUserDetails() {
             const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
-            const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
+            //const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
             
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
-                email: formattedEmail
+                //email: formattedEmail
             };
 
             updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
@@ -94,10 +94,6 @@ export default function EditUserDetails() {
 
     function handleLastNameInputClicked() {
         setLastNameInputClicked(true);
-    }
-
-    function handleEmailInputClicked() {
-        setEmailInputClicked(true);
     }
 
     return (
