@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, Loader } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { Mail, User, Pencil, LoaderCircle } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
 
+<LoaderCircle className='text-gray-500 animate-spin' />
 export default function EditUserDetails() {
     // State variables to manage user details and UI state
     const [signedInUserId, setSignedInUserId] = useState('');
@@ -123,11 +124,11 @@ export default function EditUserDetails() {
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
                                         />
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}</p>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleFirstNameInputClicked}/>
                                         </div>
                                     )}
@@ -146,11 +147,11 @@ export default function EditUserDetails() {
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             value={lastName}
                                             onChange={(e) => setLastName(e.target.value)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
                                         />
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}</p>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleLastNameInputClicked}/>
                                         </div>
                                     )}
@@ -169,11 +170,11 @@ export default function EditUserDetails() {
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].email}` : 'No data'}
                                         />
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}</p>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleEmailInputClicked}/>
                                         </div>
                                     )}
@@ -187,7 +188,7 @@ export default function EditUserDetails() {
                                         <button
                                             className="flex items-center justify-center bg-green-900 text-white rounded-md px-4 py-2 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
                                         >
-                                            <Loader className="animate-spin mr-2" size={16} /> {/* Spinning loader */}
+                                            <LoaderCircle className="animate-spin mr-2" size={16} /> {/* Spinning loader */}
                                             Updating...
                                         </button>
                                     ) : (

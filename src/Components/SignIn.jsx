@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import { auth } from './FirebaseInitialisation';
+import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
 import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
+import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 
 //favicon icons and fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -77,8 +78,29 @@ export default function SignIn() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then((result) => {
-                const user = result.user;
-                redirectToDashboard(user);
+                const user = result.user;  // retrive the user details in an array of Objects. 
+
+                console.log(user);
+
+                // Extracting user's first name, last name, and email from Google 
+                const firstNameFromGoogle = user.displayName.split(' ')[0];
+                const lastNameFromGoogle = user.displayName.split(' ')[1];
+                const emailFromGoogle = user.email;
+                const userLoginId = user.uid;
+                
+                // this returns the add the details in firbase store.
+                return addDoc(fireStoreCollectionReference,{
+                     userLoginId: userLoginId,
+                    firstName: firstNameFromGoogle,
+                    lastName: lastNameFromGoogle,
+                    email:emailFromGoogle
+                })
+                .then(
+                    redirectToDashboard(user)
+                )
+                .catch((error) =>{
+                    console.error('Error updating user details:', error);
+                })
             })
             .catch((error) => {
                 const errorCode = error.code;
