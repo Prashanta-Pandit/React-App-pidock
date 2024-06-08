@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle } from 'lucide-react';
+import { Mail, User, Pencil, Loader } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import { updateEmail, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
+    // State variables to manage user details and UI state
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
@@ -15,12 +15,9 @@ export default function EditUserDetails() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
-    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmPasswordButtonClick, setConfirmPasswordButtonClick] = useState(false);
 
+    // Effect to retrieve signed-in user ID from local storage
     useEffect(() => {
         const userId = localStorage.getItem('signedInUserUid');
         if (userId) {
@@ -28,8 +25,7 @@ export default function EditUserDetails() {
         }
     }, []);
 
-    console.log("On Profile edit page");
-
+    // Effect to fetch user details from Firestore when signed-in user ID is set
     useEffect(() => {
         if (signedInUserId) {
             const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId));
@@ -46,70 +42,66 @@ export default function EditUserDetails() {
         }
     }, [signedInUserId]);
 
-    const formatInput = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    //format the user input to proper form
+    const formatInput = (str) =>{
+       return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
+    // Function to handle form submission and update user details
     function handleOnSubmitEditUserDetails(e) {
         e.preventDefault();
-        setIsUpdateButtonClicked(true);
-        setIsPasswordModalOpen(true);
-    }
-
-    function handlePasswordConfirmation() {
-
-        setConfirmPasswordButtonClick(true);
-        setPasswordError(''); // Reset password error before reauthentication
+        setIsUpdateButtonClicked(true); // Indicate update in progress
         if (userDetails.length > 0) {
-            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
+
+            // refernce the document that you want to update. 
+            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
-            const formattedEmail = email.toLowerCase();
+            const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
+
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
                 email: formattedEmail
             };
 
-            const user = auth.currentUser;
-            const credential = EmailAuthProvider.credential(user.email, password);
-
-            reauthenticateWithCredential(user, credential)
-                .then(() => {
-                    console.log('Reauthentication successful');
-                    return updateEmail(user, formattedEmail);
-                })
-                .then(() => {
-                    console.log('Email update successful');
-                    return updateDoc(userDoc, userDataToUpdate);
-                })
-                .then(() => {
-                    console.log('Firestore update successful');
-                    setIsPasswordModalOpen(false);
-                    setTimeout(() => {
-                        setIsUpdateButtonClicked(false);
-                    }, 2000);
-                })
-                .catch((error) => {
-                    console.error('Error updating user details:', error);
-                    if (error.code === 'auth/wrong-password') {
-                        setPasswordError('Incorrect password. Please try again.');
-                    } else {
-                        setPasswordError('Failed to update details. Please try again.');
-                    }
+            updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
+            .then(() => {
+                // Indicate update success and show "Done" for 2 seconds
+                setTimeout(() => {
                     setIsUpdateButtonClicked(false);
-                });
+                }, 2000); // 2 sec
+            })
+            .catch((error) => {
+                // Handle errors and reset the update button state
+                console.error('Error updating user details:', error);
+                setIsUpdateButtonClicked(false);
+            });
         }
     }
 
+    // Function to handle cancel button click
     function handleCancel(e) {
         e.preventDefault();
-        setIsCancelButtonClicked(true);
+        setIsCancelButtonClicked(true); // Navigate back to UserDetails component
+    }
+
+    // Handlers to manage input field clicks
+    function handleFirstNameInputClicked() {
+        setFirstNameInputClicked(true);
+    }
+
+    function handleLastNameInputClicked() {
+        setLastNameInputClicked(true);
+    }
+
+    function handleEmailInputClicked() {
+        setEmailInputClicked(true);
     }
 
     return (
         isCancelButtonClicked ? (
-            <UserDetails />
+            <UserDetails /> // Render UserDetails component if cancel button is clicked
         ) : (
             <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
@@ -118,12 +110,14 @@ export default function EditUserDetails() {
                     </div>
                     <div className="mt-6 border-t border-gray-100">
                         <dl className="divide-y divide-gray-100">
+                            {/* First Name field */}
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">First Name</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {/* using conditional rendering */}
                                     {firstNameInputClicked ? (
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -134,17 +128,19 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : "loading..."}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={() => setFirstNameInputClicked(true)} />
+                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleFirstNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
                             </div>
+                            {/* Last Name field */}
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">Last Name</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {/* using conditional rendering */}
                                     {lastNameInputClicked ? (
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -155,17 +151,19 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : "loading..."}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={() => setLastNameInputClicked(true)} />
+                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleLastNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
                             </div>
+                            {/* Email field */}
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <Mail />
                                     <span className="ml-2">Email</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {/* using conditional rendering */}
                                     {emailInputClicked ? (
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -176,7 +174,7 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].email}` : "loading..."}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={() => setEmailInputClicked(true)} />
+                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleEmailInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
@@ -184,11 +182,12 @@ export default function EditUserDetails() {
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <div className="sm:col-span-2"></div>
                                 <dd className="flex flex-col sm:flex-row sm:space-x-4 justify-end text-sm font-normal leading-6">
+                                    {/* Update button with loader */}
                                     {isUpdateButtonClicked ? (
                                         <button
                                             className="flex items-center justify-center bg-green-900 text-white rounded-md px-4 py-2 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
                                         >
-                                            <LoaderCircle className="animate-spin mr-2" size={16} />
+                                            <Loader className="animate-spin mr-2" size={16} /> {/* Spinning loader */}
                                             Updating...
                                         </button>
                                     ) : (
@@ -199,52 +198,20 @@ export default function EditUserDetails() {
                                             Update
                                         </button>
                                     )}
+                                    {/* Cancel button */}
                                     <button
                                         className="flex items-center justify-center bg-white text-gray-900 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
                                         onClick={handleCancel}
                                     >
                                         Back
                                     </button>
+
                                 </dd>
                             </div>
                         </dl>
                     </div>
                 </form>
-
-                {isPasswordModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-                        <div className="bg-white p-6 rounded-md shadow-md">
-                            <h2 className="text-xl font-bold mb-4">Reauthenticate</h2>
-                            <p className="mb-4">Please enter your password to confirm changes:</p>
-                            <input
-                                type="password"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-4"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
-                            />
-                            {passwordError && (
-                                <p className="text-red-500 text-sm mb-4">{passwordError}</p>
-                            )}
-                            <div className="flex justify-end space-x-4">
-                                <button
-                                    className="bg-gray-300 text-gray-700 rounded-md px-4 py-2 hover:bg-gray-400"
-                                    onClick={() => setIsPasswordModalOpen(false)}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    className="bg-green-900 text-white rounded-md px-4 py-2 hover:bg-green-700"
-                                    onClick={handlePasswordConfirmation}
-                                >
-                                    {confirmPasswordButtonClick ? "Confirming..." : "Confirm"}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         )
     );
 }
-

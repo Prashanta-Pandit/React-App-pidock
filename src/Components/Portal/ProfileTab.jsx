@@ -47,7 +47,7 @@ export default function ProfileTab() {
                 onClick={handleManageAccount}
               >
                 <UserCog /> 
-                <span className="mx-2">Manage Account</span>
+                <span className="mx-2">Update Profile</span>
               </button>
             </li>
             <li>

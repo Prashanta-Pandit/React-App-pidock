@@ -29,7 +29,7 @@ export default function SignIn() {
         // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
         //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
         localStorage.setItem('signedInUserUid', signedInUser.uid)
-        navigate('/portal/dashboard');
+            navigate('/portal/dashboard');
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -157,8 +157,6 @@ export default function SignIn() {
                         <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
                         <span className="relative">Continue with Google</span>
                     </button>
-
-
                 </div>
             </div>
     )
