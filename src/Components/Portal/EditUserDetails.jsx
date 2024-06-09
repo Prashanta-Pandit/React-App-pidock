@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle } from 'lucide-react'; // Import the Loader icon from lucide-react
-import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
+import { Mail, User, Pencil, LoaderCircle, Ban } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
 
-<LoaderCircle className='text-gray-500 animate-spin' />
 export default function EditUserDetails() {
     // State variables to manage user details and UI state
     const [signedInUserId, setSignedInUserId] = useState('');
@@ -12,7 +11,7 @@ export default function EditUserDetails() {
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
     const [firstNameInputClicked, setFirstNameInputClicked] = useState(false);
     const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
-    const [emailInputClicked, setEmailInputClicked] = useState(false);
+    //const [emailInputClicked, setEmailInputClicked] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -125,7 +124,7 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleFirstNameInputClicked}/>
+                                            <Pencil className="size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
@@ -148,7 +147,7 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:size-6" onClick={handleLastNameInputClicked}/>
+                                            <Pencil className="size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
@@ -160,8 +159,11 @@ export default function EditUserDetails() {
                                     <span className="ml-2">Email</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    <div className='flex flex-row p-3 justify-between'>
-                                        <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                    <div className='flex flex-col p-3 justify-between'>
+                                        <div className='flex flex-row justify-between'>
+                                           <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                           <Ban className="size-4 text-red-500 hover:animate-bounce"/>
+                                        </div>
                                     </div>
                                 </dd>
                             </div>

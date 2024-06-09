@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircleUserRound, Headset, UserCog, LogOut } from 'lucide-react';
+import { CircleUserRound, Headset, UserCog, LogOut, X } from 'lucide-react';
 import SignoutButton from '../SignOut/SignoutButton';
 import EditUserDetails from './EditUserDetails';
 
@@ -33,7 +33,7 @@ export default function ProfileTab() {
   return (
     <div className="relative inline-block mt-28">
       <div>
-        <CircleUserRound className="cursor-pointer" onClick={showProfileTabWhenClicked} />
+        <CircleUserRound className="cursor-pointer hover:animate-bounce" onClick={showProfileTabWhenClicked} />
         <div
           className={`absolute mt-2 right-0 bg-white p-2 rounded shadow-md transition-transform duration-300 ease-in-out ${
             isProfileTabClicked ? 'transform scale-100' : 'transform scale-0'
@@ -74,15 +74,10 @@ export default function ProfileTab() {
       {isModelOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
           <div className="bg-white p-6 rounded-md shadow-md max-w-3xl overflow-y-auto" style={{ maxHeight: '80vh' }}>
-            <EditUserDetails />
             <div className="flex justify-end mt-4">
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                onClick={handleCloseModal}
-              >
-                Close
-              </button>
+                <X className='hover:bg-slate-400 hover:text-white' onClick={handleCloseModal}/>
             </div>
+            <EditUserDetails />
           </div>
         </div>
       )}

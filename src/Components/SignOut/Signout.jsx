@@ -24,7 +24,7 @@ export default function Signout() {
       {loading ? (
           // Show loading spinner while 'loading' state is true
         <div className="mt-36 flex flex-row items-center justify-center px-6 py-12 lg:px-8 space-x-4">
-           <LoaderCircle className='animate-spin w-12 h-12 text-gray-500 font-semibold' />
+           <LoaderCircle className='animate-spin w-12 h-12 text-red-500 font-semibold' />
         <span className="relative text-lg text-gray-500 font-semibold">Signing you out...</span>
      </div>
       ) : (

@@ -12,6 +12,7 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 export default function SignIn() {
 
     const [isSignInButtonClicked, setIsSignInButtonClicked] = useState(false);
+    const [isGoogleSignInButtonClicked, setIsGoogleSignInButtonClicked ] = useState(false);
 
     //use dom function, useNavigate() to naviagate to pages.
     const navigate = useNavigate(); 
@@ -75,6 +76,7 @@ export default function SignIn() {
     //handle sign in with google 
     function handleGoogleSignIn() {
 
+        setIsGoogleSignInButtonClicked(true);
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then((result) => {
@@ -85,7 +87,7 @@ export default function SignIn() {
                 onSnapshot(q, (snapshot) => {
                     const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })); // get the details in array.
                     
-                    
+                    // only add users details, if the user is new. 
                     if(details.length === 0){
                         // Extracting user's first name, last name, and email from Google 
                         const firstNameFromGoogle = user.displayName.split(' ')[0];
@@ -187,8 +189,19 @@ export default function SignIn() {
                         className="flex items-center font-bold justify-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6 transition-transform duration-300 transform hover:scale-105"
                         onClick={handleGoogleSignIn}
                     >
-                        <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
-                        <span className="relative">Continue with Google</span>
+                        {
+                            !isGoogleSignInButtonClicked ? (
+                                <>
+                                   <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
+                                   <span className="relative">Continue with Google</span>
+                                </>
+                            ):(
+                                <>
+                                   <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
+                                   <span className="relative">Connecting you to Google services...</span>
+                                </>
+                            )
+                        }
                     </button>
                 </div>
             </div>
