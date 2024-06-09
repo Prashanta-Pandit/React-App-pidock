@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoaderCircle } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
 
 export default function SupportChat() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    // regular expression to handle if the input consist number. 
+    const containsNumber = (str) => /\d/.test(str);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', { name, email, message });
+        if(containsNumber(name)){
+           setErrorMessage('Name should not contain number.');
+        }
+
         setIsSubmitted(true);
+        console.log('Form submitted:', { name, email, message });
+        
     };
+
+    useEffect(()=>{
+        if(isSubmitted){
+           const timer = setTimeout(()=>{
+                setIsSubmitted(false);
+           }, 2000)
+        }
+    }, [isSubmitted]);
 
     return (
         <div
@@ -26,6 +42,9 @@ export default function SupportChat() {
                 </div>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={handleSubmit}>
+                        {errorMessage && (
+                             <div className="text-red-500 text-sm">{errorMessage}</div>
+                        )}
                         <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">

@@ -27,7 +27,7 @@ export default function Navbar() {
                 </a>
               </li>
               <li>
-                  <Help />
+                  <Help className="cursor-pointer"/>
               </li>
             </ul>
           </div>

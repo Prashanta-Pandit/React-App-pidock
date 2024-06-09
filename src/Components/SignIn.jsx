@@ -72,6 +72,17 @@ export default function SignIn() {
                 }
             })
     }
+     // setting up the timer for sign in button click. 
+     useEffect(()=>{
+        let timer;
+        if(isSignInButtonClicked){
+            timer = setTimeout(()=>{
+                setIsSignInButtonClicked(false);
+            }, 2000)
+        }
+        return () => clearTimeout(timer);
+
+    }, [isSignInButtonClicked]);
     
     //handle sign in with google 
     function handleGoogleSignIn() {

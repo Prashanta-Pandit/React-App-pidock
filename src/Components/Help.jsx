@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LoaderCircle, CircleHelp, X } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
 
 export default function Help() {
@@ -9,6 +9,20 @@ export default function Help() {
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
+    const [errorMessage, setErrorMessage] = useState('');
+
+    // setup a timer for the sigining in load...
+    useEffect(()=>{
+        let timer;
+        if(isSubmitted){
+            timer = setTimeout(()=>{
+                setIsSubmitted(false);
+            }, 2000) // 2 sec
+        }
+        return () => clearTimeout (timer);
+
+    }, [isSubmitted]);
+
     const showHelpTabWhenClicked = () => {
         setIsHelpTabClicked(true);
     };
@@ -17,10 +31,25 @@ export default function Help() {
         setIsHelpTabClicked(false);
     };
 
+    // regular expression to handle if the input consist number. 
+    const containsNumber = (str) => /\d/.test(str);
+
+    // regular expression to handle if the input consist alphabet. 
+    const containsAlphabet = (str) => /[a-zA-Z]/.test(str);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', { name, email, message });
         setIsSubmitted(true);
+
+        if(containsNumber(name)){
+            setErrorMessage('Name should not contain number.');
+        }
+
+        if(containsAlphabet(phone)){
+            setErrorMessage('Phone number only contains number.');
+        }
+        console.log('Form submitted:', { name, email, message });
+        
     };
 
     return (
@@ -46,9 +75,12 @@ export default function Help() {
 
                             <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
                                 <form className="space-y-6" onSubmit={handleSubmit}>
+                                    {errorMessage && (
+                                        <div className="text-red-500 text-sm">{errorMessage}</div>
+                                    )}
                                     <div>
                                         <div className="flex items-center justify-between">
-                                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Name</label>
+                                            <label className="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                         </div>
                                         <div className="mt-2">
                                             <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
@@ -56,7 +88,7 @@ export default function Help() {
                                     </div>
                                     <div>
                                         <div className="flex items-center justify-between">
-                                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                                            <label className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                         </div>
                                         <div className="mt-2">
                                             <input  type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
@@ -64,7 +96,7 @@ export default function Help() {
                                     </div>
                                     <div>
                                         <div className="flex items-center justify-between">
-                                            <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900">Phone</label>
+                                            <label className="block text-sm font-medium leading-6 text-gray-900">Phone</label>
                                         </div>
                                         <div className="mt-2">
                                             <input  type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
@@ -72,7 +104,7 @@ export default function Help() {
                                     </div>
                                     <div>
                                         <div className="flex items-center justify-between">
-                                            <label htmlFor="message" required className="block text-sm font-medium leading-6 text-gray-900">Message</label>
+                                            <label required className="block text-sm font-medium leading-6 text-gray-900">Message</label>
                                         </div>
                                         <div className="mt-2">
                                             <textarea type="text" required value={message} onChange={(e) => setMessage(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6">
@@ -86,8 +118,8 @@ export default function Help() {
                                             >
                                             {isSubmitted ? (
                                                 <div className="flex items-center space-x-2">
-                                                <LoaderCircle className="animate-spin" />
-                                                <span>Submitting...</span>
+                                                   <LoaderCircle className="animate-spin" />
+                                                   <span>Submitting...</span>
                                                 </div>
                                             ) : (
                                                 "Submit"

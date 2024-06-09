@@ -1,22 +1,21 @@
-import React, { useState } from 'react'; // useState and useEffect hooks.
-import { useNavigate } from 'react-router-dom'; // this helps to navigate to the other pages. 
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
 import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import { LoaderCircle } from 'lucide-react'
-
+import { LoaderCircle, Phone } from 'lucide-react'
 
 export default function Registration() {
-
     const [isCreateButtonClicked, setIsCreateButtonClicked] = useState(false);
-    
+    const [errorMessage, setErrorMessage] = useState('');
+
     const navigate = useNavigate();
 
-    function redirectToLoginPage() {
+    const redirectToLoginPage = () => {
         navigate('/'); 
     }
 
-    function redirectToDashboardPage() {
+    const redirectToDashboardPage = () => {
         navigate('/portal/dashboard'); 
     }
 
@@ -30,41 +29,57 @@ export default function Registration() {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
-    function handleCreateAccountOnSubmit(e) {
-        e.preventDefault();
+    useEffect(()=>{
+        let timer;
+        if(isCreateButtonClicked){
+            timer = setTimeout(()=>{
+                setIsCreateButtonClicked(false);
+            }, 2000)
+        }
+        return () => clearTimeout(timer);
+    }, [isCreateButtonClicked]);
+    
+    // regular expression to handle if the input consist number. 
+    const containsNumber = (str) => /\d/.test(str);
 
+    const handleCreateAccountOnSubmit = (e) => {
+        e.preventDefault();
         setIsCreateButtonClicked(true);
 
-        if (passwordRegistration === verifyPasswordRegistration) {
-            
-            const formattedFirstName = formatInput(firstName);
-            const formattedLastName = formatInput(lastName);
-            const formattedEmail = emailRegistration.toLowerCase(); //emails are typically formatted in lowercase. 
+        if (containsNumber(firstName || containsNumber(lastName))){
+            setErrorMessage('Name field should not contain number.');
+        }else{
 
-            createUserWithEmailAndPassword(auth, emailRegistration, passwordRegistration)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userLoginId = user.uid;
-
-                    return addDoc(fireStoreCollectionReference, {
-                        userLoginId: userLoginId,
-                        firstName: formattedFirstName,
-                        lastName: formattedLastName,
-                        email: formattedEmail
+            if (passwordRegistration === verifyPasswordRegistration ) {
+                const formattedFirstName = formatInput(firstName);
+                const formattedLastName = formatInput(lastName);
+                const formattedEmail = emailRegistration.toLowerCase();
+    
+                createUserWithEmailAndPassword(auth, formattedEmail, passwordRegistration)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        const userLoginId = user.uid;
+    
+                        return addDoc(fireStoreCollectionReference, {
+                            userLoginId: userLoginId,
+                            firstName: formattedFirstName,
+                            lastName: formattedLastName,
+                            email: formattedEmail
+                        });
+                    })
+                    .then(() => {
+                        redirectToDashboardPage();
+                    })
+                    .catch((error) => {
+                        var errorMessage = error.message;
+                        console.error("Sign up error:", errorMessage);
+                        if (errorMessage) {
+                            alert('Email address is already in use. Please use a different email to get started.');
+                        }
                     });
-                })
-                .then(() => {
-                    redirectToDashboardPage();
-                })
-                .catch((error) => {
-                    var errorMessage = error.message;
-                    console.error("Sign up error:", errorMessage);
-                    if (errorMessage) {
-                        alert('Email address is already in use. Please use a different email to get started.');
-                    }
-                });
-        } else {
-            alert('Passwords do not match.');
+            } else {
+                alert('Passwords do not match.');
+            }
         }
     }
 
@@ -76,6 +91,9 @@ export default function Registration() {
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" onSubmit={handleCreateAccountOnSubmit}>
+                    {errorMessage && (
+                        <div className="text-red-500 text-sm">{errorMessage}</div>
+                    )}
                     <div>
                         <div className="flex items-center justify-between">
                             <label htmlFor="first_name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
@@ -135,5 +153,6 @@ export default function Registration() {
                 </button>
             </div>
         </div> 
-    );
-}
+)};
+  
+

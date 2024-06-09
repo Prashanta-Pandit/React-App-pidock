@@ -124,7 +124,7 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked}/>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
@@ -147,7 +147,7 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked}/>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked}/>
                                         </div>
                                     )}
                                 </dd>
@@ -162,7 +162,7 @@ export default function EditUserDetails() {
                                     <div className='flex flex-col p-3 justify-between'>
                                         <div className='flex flex-row justify-between'>
                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                           <Ban className="size-4 text-red-500 hover:animate-bounce"/>
+                                           <Ban className="cursor-pointer size-4 text-red-500 hover:animate-bounce"/>
                                         </div>
                                     </div>
                                 </dd>
