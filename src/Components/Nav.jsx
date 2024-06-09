@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CircleHelp } from 'lucide-react';
-import ProfileTab from './Portal/ProfileTab';
+import Help from './Help';
 
 export default function Navbar() {
 
@@ -31,7 +31,7 @@ export default function Navbar() {
                 <button
                   className=" text-gray-800 hover:text-gray-900 "
                 >
-                  <CircleHelp />
+                  <Help />
                 </button>
               </li>
             </ul>
