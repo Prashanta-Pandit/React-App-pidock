@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { CircleHelp } from 'lucide-react';
 import Help from './Help';
 
 export default function Navbar() {
@@ -22,17 +21,13 @@ export default function Navbar() {
             <ul className="inline-flex space-x-8">
               <li>
                 <a
-                  className="text-sm font-semibold text-gray-800 hover:text-gray-900"
+                  className=" cursor-pointer text-sm font-semibold text-black hover:text-gray-600"
                 >
                   About
                 </a>
               </li>
               <li>
-                <button
-                  className=" text-gray-800 hover:text-gray-900 "
-                >
                   <Help />
-                </button>
               </li>
             </ul>
           </div>

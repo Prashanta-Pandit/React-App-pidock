@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircleHelp } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
+import { LoaderCircle, CircleHelp, X } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
 
 export default function Help() {
     const [isHelpTabClicked, setIsHelpTabClicked] = useState(false);
@@ -9,7 +9,11 @@ export default function Help() {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const showHelpTabWhenClicked = () => {
-        setIsHelpTabClicked(!isHelpTabClicked);
+        setIsHelpTabClicked(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsHelpTabClicked(false);
     };
 
     const handleSubmit = (e) => {
@@ -20,64 +24,83 @@ export default function Help() {
 
     return (
         <div className="relative inline-block">
-            <CircleHelp className="cursor-pointer text-blue-500" onClick={showHelpTabWhenClicked} />
-            <div
-                className={`absolute mt-2 right-0 bg-white p-6 rounded-lg shadow-lg transition-transform duration-300 ease-in-out ${
-                    isHelpTabClicked ? 'transform scale-100 opacity-100' : 'transform scale-95 opacity-0'
-                }`}
-                style={{ width: '350px', transformOrigin: 'top right', zIndex: 50 }}
-            >
-                <h3 className="mb-6 font-bold text-center text-black">Help Form</h3>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="name" className="block text-sm font-medium text-black">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            className="w-full px-3 py-2 mt-1 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-sm font-medium text-black">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            className="w-full px-3 py-2 mt-1 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="message" className="block text-sm font-medium text-black">Message</label>
-                        <textarea
-                            id="message"
-                            className="w-full px-3 py-2 mt-1 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            rows="4"
-                            required
-                        ></textarea>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full px-4 py-2 mt-4 text-white bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-200"
+            <CircleHelp className="cursor-pointer text-black hover:text-gray-600" onClick={showHelpTabWhenClicked} />
+            {isHelpTabClicked && (
+                <div
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+                    style={{ zIndex: 50 }}
+                >
+                    <div
+                        className="relative bg-white p-6 rounded-lg shadow-lg"
+                        style={{ width: '350px' }}
                     >
-                        Submit
-                    </button>
-                </form>
-                {isSubmitted && (
-                    <div className="mt-4 text-center text-green-800">
-                        We have received your message. 
-                    </div>
-                )}
+                        <div className="flex justify-end">
+                            <X className="cursor-pointer hover:bg-red-600 hover:text-white" onClick={handleCloseModal} />
+                        </div>
+
+                        <div className="flex min-h-full flex-col justify-center">
+                            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                                <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">Help form</h3>
+                            </div>
+
+                            <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
+                                <form className="space-y-6" onSubmit={handleSubmit}>
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Name</label>
+                                        </div>
+                                        <div className="mt-2">
+                                            <input id="email" name="email" type="email" required value={name} onChange={(e) => setName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                                        </div>
+                                        <div className="mt-2">
+                                            <input id="email" name="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Message</label>
+                                        </div>
+                                        <div className="mt-2">
+                                            <textarea type="text" required value={message} onChange={(e) => setMessage(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button
+                                            type="submit"
+                                            className="flex w-full items-center justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black"
+                                            >
+                                            {isSubmitted ? (
+                                                <div className="flex items-center space-x-2">
+                                                <LoaderCircle className="animate-spin" />
+                                                <span>Submitting...</span>
+                                                </div>
+                                            ) : (
+                                                "Submit"
+                                            )}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {isSubmitted && (
+                             <div className="mt-4 text-center text-green-800">
+                                 We have received your message.
+                             </div>
+                         )}
+                </div>
             </div>
+            )}
         </div>
     );
 }
+
+
 
 
 

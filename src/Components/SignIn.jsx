@@ -198,7 +198,7 @@ export default function SignIn() {
                             ):(
                                 <>
                                    <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
-                                   <span className="relative">Connecting you to Google services...</span>
+                                   <span className="relative font-light">Connecting you to Google services...</span>
                                 </>
                             )
                         }
