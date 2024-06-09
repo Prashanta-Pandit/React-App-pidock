@@ -21,7 +21,7 @@ export default function SupportChat() {
             <div className="flex min-h-full flex-col justify-center">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">
-                        Chat
+                        Chat online
                     </h3>
                 </div>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">

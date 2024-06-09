@@ -5,6 +5,7 @@ export default function Help() {
     const [isHelpTabClicked, setIsHelpTabClicked] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -40,7 +41,7 @@ export default function Help() {
 
                         <div className="flex min-h-full flex-col justify-center">
                             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                                <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">Help form</h3>
+                                <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">Send your message</h3>
                             </div>
 
                             <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
@@ -50,7 +51,7 @@ export default function Help() {
                                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                         </div>
                                         <div className="mt-2">
-                                            <input id="email" name="email" type="email" required value={name} onChange={(e) => setName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                            <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
                                         </div>
                                     </div>
                                     <div>
@@ -58,7 +59,15 @@ export default function Help() {
                                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                         </div>
                                         <div className="mt-2">
-                                            <input id="email" name="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                            <input  type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center justify-between">
+                                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Phone</label>
+                                        </div>
+                                        <div className="mt-2">
+                                            <input  type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
                                         </div>
                                     </div>
                                     <div>
