@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LoaderCircle, CircleHelp, X } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
+import { LoaderCircle, CircleHelp, X } from 'lucide-react';
 
 export default function Help() {
     const [isHelpTabClicked, setIsHelpTabClicked] = useState(false);
@@ -8,19 +8,16 @@ export default function Help() {
     const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
-
     const [errorMessage, setErrorMessage] = useState('');
 
-    // setup a timer for the sigining in load...
-    useEffect(()=>{
+    useEffect(() => {
         let timer;
-        if(isSubmitted){
-            timer = setTimeout(()=>{
+        if (isSubmitted) {
+            timer = setTimeout(() => {
                 setIsSubmitted(false);
-            }, 2000) // 2 sec
+            }, 2000); // 2 sec
         }
-        return () => clearTimeout (timer);
-
+        return () => clearTimeout(timer);
     }, [isSubmitted]);
 
     const showHelpTabWhenClicked = () => {
@@ -31,25 +28,29 @@ export default function Help() {
         setIsHelpTabClicked(false);
     };
 
-    // regular expression to handle if the input consist number. 
     const containsNumber = (str) => /\d/.test(str);
-
-    // regular expression to handle if the input consist alphabet. 
     const containsAlphabet = (str) => /[a-zA-Z]/.test(str);
+
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
+        setErrorMessage('');
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmitted(true);
 
-        if(containsNumber(name)){
+        if (containsNumber(name)) {
             setErrorMessage('Name should not contain number.');
+            return;
         }
 
-        if(containsAlphabet(phone)){
-            setErrorMessage('Phone number only contains number.');
+        if (containsAlphabet(phone)) {
+            setErrorMessage('Phone number only contains numbers.');
+            return;
         }
-        console.log('Form submitted:', { name, email, message });
-        
+
+        console.log('Form submitted:', { name, email, phone, message });
     };
 
     return (
@@ -73,7 +74,7 @@ export default function Help() {
                                 <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">Send your message</h3>
                             </div>
 
-                            <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
+                            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                                 <form className="space-y-6" onSubmit={handleSubmit}>
                                     {errorMessage && (
                                         <div className="text-red-500 text-sm">{errorMessage}</div>
@@ -83,7 +84,7 @@ export default function Help() {
                                             <label className="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                         </div>
                                         <div className="mt-2">
-                                            <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                            <input type="text" required value={name} onChange={handleInputChange(setName)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
                                         </div>
                                     </div>
                                     <div>
@@ -91,7 +92,7 @@ export default function Help() {
                                             <label className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                         </div>
                                         <div className="mt-2">
-                                            <input  type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                            <input type="email" required value={email} onChange={handleInputChange(setEmail)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
                                         </div>
                                     </div>
                                     <div>
@@ -99,7 +100,7 @@ export default function Help() {
                                             <label className="block text-sm font-medium leading-6 text-gray-900">Phone</label>
                                         </div>
                                         <div className="mt-2">
-                                            <input  type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"/>
+                                            <input type="text" required value={phone} onChange={handleInputChange(setPhone)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
                                         </div>
                                     </div>
                                     <div>
@@ -107,19 +108,18 @@ export default function Help() {
                                             <label required className="block text-sm font-medium leading-6 text-gray-900">Message</label>
                                         </div>
                                         <div className="mt-2">
-                                            <textarea type="text" required value={message} onChange={(e) => setMessage(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6">
-                                            </textarea>
+                                            <textarea type="text" required value={message} onChange={handleInputChange(setMessage)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"></textarea>
                                         </div>
                                     </div>
                                     <div>
                                         <button
                                             type="submit"
                                             className="flex w-full items-center justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black"
-                                            >
+                                        >
                                             {isSubmitted ? (
                                                 <div className="flex items-center space-x-2">
-                                                   <LoaderCircle className="animate-spin" />
-                                                   <span>Submitting...</span>
+                                                    <LoaderCircle className="animate-spin" />
+                                                    <span>Submitting...</span>
                                                 </div>
                                             ) : (
                                                 "Submit"
@@ -130,16 +130,17 @@ export default function Help() {
                             </div>
                         </div>
                         {isSubmitted && (
-                             <div className="mt-4 text-center text-green-800">
-                                 We have received your message.
-                             </div>
-                         )}
+                            <div className="mt-4 text-center text-green-800">
+                                We have received your message.
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
             )}
         </div>
     );
 }
+
 
 
 

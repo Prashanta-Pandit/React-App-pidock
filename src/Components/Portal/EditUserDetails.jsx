@@ -16,6 +16,7 @@ export default function EditUserDetails() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Effect to retrieve signed-in user ID from local storage
     useEffect(() => {
@@ -42,9 +43,27 @@ export default function EditUserDetails() {
         }
     }, [signedInUserId]);
 
+    useEffect(() => {
+        if (isUpdateButtonClicked) {
+            const timer = setTimeout(() => {
+                setIsUpdateButtonClicked(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [isUpdateButtonClicked]);
+
     //format the user input to proper form
-    const formatInput = (str) =>{
-       return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const formatInput = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
+    // regular expression to handle if the input consist number. 
+    const containsNumber = (str) => /\d/.test(str);
+
+    // Function to handle input changes and reset error message
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
+        setErrorMessage(''); // Clear the error message
     };
 
     // Function to handle form submission and update user details
@@ -58,25 +77,30 @@ export default function EditUserDetails() {
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
             //const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
-            
+
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
                 //email: formattedEmail
             };
 
-            updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
-            .then(() => {
-                // Indicate update success and show "Done" for 2 seconds
-                setTimeout(() => {
-                    setIsUpdateButtonClicked(false);
-                }, 2000); // 2 sec
-            })
-            .catch((error) => {
-                // Handle errors and reset the update button state
-                console.error('Error updating user details:', error);
-                setIsUpdateButtonClicked(false);
-            });
+            if (containsNumber(firstName) || containsNumber(lastName)) {
+                setErrorMessage('Name field should not contain number.');
+            }
+            else {
+                updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
+                    .then(() => {
+                        // Indicate update success and show "Done" for 2 seconds
+                        setTimeout(() => {
+                            setIsUpdateButtonClicked(false);
+                        }, 2000); // 2 sec
+                    })
+                    .catch((error) => {
+                        // Handle errors and reset the update button state
+                        console.error('Error updating user details:', error);
+                        setIsUpdateButtonClicked(false);
+                    });
+            }
         }
     }
 
@@ -101,6 +125,9 @@ export default function EditUserDetails() {
         ) : (
             <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
+                    {errorMessage && (
+                        <div className="text-red-500 text-sm">{errorMessage}</div>
+                    )}
                     <div className="px-4 sm:px-0">
                         <h3 className="text-2xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
@@ -118,13 +145,13 @@ export default function EditUserDetails() {
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
+                                            onChange={handleInputChange(setFirstName)}
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
                                         />
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked}/>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -141,13 +168,13 @@ export default function EditUserDetails() {
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
+                                            onChange={handleInputChange(setLastName)}
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
                                         />
                                     ) : (
                                         <div className='flex flex-row p-3 justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked}/>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -161,8 +188,8 @@ export default function EditUserDetails() {
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                     <div className='flex flex-col p-3 justify-between'>
                                         <div className='flex flex-row justify-between'>
-                                           <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                           <Ban className="cursor-pointer size-4 text-red-500 hover:animate-bounce"/>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Ban className="cursor-pointer size-4 text-red-500 hover:animate-bounce" />
                                         </div>
                                     </div>
                                 </dd>
@@ -203,3 +230,4 @@ export default function EditUserDetails() {
         )
     );
 }
+

@@ -1,38 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { LoaderCircle } from 'lucide-react'; // Ensure to import the CircleHelp icon from Lucid library
+import { LoaderCircle } from 'lucide-react'; 
 
 export default function SupportChat() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [message, setMessage] = useState('');
 
-    // regular expression to handle if the input consist number. 
     const containsNumber = (str) => /\d/.test(str);
+
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
+        setErrorMessage('');
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(containsNumber(name)){
-           setErrorMessage('Name should not contain number.');
+        if (containsNumber(name)) {
+            setErrorMessage('Name should not contain number.');
+            return;
         }
 
         setIsSubmitted(true);
         console.log('Form submitted:', { name, email, message });
-        
     };
 
-    useEffect(()=>{
-        if(isSubmitted){
-           const timer = setTimeout(()=>{
+    useEffect(() => {
+        if (isSubmitted) {
+            const timer = setTimeout(() => {
                 setIsSubmitted(false);
-           }, 2000)
+            }, 2000);
+            return () => clearTimeout(timer);
         }
     }, [isSubmitted]);
 
     return (
         <div
-          className="relative bg-white p-6"
-          style={{ width: '350px' }}
+            className="relative bg-white p-6"
+            style={{ width: '350px' }}
         >
             <div className="flex min-h-full flex-col justify-center">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -43,7 +49,7 @@ export default function SupportChat() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         {errorMessage && (
-                             <div className="text-red-500 text-sm">{errorMessage}</div>
+                            <div className="text-red-500 text-sm">{errorMessage}</div>
                         )}
                         <div>
                             <div className="flex items-center justify-between">
@@ -58,7 +64,7 @@ export default function SupportChat() {
                                     type="text"
                                     required
                                     value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={handleInputChange(setName)}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -76,7 +82,7 @@ export default function SupportChat() {
                                     type="email"
                                     required
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={handleInputChange(setEmail)}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -93,7 +99,7 @@ export default function SupportChat() {
                                     name="message"
                                     required
                                     value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
+                                    onChange={handleInputChange(setMessage)}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
                                     rows="4"
                                 />
@@ -120,3 +126,4 @@ export default function SupportChat() {
         </div>
     );
 }
+
