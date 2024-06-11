@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, Ban, BriefcaseBusiness, Handshake, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { Mail, User, Pencil, LoaderCircle, Ban, BriefcaseBusiness, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
@@ -11,13 +11,11 @@ export default function EditUserDetails() {
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
     const [firstNameInputClicked, setFirstNameInputClicked] = useState(false);
     const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
-    const [titleInputClicked, setTitleInputClicked] = useState(false);
     const [departmentInputClicked, setDepartmentInputClicked] = useState(false);
     const [roleInputClicked, setRoleInputClicked] = useState(false);
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [title, setTitle] = useState('');
     const [department, setDepartment] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
@@ -43,7 +41,6 @@ export default function EditUserDetails() {
                     setFirstName(details[0].firstName);
                     setLastName(details[0].lastName);
                     setEmail(details[0].email);
-                    setTitle(details[0].title);
                     setDepartment(details[0].department);
                     setRole(details[0].role);
                 }
@@ -85,7 +82,6 @@ export default function EditUserDetails() {
             const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
-            const formattedTitle = formatInput(title);
             const formattedDepartment = formatInput(department);
             const formattedRole = formatInput(role);
             //const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
@@ -94,12 +90,11 @@ export default function EditUserDetails() {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
                 department: formattedDepartment,
-                title: formattedTitle,
                 role: formattedRole
                 //email: formattedEmail
             };
 
-            if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(title) || containsNumber(department) || containsNumber(role)) {
+            if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
                 setErrorMessage('Input field should not contain number.');
             }
             else {
@@ -134,10 +129,6 @@ export default function EditUserDetails() {
         setLastNameInputClicked(true);
     }
 
-    function handleTitleInputClicked() {
-        setTitleInputClicked(true);
-    }
-
     function handleDepartmentInputClicked() {
         setDepartmentInputClicked(true);
     }
@@ -159,30 +150,7 @@ export default function EditUserDetails() {
                         <h3 className="text-xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
                     <div className="mt-6 border-t border-gray-100">
-                        <dl className="divide-y divide-gray-100">
-                            {/* Title field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <Handshake />
-                                    <span className="ml-2">Occupation Title</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {/* using conditional rendering */}
-                                    {titleInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={title}
-                                            onChange={handleInputChange(setTitle)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].title}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].title}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleTitleInputClicked} />
-                                        </div>
-                                    )}
-                                </dd>
-                            </div>
+                        <dl className="divide-y divide-gray-100">  
                             {/* First Name field */}
                             <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">

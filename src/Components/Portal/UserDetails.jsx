@@ -52,13 +52,6 @@ export default function Profile() {
                                     <>
                                         <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                             <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                                <Handshake />
-                                                <span className="ml-2">Occupation Title</span>
-                                            </dt>
-                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails[0].title}</dd>
-                                        </div>
-                                        <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                                 <User />
                                                 <span className="ml-2">Full Name</span>
                                             </dt>

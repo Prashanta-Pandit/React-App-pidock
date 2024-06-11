@@ -9,6 +9,8 @@ import { LoaderCircle } from 'lucide-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
+import Footer from "./Footer";
+
 export default function SignIn() {
 
     const [isSignInButtonClicked, setIsSignInButtonClicked] = useState(false);
@@ -134,6 +136,7 @@ export default function SignIn() {
     }
 
     return (
+        <>
         // making sure that the loading spinner run before retriving to dashboard.jsx
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -216,5 +219,7 @@ export default function SignIn() {
                     </button>
                 </div>
             </div>
+            <Footer />
+        </>
     )
 }
