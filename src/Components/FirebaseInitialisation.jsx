@@ -19,7 +19,7 @@ const auth =getAuth(app);  // getting authentication
 const firestoreDb = getFirestore(app); // getting the db ready for firestore
 
 //collection reference from firestoreDb
-const fireStoreCollectionReference = collection(firestoreDb, 'users') // this collection is being stored in the collection called collectionReference
+const fireStoreCollectionReference = collection(firestoreDb, 'employees') // this collection is being stored in the collection called collectionReference
 
 console.log(`Firebase reference:  ${fireStoreCollectionReference}`);
 

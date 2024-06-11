@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fireStoreCollectionReference } from '../../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { LoaderCircle } from 'lucide-react';
-import EmployeesList from './ItemsInDashboard/TeamList';
+import EmployeesList from './ItemsInDashboard/EmployeeList';
 
 export default function UserDashboard() {
   const [signedInUserId, setSignedInUserId] = useState('');
@@ -28,7 +28,7 @@ export default function UserDashboard() {
 
   return (
     <div className="mt-32 ml-6 flex flex-col justify-center px-4 py-6 lg:px-2">
-      <h2 className="text-2xl font-semibold mb-4">
+      <h2 className="text-2xl font-semibold mb-4 ml-3">
         {userDetails.length > 0 ? `Welcome ${userDetails[0].firstName}` : <LoaderCircle className="text-gray-300 animate-spin" />}
       </h2>
       <EmployeesList />
