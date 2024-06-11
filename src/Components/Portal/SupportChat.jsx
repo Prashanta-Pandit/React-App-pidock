@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LoaderCircle } from 'lucide-react'; 
+import { LoaderCircle, Headset } from 'lucide-react'; 
 
 export default function SupportChat() {
     const [name, setName] = useState('');
@@ -41,10 +41,9 @@ export default function SupportChat() {
             style={{ width: '350px' }}
         >
             <div className="flex min-h-full flex-col justify-center">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h3 className="text-center font-bold leading-9 tracking-tight text-gray-900">
-                        Chat online
-                    </h3>
+                <div className="flex flex-row justify-center sm:mx-auto sm:w-full sm:max-w-sm">
+                    <Headset />
+                    <h3 className=' ml-3 font-bold'>Chat online</h3>
                 </div>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={handleSubmit}>
