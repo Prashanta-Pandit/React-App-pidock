@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, Ban } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { Mail, User, Pencil, LoaderCircle, Ban, BriefcaseBusiness, Handshake, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
@@ -11,9 +11,15 @@ export default function EditUserDetails() {
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
     const [firstNameInputClicked, setFirstNameInputClicked] = useState(false);
     const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
-    //const [emailInputClicked, setEmailInputClicked] = useState(false);
+    const [titleInputClicked, setTitleInputClicked] = useState(false);
+    const [departmentInputClicked, setDepartmentInputClicked] = useState(false);
+    const [roleInputClicked, setRoleInputClicked] = useState(false);
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [title, setTitle] = useState('');
+    const [department, setDepartment] = useState('');
+    const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -37,6 +43,9 @@ export default function EditUserDetails() {
                     setFirstName(details[0].firstName);
                     setLastName(details[0].lastName);
                     setEmail(details[0].email);
+                    setTitle(details[0].title);
+                    setDepartment(details[0].department);
+                    setRole(details[0].role);
                 }
             });
             return () => unsubscribe();
@@ -76,16 +85,22 @@ export default function EditUserDetails() {
             const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
+            const formattedTitle = formatInput(title);
+            const formattedDepartment = formatInput(department);
+            const formattedRole = formatInput(role);
             //const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
 
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
+                department: formattedDepartment,
+                title: formattedTitle,
+                role: formattedRole
                 //email: formattedEmail
             };
 
-            if (containsNumber(firstName) || containsNumber(lastName)) {
-                setErrorMessage('Name field should not contain number.');
+            if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(title) || containsNumber(department) || containsNumber(role)) {
+                setErrorMessage('Input field should not contain number.');
             }
             else {
                 updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
@@ -119,6 +134,18 @@ export default function EditUserDetails() {
         setLastNameInputClicked(true);
     }
 
+    function handleTitleInputClicked() {
+        setTitleInputClicked(true);
+    }
+
+    function handleDepartmentInputClicked() {
+        setDepartmentInputClicked(true);
+    }
+
+    function handleRoleInputClicked() {
+        setRoleInputClicked(true);
+    }
+
     return (
         isCancelButtonClicked ? (
             <UserDetails /> // Render UserDetails component if cancel button is clicked
@@ -133,8 +160,31 @@ export default function EditUserDetails() {
                     </div>
                     <div className="mt-6 border-t border-gray-100">
                         <dl className="divide-y divide-gray-100">
+                            {/* Title field */}
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <Handshake />
+                                    <span className="ml-2">Occupation Title</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {/* using conditional rendering */}
+                                    {titleInputClicked ? (
+                                        <input
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            value={title}
+                                            onChange={handleInputChange(setTitle)}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].title}` : 'No data'}
+                                        />
+                                    ) : (
+                                        <div className='flex flex-row justify-between'>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].title}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleTitleInputClicked} />
+                                        </div>
+                                    )}
+                                </dd>
+                            </div>
                             {/* First Name field */}
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">First Name</span>
@@ -149,7 +199,7 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row p-3 justify-between'>
+                                        <div className='flex flex-row justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked} />
                                         </div>
@@ -157,13 +207,12 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Last Name field */}
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">Last Name</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {/* using conditional rendering */}
                                     {lastNameInputClicked ? (
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -172,7 +221,7 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row p-3 justify-between'>
+                                        <div className='flex flex-row justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
                                         </div>
@@ -180,54 +229,88 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Email field */}
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <Mail />
                                     <span className="ml-2">Email</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    <div className='flex flex-col p-3 justify-between'>
-                                        <div className='flex flex-row justify-between'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Ban className="cursor-pointer size-4 text-red-500 hover:animate-bounce" />
-                                        </div>
-                                    </div>
+                                    {userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}
                                 </dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <div className="sm:col-span-2"></div>
-                                <dd className="flex flex-col sm:flex-row sm:space-x-4 justify-end text-sm font-normal leading-6">
-                                    {/* Update button with loader */}
-                                    {isUpdateButtonClicked ? (
-                                        <button
-                                            className="flex items-center justify-center bg-green-900 text-white rounded-md px-4 py-2 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
-                                        >
-                                            <LoaderCircle className="animate-spin mr-2" size={16} /> {/* Spinning loader */}
-                                            Updating...
-                                        </button>
+                            {/* Department field */}
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <Landmark />
+                                    <span className="ml-2">Department</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {departmentInputClicked ? (
+                                        <input
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            value={department}
+                                            onChange={handleInputChange(setDepartment)}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].department}` : 'No data'}
+                                        />
                                     ) : (
-                                        <button
-                                            className="flex items-center justify-center bg-black text-white rounded-md px-4 py-2 hover:bg-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring- focus:ring-opacity-50 mb-2 sm:mb-0"
-                                            type="submit"
-                                        >
-                                            Update
-                                        </button>
+                                        <div className='flex flex-row justify-between'>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].department}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleDepartmentInputClicked} />
+                                        </div>
                                     )}
-                                    {/* Cancel button */}
-                                    <button
-                                        className="flex items-center justify-center bg-white text-gray-900 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-                                        onClick={handleCancel}
-                                    >
-                                        Back
-                                    </button>
-
+                                </dd>
+                            </div>
+                            {/* Role field */}
+                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <BriefcaseBusiness />
+                                    <span className="ml-2">Role</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {roleInputClicked ? (
+                                        <input
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            value={role}
+                                            onChange={handleInputChange(setRole)}
+                                            placeholder={userDetails.length > 0 ? `${userDetails[0].role}` : 'No data'}
+                                        />
+                                    ) : (
+                                        <div className='flex flex-row justify-between'>
+                                            <p>{userDetails.length > 0 ? `${userDetails[0].role}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleRoleInputClicked} />
+                                        </div>
+                                    )}
                                 </dd>
                             </div>
                         </dl>
+                    </div>
+                    {/* Button for Cancel and Update */}
+                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <button
+                            onClick={handleCancel}
+                            className="flex flex-row rounded-md bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-gray-200 border border-gray-500 border-solid">
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800"
+                            disabled={isUpdateButtonClicked}
+                        >
+                            {isUpdateButtonClicked ? (
+                                <div className='flex flex-row justify-center'>
+                                    <LoaderCircle className='w-6 h-6 animate-spin' />
+                                    <span className="ml-2">Updating...</span>
+                                </div>
+                            ) : (
+                                <div>Update</div>
+                            )}
+                        </button>
                     </div>
                 </form>
             </div>
         )
     );
 }
+
 

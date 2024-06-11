@@ -21,6 +21,9 @@ export default function Registration() {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [title, setTitle] = useState('');
+    const [department, setDepartment] = useState('');
+    const [role, setRole] = useState('');
     const [emailRegistration, setEmailRegistration] = useState('');
     const [passwordRegistration, setPasswordRegistration] = useState('');
     const [verifyPasswordRegistration, setVerifyPasswordRegistration] = useState('');
@@ -52,12 +55,15 @@ export default function Registration() {
         e.preventDefault();
         setIsCreateButtonClicked(true);
 
-        if (containsNumber(firstName) || containsNumber(lastName)) {
-            setErrorMessage('Name field should not contain number.');
+        if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(title) || containsNumber(department) || containsNumber(role)) {
+            setErrorMessage('Input field should not contain number.');
         } else {
             if (passwordRegistration === verifyPasswordRegistration) {
                 const formattedFirstName = formatInput(firstName);
                 const formattedLastName = formatInput(lastName);
+                const formattedTitle = formatInput(title);
+                const formattedDepartment = formatInput(department);
+                const formattedRole = formatInput(role);
                 const formattedEmail = emailRegistration.toLowerCase();
 
                 createUserWithEmailAndPassword(auth, formattedEmail, passwordRegistration)
@@ -69,7 +75,10 @@ export default function Registration() {
                             userLoginId: userLoginId,
                             firstName: formattedFirstName,
                             lastName: formattedLastName,
-                            email: formattedEmail
+                            email: formattedEmail,
+                            department : formattedDepartment,
+                            title : formattedTitle,
+                            role: formattedRole
                         });
                     })
                     .then(() => {
@@ -121,6 +130,30 @@ export default function Registration() {
                         </div>
                         <div className="mt-2">
                             <input id="email" name="email" type="email" required value={emailRegistration} onChange={handleInputChange(setEmailRegistration)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center justify-between">
+                            <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">Occupation Title</label>
+                        </div>
+                        <div className="mt-2">
+                            <input id="title" name="title" type="text" required value={title} onChange={handleInputChange(setTitle)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center justify-between">
+                            <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">Department</label>
+                        </div>
+                        <div className="mt-2">
+                            <input id="department" name="department" type="text" required value={department} onChange={handleInputChange(setDepartment)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center justify-between">
+                            <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">Role</label>
+                        </div>
+                        <div className="mt-2">
+                            <input id="role" name="role" type="text" required value={role} onChange={handleInputChange(setRole)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
                         </div>
                     </div>
                     <div>
