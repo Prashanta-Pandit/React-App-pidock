@@ -40,7 +40,7 @@ export default function Profile() {
                 <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                     <div>
                         <div className="flex flex-row justify-between px-4 sm:px-0">
-                            <h3 className="text-2xl font-bold leading-7 text-gray-900">Your details</h3>
+                            <h3 className="text-xl font-bold leading-7 text-gray-900">Your details</h3>
                             <button className="flex flex-row text-sm font-normal leading-6 text-blue-600 hover:underline" onClick={editButtonClick}>
                                 <Pencil className="size-5 mr-1" />
                                 <span>edit</span>

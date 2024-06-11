@@ -156,12 +156,12 @@ export default function EditUserDetails() {
                         <div className="text-red-500 text-sm">{errorMessage}</div>
                     )}
                     <div className="px-4 sm:px-0">
-                        <h3 className="text-2xl font-bold leading-7 text-gray-900">Update your details</h3>
+                        <h3 className="text-xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
                     <div className="mt-6 border-t border-gray-100">
                         <dl className="divide-y divide-gray-100">
                             {/* Title field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <Handshake />
                                     <span className="ml-2">Occupation Title</span>
@@ -184,7 +184,7 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* First Name field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">First Name</span>
@@ -207,7 +207,7 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Last Name field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <User />
                                     <span className="ml-2">Last Name</span>
@@ -229,7 +229,7 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Email field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <Mail />
                                     <span className="ml-2">Email</span>
@@ -239,7 +239,7 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Department field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <Landmark />
                                     <span className="ml-2">Department</span>
@@ -261,7 +261,7 @@ export default function EditUserDetails() {
                                 </dd>
                             </div>
                             {/* Role field */}
-                            <div className="px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <BriefcaseBusiness />
                                     <span className="ml-2">Role</span>
