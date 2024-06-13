@@ -19,9 +19,9 @@ export default function AddEmployeeModal() {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <div className="flex justify-end">
-              <X className="cursor-pointer hover:bg-red-600 hover:text-white" onClick={handleCloseModal} />
+              <X className="cursor-pointer hover:bg-red-600 text-black" onClick={handleCloseModal} />
             </div>
-            <h2 className="text-lg font-semibold mb-4">Add New Employee</h2>
+            <h2 className=" text-black text-lg font-semibold mb-4">Add New Employee</h2>
       
             <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
               <div className="mb-4 col-span-1">
@@ -89,9 +89,10 @@ export default function AddEmployeeModal() {
         </div>
       )}
 
+{/* // make it visible first and only visible the model above when the button is clicked.  */}
       <button  onClick={() => setIsCloseButtonClicked(true)}> Add </button>
     </>
   );
 }
 
-
+   

@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
-
 import { fireStoreCollectionReference } from '../../../FirebaseInitialisation';
-import { onSnapshot } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-
+import { onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import AddEmployeeButton from './AddEmployeeButton';
 
 export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
-  const [addEmployeeButtonClicked, setAddEmployeeButtonClicked] = useState(false);
+  const [signedInUserId, setSignedInUserId] = useState('');
 
+  useEffect(()=>{
+    const userId = localStorage.getItem('signedInUserUid');
+    if(userId){
+      setSignedInUserId(userId);
+    }});
+  
   useEffect(() => {
     const unsubscribe = onSnapshot(fireStoreCollectionReference, (snapshot) => {
-      const Details = snapshot.docs.map(doc => ({
+      const details = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-      setEmployeeDetails(Details);
+      setEmployeeDetails(details);
     });
     return () => unsubscribe(); // clean up the listener.
   }, []);
-  
-  const addEmployee = () =>{
-    setAddEmployeeButtonClicked(true);
+
+  const deleteEmployee = (documentId) => {
+    // firebase delete features. 
+    deleteDoc(doc(fireStoreCollectionReference, documentId));
+    console.log(signedInUserId);
+    
+  };
+
+  function detectTheSignInUserDocumentList(){
+    employeeDetails.map(()=>{
+      
+    })
   }
 
   return (
@@ -32,13 +45,12 @@ export default function TeamList() {
           <div>
             <h2 className="text-lg font-semibold">Employees</h2>
             <p className="mt-1 text-sm text-gray-700">
-              This is a list of all employees. You can add new employees, edit or delete existing
-              ones.
+              This is a list of all employees. You can add new employees, edit or delete existing ones.
             </p>
           </div>
-          <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
+          {/* <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
               <AddEmployeeButton />
-          </div>
+          </div> */}
         </div>
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -79,7 +91,7 @@ export default function TeamList() {
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
                       {employeeDetails.map((employee) => (
-                        <tr key={employee.name}>
+                        <tr key={employee.id}>
                           <td className="whitespace-nowrap px-4 py-4">
                             <div className="flex items-center">
                               <div className="h-10 w-10 flex-shrink-0">
@@ -90,13 +102,13 @@ export default function TeamList() {
                                 />
                               </div>
                               <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">{employee.firstName} {employee.lastName}</div>
+                                <div className="text-m font-semibold text-gray-900">{employee.firstName} {employee.lastName}</div>
                                 <div className="text-sm text-gray-700">{employee.email}</div>
                               </div>
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                            <div className="text-sm text-gray-700">{employee.department}</div>
+                            <div className="text-sm text-gray-700"> {employee.department }</div>
                           </td>
                           <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
                             <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
@@ -107,7 +119,10 @@ export default function TeamList() {
                             {employee.role}
                           </td>
                           <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                            <Trash2 className='cursor-pointer size-5 text-red-700' />
+                            <Trash2 
+                              className='cursor-pointer size-5 text-red-700 hover:text-blue-700' 
+                              onClick={() => deleteEmployee(employee.id)}
+                            />
                           </td>
                         </tr>
                       ))}
@@ -122,6 +137,7 @@ export default function TeamList() {
     </>
   );
 }
+
 
 
 

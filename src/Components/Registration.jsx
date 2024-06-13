@@ -88,8 +88,13 @@ export default function Registration() {
                     })
                     .catch((error) => {
                         var errorMessage = error.message;
+                        var errorCode = error.code;
+                        console.error("Sign up error:", errorCode);
                         console.error("Sign up error:", errorMessage);
-                        if (errorMessage) {
+                        if (errorCode == 'auth/weak-password') {
+                            alert('Password should be at least 6 characters');
+                        }
+                        else{
                             alert('Email address is already in use. Please use a different email to get started.');
                         }
                     });

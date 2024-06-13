@@ -16,8 +16,20 @@ export default function SignIn() {
     const [isSignInButtonClicked, setIsSignInButtonClicked] = useState(false);
     const [isGoogleSignInButtonClicked, setIsGoogleSignInButtonClicked ] = useState(false);
 
-    //use dom function, useNavigate() to naviagate to pages.
     const navigate = useNavigate(); 
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                redirectToDashboard(user);
+            } else {
+                console.log('No user is signed in.');
+            }
+        });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [auth]);
 
     function handleCreateAccount() {
         navigate('/register');
@@ -29,20 +41,9 @@ export default function SignIn() {
     }
 
     function redirectToDashboard(signedInUser) {
-
-        // storing the signed in user unique uid in local storgae. This helps in locating a seperate portal for signed user. 
-        //This is a unique which has been stored in firestore as well, it will help to retrive other data from firebase.
-        localStorage.setItem('signedInUserUid', signedInUser.uid)
-            navigate('/portal/dashboard');
+        localStorage.setItem('signedInUserUid', signedInUser.uid);
+        navigate('/portal/dashboard');
     }
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            redirectToDashboard(user);
-        } else {
-            console.log('No user is signed in.');
-        }
-    });
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -54,10 +55,8 @@ export default function SignIn() {
     function handleSignInOnSubmit(e) {
         e.preventDefault();
         
-        // make it true when clciked.
         setIsSignInButtonClicked(true);
 
-        // submit the formatted email.
         const formatedEmail = formatEmail(email);
 
         signInWithEmailAndPassword(auth, formatedEmail, password)
@@ -74,57 +73,47 @@ export default function SignIn() {
                 }
             })
     }
-     // setting up the timer for sign in button click. 
-     useEffect(()=>{
+    // useEffect runs the code, only if the certain action applied. for eg: the timer only runs when the Sign in button is clicked. 
+    useEffect(() => {
         let timer;
-        if(isSignInButtonClicked){
-            timer = setTimeout(()=>{
+        if (isSignInButtonClicked) {
+            timer = setTimeout(() => {
                 setIsSignInButtonClicked(false);
-            }, 2000)
+            }, 2000);
         }
         return () => clearTimeout(timer);
-
     }, [isSignInButtonClicked]);
-    
-    //handle sign in with google 
-    function handleGoogleSignIn() {
 
+    function handleGoogleSignIn() {
         setIsGoogleSignInButtonClicked(true);
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then((result) => {
-                const user = result.user;  // retrive the user details in an array of Objects. 
-                console.log(user);
+                const user = result.user;
 
                 const q = query(fireStoreCollectionReference, where("userLoginId", "==", user.uid))
                 onSnapshot(q, (snapshot) => {
-                    const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })); // get the details in array.
+                    const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
                     
-                    // only add users details, if the user is new. 
-                    if(details.length === 0){
-                        // Extracting user's first name, last name, and email from Google 
+                    if (details.length === 0) {
                         const firstNameFromGoogle = user.displayName.split(' ')[0];
                         const lastNameFromGoogle = user.displayName.split(' ')[1];
                         const emailFromGoogle = user.email;
                         const userLoginId = user.uid;
-                        
-                        // this returns the add the details in firbase store.
-                        return addDoc(fireStoreCollectionReference,{
+
+                        return addDoc(fireStoreCollectionReference, {
                             userLoginId: userLoginId,
                             firstName: firstNameFromGoogle,
                             lastName: lastNameFromGoogle,
-                            email:emailFromGoogle
+                            email: emailFromGoogle
                         })
-                        .then(
-                            redirectToDashboard(user)
-                        )
-                        .catch((error) =>{
+                        .then(() => redirectToDashboard(user))
+                        .catch((error) => {
                             console.error('Error updating user details:', error);
-                        })
-                    }
-                    else{
-                        redirectToDashboard(user); // if the array is not empty than, redirect to dashboard. 
-                        console.log('User already exist, in firestore db.');
+                        });
+                    } else {
+                        redirectToDashboard(user);
+                        console.log('User already exist in firestore db.');
                     }
                 });
             })
@@ -132,12 +121,11 @@ export default function SignIn() {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.error('Google sign-in error:', errorCode, errorMessage);
-            })
+            });
     }
 
     return (
         <>
-        // making sure that the loading spinner run before retriving to dashboard.jsx
             <div className="mt-10 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in</h2>
@@ -223,3 +211,4 @@ export default function SignIn() {
         </>
     )
 }
+
