@@ -53,12 +53,13 @@ export default function Registration() {
         setErrorMessage('');
     };
 
-    const handleCreateAccountOnSubmit = (e) => {
+    const handleCreateAccountOnSubmit = async (e) => {
         e.preventDefault();
         setIsCreateButtonClicked(true);
 
         if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(title) || containsNumber(department) || containsNumber(role)) {
             setErrorMessage('Input field should not contain number.');
+            setIsCreateButtonClicked(false);
         } else {
             if (passwordRegistration === verifyPasswordRegistration) {
                 const formattedFirstName = formatInput(firstName);
@@ -68,38 +69,37 @@ export default function Registration() {
                 const formattedRole = formatInput(role);
                 const formattedEmail = emailRegistration.toLowerCase();
 
-                createUserWithEmailAndPassword(auth, formattedEmail, passwordRegistration)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        const userLoginId = user.uid;
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, formattedEmail, passwordRegistration);
+                    const user = userCredential.user;
+                    const userLoginId = user.uid;
 
-                        return addDoc(fireStoreCollectionReference, {
-                            userLoginId: userLoginId,
-                            firstName: formattedFirstName,
-                            lastName: formattedLastName,
-                            email: formattedEmail,
-                            department : formattedDepartment,
-                            title : formattedTitle,
-                            role: formattedRole
-                        });
-                    })
-                    .then(() => {
-                        redirectToDashboardPage();
-                    })
-                    .catch((error) => {
-                        var errorMessage = error.message;
-                        var errorCode = error.code;
-                        console.error("Sign up error:", errorCode);
-                        console.error("Sign up error:", errorMessage);
-                        if (errorCode == 'auth/weak-password') {
-                            alert('Password should be at least 6 characters');
-                        }
-                        else{
-                            alert('Email address is already in use. Please use a different email to get started.');
-                        }
+                    await addDoc(fireStoreCollectionReference, {
+                        userLoginId: userLoginId,
+                        firstName: formattedFirstName,
+                        lastName: formattedLastName,
+                        email: formattedEmail,
+                        department : formattedDepartment,
+                        title : formattedTitle,
+                        role: formattedRole
                     });
+
+                    redirectToDashboardPage();
+                } catch (error) {
+                    const errorMessage = error.message;
+                    const errorCode = error.code;
+                    console.error("Sign up error:", errorCode);
+                    console.error("Sign up error:", errorMessage);
+                    if (errorCode === 'auth/weak-password') {
+                        alert('Password should be at least 6 characters');
+                    } else {
+                        alert('Email address is already in use. Please use a different email to get started.');
+                    }
+                    setIsCreateButtonClicked(false);
+                }
             } else {
                 alert('Passwords do not match.');
+                setIsCreateButtonClicked(false);
             }
         }
     };

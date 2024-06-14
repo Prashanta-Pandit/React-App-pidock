@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, Ban, ImageUp, BriefcaseBusiness, Landmark } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { Mail, User, Pencil, LoaderCircle, ArrowLeft, Ban, ImageUp, BriefcaseBusiness, Landmark } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { fireStoreCollectionReference, firebaseStorage } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
@@ -72,49 +72,6 @@ export default function EditUserDetails() {
     // Regular expression to handle if the input consists of a number
     const containsNumber = (str) => /\d/.test(str);
 
-    // Function to handle input changes and reset error message
-    const handleInputChange = (setter) => (e) => {
-        setter(e.target.value);
-        setErrorMessage(''); // Clear the error message
-    };
-
-    // Function to handle form submission and update user details
-    function handleOnSubmitEditUserDetails(e) {
-        e.preventDefault();
-        setIsUpdateButtonClicked(true); // Indicate update in progress
-
-        if (userDetails.length > 0) {
-            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
-            const formattedFirstName = formatInput(firstName);
-            const formattedLastName = formatInput(lastName);
-            const formattedDepartment = formatInput(department);
-            const formattedRole = formatInput(role);
-
-            const userDataToUpdate = {
-                firstName: formattedFirstName,
-                lastName: formattedLastName,
-                department: formattedDepartment,
-                role: formattedRole,
-                profilePictureURL: profilePictureURL // Update the URL in Firestore
-            };
-
-            if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
-                setErrorMessage('Input field should not contain number.');
-            } else {
-                updateDoc(userDoc, userDataToUpdate)
-                    .then(() => {
-                        setTimeout(() => {
-                            setIsUpdateButtonClicked(false);
-                        }, 2000);
-                    })
-                    .catch(error => {
-                        console.error('Error updating user details:', error);
-                        setIsUpdateButtonClicked(false);
-                    });
-            }
-        }
-    }
-
     // Function to handle cancel button click
     function handleCancel(e) {
         e.preventDefault();
@@ -138,22 +95,60 @@ export default function EditUserDetails() {
         setRoleInputClicked(true);
     }
 
+    // Function to handle input changes and reset error message
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
+        setErrorMessage(''); // Clear the error message
+    };
+
     // Function to handle file upload for profile picture
-    function handleImageUpload(event) {
-        const image = event.target.files[0];
-        if (image) {
-            const imageRef = ref(firebaseStorage, `profilePictures/${image.name}`);
-            uploadBytes(imageRef, image)
-                .then(() => {
-                    return getDownloadURL(imageRef);
-                })
-                .then(downloadURL => {
-                    setProfilePictureURL(downloadURL);
-                    setImageInputClicked(true);
-                })
-                .catch(error => {
-                    console.error('Error uploading image:', error);
-                });
+    function handleImageUpload(image) {
+        const imageRef = ref(firebaseStorage, `profilePictures/${image.name}`);
+        return uploadBytes(imageRef, image)
+            .then(() => getDownloadURL(imageRef))
+            .catch(error => {
+                console.error('Error uploading image:', error);
+                throw error;
+            });
+    }
+
+    // Function to handle form submission and update user details
+    async function handleOnSubmitEditUserDetails(e) {
+        e.preventDefault();
+        setIsUpdateButtonClicked(true); // Indicate update in progress
+
+        try {
+            let newProfilePictureURL = profilePictureURL;
+            if (profilePicture) {
+                newProfilePictureURL = await handleImageUpload(profilePicture);
+                setProfilePictureURL(newProfilePictureURL);
+            }
+
+            if (userDetails.length > 0) {
+                const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
+                const formattedFirstName = formatInput(firstName);
+                const formattedLastName = formatInput(lastName);
+                const formattedDepartment = formatInput(department);
+                const formattedRole = formatInput(role);
+
+                const userDataToUpdate = {
+                    firstName: formattedFirstName,
+                    lastName: formattedLastName,
+                    department: formattedDepartment,
+                    role: formattedRole,
+                    profilePictureURL: newProfilePictureURL // Update the URL in Firestore
+                };
+
+                if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
+                    setErrorMessage('Input field should not contain number.');
+                } else {
+                    await updateDoc(userDoc, userDataToUpdate);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating user details:', error);
+        } finally {
+            setIsUpdateButtonClicked(false);
         }
     }
 
@@ -186,9 +181,9 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row justify-between'>
+                                        <div className='flex flex-row'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked} />
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -208,9 +203,9 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row justify-between'>
+                                        <div className='flex flex-row'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -230,9 +225,9 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].department}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row justify-between'>
+                                        <div className='flex flex-row'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].department}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleDepartmentInputClicked} />
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleDepartmentInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -252,9 +247,9 @@ export default function EditUserDetails() {
                                             placeholder={userDetails.length > 0 ? `${userDetails[0].role}` : 'No data'}
                                         />
                                     ) : (
-                                        <div className='flex flex-row justify-between'>
+                                        <div className='flex flex-row'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].role}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleRoleInputClicked} />
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleRoleInputClicked} />
                                         </div>
                                     )}
                                 </dd>
@@ -266,7 +261,9 @@ export default function EditUserDetails() {
                                     <span className="ml-2">Email</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                    <div className='flex flex-row'>
+                                        <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                    </div>
                                 </dd>
                             </div>
                             {/* Profile Picture field */}
@@ -276,44 +273,42 @@ export default function EditUserDetails() {
                                     <span className="ml-2">Profile Picture</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    <div className="flex flex-row justify-between">
-                                        {imageInputClicked ? (
-                                            <input
-                                                type="file"
-                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                onChange={handleImageUpload}
-                                            />
-                                        ) : (
-                                            <div className="flex items-center">
-                                                {profilePictureURL ? (
-                                                    <img src={profilePictureURL} alt="Profile" className="w-10 h-10 rounded-full mr-4" />
-                                                ) : (
-                                                    <LoaderCircle className='text-gray-500 animate-spin' />
-                                                )}
-                                                <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
-                                            </div>
-                                        )}
-                                    </div>
+                                    {imageInputClicked ? (
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setProfilePicture(e.target.files[0]);
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className='flex flex-row'>
+                                            <p>{profilePictureURL ? <img src={profilePictureURL} alt="Profile" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
+                                        </div>
+                                    )}
                                 </dd>
                             </div>
                         </dl>
                     </div>
-                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                    <div className="flex items-center justify-end space-x-4">
                         <button
                             type="button"
-                            className="text-sm font-semibold leading-6 text-gray-900"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-white py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-slate-300 focus:outline-none"
                             onClick={handleCancel}
                         >
-                            Cancel
+                            <ArrowLeft className="mr-2 text-black" /> back
                         </button>
                         <button
                             type="submit"
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-black"
                         >
                             {isUpdateButtonClicked ? (
-                                <LoaderCircle className='text-gray-500 animate-spin' />
+                                <LoaderCircle className="mr-2 animate-spin" />
                             ) : (
-                                'Update'
+                                <>Update</>
                             )}
                         </button>
                     </div>
@@ -322,5 +317,6 @@ export default function EditUserDetails() {
         )
     );
 }
+
 
 

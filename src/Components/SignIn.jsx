@@ -2,20 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
 import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
-import { onSnapshot ,addDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-
-import { LoaderCircle } from 'lucide-react'
-//favicon icons and fontawesome
+import { onSnapshot, addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { LoaderCircle } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-
 import Footer from "./Footer";
 
 export default function SignIn() {
-
     const [isSignInButtonClicked, setIsSignInButtonClicked] = useState(false);
-    const [isGoogleSignInButtonClicked, setIsGoogleSignInButtonClicked ] = useState(false);
-
+    const [isGoogleSignInButtonClicked, setIsGoogleSignInButtonClicked] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -29,7 +27,7 @@ export default function SignIn() {
 
         // Cleanup subscription on unmount
         return () => unsubscribe();
-    }, [auth]);
+    }, []);
 
     function handleCreateAccount() {
         navigate('/register');
@@ -45,84 +43,65 @@ export default function SignIn() {
         navigate('/portal/dashboard');
     }
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
     const formatEmail = (str) => {
-       return str.toLowerCase();
+        return str.toLowerCase();
     }
 
-    function handleSignInOnSubmit(e) {
+    const handleSignInOnSubmit = async (e) => {
         e.preventDefault();
-        
         setIsSignInButtonClicked(true);
 
-        const formatedEmail = formatEmail(email);
+        const formattedEmail = formatEmail(email);
 
-        signInWithEmailAndPassword(auth, formatedEmail, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                redirectToDashboard(user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.error('Login error:', errorCode, errorMessage);
-                if (errorCode === 'auth/invalid-credential') {
-                    alert('Wrong email or password. Or, if this is a google account, try Continue with google option.');
-                }
-            })
-    }
-    // useEffect runs the code, only if the certain action applied. for eg: the timer only runs when the Sign in button is clicked. 
-    useEffect(() => {
-        let timer;
-        if (isSignInButtonClicked) {
-            timer = setTimeout(() => {
-                setIsSignInButtonClicked(false);
-            }, 2000);
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, formattedEmail, password);
+            const user = userCredential.user;
+            redirectToDashboard(user);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Login error:', errorCode, errorMessage);
+            if (errorCode === 'auth/invalid-credential') {
+                alert('Wrong email or password. Or, if this is a Google account, try the "Continue with Google" option.');
+            }
+        } finally {
+            setIsSignInButtonClicked(false);
         }
-        return () => clearTimeout(timer);
-    }, [isSignInButtonClicked]);
+    };
 
-    function handleGoogleSignIn() {
+    const handleGoogleSignIn = async () => {
         setIsGoogleSignInButtonClicked(true);
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user;
 
-                const q = query(fireStoreCollectionReference, where("userLoginId", "==", user.uid))
-                onSnapshot(q, (snapshot) => {
-                    const details = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-                    
-                    if (details.length === 0) {
-                        const firstNameFromGoogle = user.displayName.split(' ')[0];
-                        const lastNameFromGoogle = user.displayName.split(' ')[1];
-                        const emailFromGoogle = user.email;
-                        const userLoginId = user.uid;
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
 
-                        return addDoc(fireStoreCollectionReference, {
-                            userLoginId: userLoginId,
-                            firstName: firstNameFromGoogle,
-                            lastName: lastNameFromGoogle,
-                            email: emailFromGoogle
-                        })
-                        .then(() => redirectToDashboard(user))
-                        .catch((error) => {
-                            console.error('Error updating user details:', error);
-                        });
-                    } else {
-                        redirectToDashboard(user);
-                        console.log('User already exist in firestore db.');
-                    }
+            const q = query(fireStoreCollectionReference, where("userLoginId", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+            const details = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
+            if (details.length === 0) {
+                const [firstNameFromGoogle, lastNameFromGoogle] = user.displayName.split(' ');
+                const emailFromGoogle = user.email;
+                const userLoginId = user.uid;
+
+                await addDoc(fireStoreCollectionReference, {
+                    userLoginId,
+                    firstName: firstNameFromGoogle,
+                    lastName: lastNameFromGoogle,
+                    email: emailFromGoogle
                 });
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.error('Google sign-in error:', errorCode, errorMessage);
-            });
-    }
+            }
+            redirectToDashboard(user);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Google sign-in error:', errorCode, errorMessage);
+        } finally {
+            setIsGoogleSignInButtonClicked(false);
+        }
+    };
 
     return (
         <>
@@ -158,19 +137,19 @@ export default function SignIn() {
                         </div>
 
                         <div>
-                          <button
-                            type="submit"
-                            className="flex w-full items-center justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black"
+                            <button
+                                type="submit"
+                                className="flex w-full items-center justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-black"
                             >
-                            {isSignInButtonClicked ? (
-                                <div className="flex items-center space-x-2">
-                                   <LoaderCircle className="animate-spin" />
-                                   <span>Signing you in...</span>
-                                </div>
-                            ) : (
-                                "Sign In"
-                            )}
-                          </button>
+                                {isSignInButtonClicked ? (
+                                    <div className="flex items-center space-x-2">
+                                        <LoaderCircle className="animate-spin" />
+                                        <span>Signing you in...</span>
+                                    </div>
+                                ) : (
+                                    "Sign In"
+                                )}
+                            </button>
                         </div>
                     </form>
 
@@ -194,13 +173,13 @@ export default function SignIn() {
                         {
                             !isGoogleSignInButtonClicked ? (
                                 <>
-                                   <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
-                                   <span className="relative">Continue with Google</span>
+                                    <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
+                                    <span className="relative">Continue with Google</span>
                                 </>
                             ):(
                                 <>
-                                   <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
-                                   <span className="relative font-light">Connecting you to Google services...</span>
+                                    <FontAwesomeIcon icon={faGoogle} className="mr-2" size='2xl' style={{color: "#ff0000"}} />
+                                    <span className="relative font-light">Connecting you to Google services...</span>
                                 </>
                             )
                         }
@@ -209,6 +188,7 @@ export default function SignIn() {
             </div>
             <Footer />
         </>
-    )
+    );
 }
+
 
