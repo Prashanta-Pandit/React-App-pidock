@@ -267,7 +267,7 @@ export default function EditUserDetails() {
                         >
                             {isUpdateButtonClicked ? (
                                 <div className='flex flex-row justify-center'>
-                                    <LoaderCircle className='w-6 h-6 animate-spin' />
+                                    <LoaderCircle className='w-4 h-4 animate-spin' />
                                     <span className="ml-2">Updating...</span>
                                 </div>
                             ) : (

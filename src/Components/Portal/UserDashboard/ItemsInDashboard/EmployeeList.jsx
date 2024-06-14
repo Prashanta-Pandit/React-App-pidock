@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { fireStoreCollectionReference } from '../../../FirebaseInitialisation';
+import { auth, fireStoreCollectionReference } from '../../../FirebaseInitialisation';
 import { onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
@@ -30,6 +31,7 @@ export default function TeamList() {
         deleteDoc(doc(fireStoreCollectionReference, documentId))
             .then(() => {
                 console.log(`Document with ID ${documentId} deleted successfully.`);
+
             })
             .catch((error) => {
                 console.error('Error deleting document:', error);
