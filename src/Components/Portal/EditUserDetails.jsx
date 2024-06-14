@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, Ban, BriefcaseBusiness, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { Mail, User, Pencil, LoaderCircle, Ban, ImageUp, BriefcaseBusiness, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import UserDetails from './UserDetails';
@@ -13,6 +13,7 @@ export default function EditUserDetails() {
     const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
     const [departmentInputClicked, setDepartmentInputClicked] = useState(false);
     const [roleInputClicked, setRoleInputClicked] = useState(false);
+    const [imageInputClicked, setImageInputClicked] = useState(false);
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -21,6 +22,7 @@ export default function EditUserDetails() {
     const [email, setEmail] = useState('');
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [profilePicture, setProfilePicture] = useState('');
 
     // Effect to retrieve signed-in user ID from local storage
     useEffect(() => {
@@ -137,6 +139,19 @@ export default function EditUserDetails() {
         setRoleInputClicked(true);
     }
 
+     // Function to handle file upload for profile picture
+     function handleImageUpload(event) {
+        setImageInputClicked(true);
+
+        const file = event.target.files[0];
+        if (file) {
+            // You can implement your upload logic here, such as using Firebase Storage
+            // For simplicity, let's assume we update state with a local URL
+            const imageUrl = URL.createObjectURL(file);
+            setUserImage(imageUrl);
+        }
+    }
+
     return (
         isCancelButtonClicked ? (
             <UserDetails /> // Render UserDetails component if cancel button is clicked
@@ -246,6 +261,28 @@ export default function EditUserDetails() {
                                         <div className='flex flex-row justify-between'>
                                             <p>{userDetails.length > 0 ? `${userDetails[0].role}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleRoleInputClicked} />
+                                        </div>
+                                    )}
+                                </dd>
+                            </div>
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <ImageUp />
+                                    <span className="ml-2">Profile Picture</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {imageInputClicked ? (
+                                        <input
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            value={profilePicture}
+                                            onChange={handleInputChange(setProfilePicture)}
+                                            type="file"
+                                            // placeholder= Add a users image name here
+                                        />
+                                    ) : (
+                                        <div className='flex flex-row justify-between'>
+                                            <p>{userDetails.length > 0 ? 'undefined' : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleImageUpload} />
                                         </div>
                                     )}
                                 </dd>
