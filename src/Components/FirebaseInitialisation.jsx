@@ -2,6 +2,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { getFirestore, collection } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC9tPDspMrJfQCIOheawZSki3TDaqSuVKU",
@@ -20,6 +21,7 @@ const firestoreDb = getFirestore(app); // getting the db ready for firestore
 
 //collection reference from firestoreDb
 const fireStoreCollectionReference = collection(firestoreDb, 'employees') // this collection is being stored in the collection called collectionReference
+const firebaseStorage = getStorage(app);
 
 
-export { auth, fireStoreCollectionReference};
+export { auth, fireStoreCollectionReference, firebaseStorage};

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { auth, fireStoreCollectionReference } from '../../../FirebaseInitialisation';
+import { fireStoreCollectionReference } from '../../../FirebaseInitialisation';
 import { onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import { deleteUser } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
@@ -100,8 +99,8 @@ export default function TeamList() {
                               <div className="h-10 w-10 flex-shrink-0">
                                 <img
                                   className="h-10 w-10 rounded-full object-cover bg-gray-400"
-                                  // src={employee.image}
-                                  alt=''
+                                  src={employee.profilePictureURL}
+                                  alt='No image'
                                 />
                               </div>
                               <div className="ml-4">

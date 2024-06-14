@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, Ban, ImageUp, BriefcaseBusiness, Landmark  } from 'lucide-react'; // Import the Loader icon from lucide-react
-import { fireStoreCollectionReference } from '../FirebaseInitialisation';
+import { Mail, User, Pencil, LoaderCircle, Ban, ImageUp, BriefcaseBusiness, Landmark } from 'lucide-react'; // Import the Loader icon from lucide-react
+import { fireStoreCollectionReference, firebaseStorage } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
 import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
@@ -13,7 +14,10 @@ export default function EditUserDetails() {
     const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
     const [departmentInputClicked, setDepartmentInputClicked] = useState(false);
     const [roleInputClicked, setRoleInputClicked] = useState(false);
+
     const [imageInputClicked, setImageInputClicked] = useState(false);
+    const [profilePicture, setProfilePicture] = useState('');
+    const [profilePictureURL, setProfilePictureURL] = useState('');
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -22,7 +26,6 @@ export default function EditUserDetails() {
     const [email, setEmail] = useState('');
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [profilePicture, setProfilePicture] = useState('');
 
     // Effect to retrieve signed-in user ID from local storage
     useEffect(() => {
@@ -45,6 +48,7 @@ export default function EditUserDetails() {
                     setEmail(details[0].email);
                     setDepartment(details[0].department);
                     setRole(details[0].role);
+                    setProfilePictureURL(details[0].profilePictureURL || 'no image');
                 }
             });
             return () => unsubscribe();
@@ -60,12 +64,12 @@ export default function EditUserDetails() {
         }
     }, [isUpdateButtonClicked]);
 
-    //format the user input to proper form
+    // Format the user input to proper form
     const formatInput = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
-    // regular expression to handle if the input consist number. 
+    // Regular expression to handle if the input consists of a number
     const containsNumber = (str) => /\d/.test(str);
 
     // Function to handle input changes and reset error message
@@ -78,37 +82,32 @@ export default function EditUserDetails() {
     function handleOnSubmitEditUserDetails(e) {
         e.preventDefault();
         setIsUpdateButtonClicked(true); // Indicate update in progress
-        if (userDetails.length > 0) {
 
-            // refernce the document that you want to update. 
-            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id); //const docRef = doc(db, "collectionName", "documentID");
+        if (userDetails.length > 0) {
+            const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
             const formattedFirstName = formatInput(firstName);
             const formattedLastName = formatInput(lastName);
             const formattedDepartment = formatInput(department);
             const formattedRole = formatInput(role);
-            //const formattedEmail = email.toLowerCase(); // Typically, emails are stored in lower case
 
             const userDataToUpdate = {
                 firstName: formattedFirstName,
                 lastName: formattedLastName,
                 department: formattedDepartment,
-                role: formattedRole
-                //email: formattedEmail
+                role: formattedRole,
+                profilePictureURL: profilePictureURL // Update the URL in Firestore
             };
 
             if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
                 setErrorMessage('Input field should not contain number.');
-            }
-            else {
-                updateDoc(userDoc, userDataToUpdate) // data update in firbase firestore.
+            } else {
+                updateDoc(userDoc, userDataToUpdate)
                     .then(() => {
-                        // Indicate update success and show "Done" for 2 seconds
                         setTimeout(() => {
                             setIsUpdateButtonClicked(false);
-                        }, 2000); // 2 sec
+                        }, 2000);
                     })
-                    .catch((error) => {
-                        // Handle errors and reset the update button state
+                    .catch(error => {
                         console.error('Error updating user details:', error);
                         setIsUpdateButtonClicked(false);
                     });
@@ -139,16 +138,22 @@ export default function EditUserDetails() {
         setRoleInputClicked(true);
     }
 
-     // Function to handle file upload for profile picture
-     function handleImageUpload(event) {
-        setImageInputClicked(true);
-
-        const file = event.target.files[0];
-        if (file) {
-            // You can implement your upload logic here, such as using Firebase Storage
-            // For simplicity, let's assume we update state with a local URL
-            const imageUrl = URL.createObjectURL(file);
-            setUserImage(imageUrl);
+    // Function to handle file upload for profile picture
+    function handleImageUpload(event) {
+        const image = event.target.files[0];
+        if (image) {
+            const imageRef = ref(firebaseStorage, `profilePictures/${image.name}`);
+            uploadBytes(imageRef, image)
+                .then(() => {
+                    return getDownloadURL(imageRef);
+                })
+                .then(downloadURL => {
+                    setProfilePictureURL(downloadURL);
+                    setImageInputClicked(true);
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
         }
     }
 
@@ -165,7 +170,7 @@ export default function EditUserDetails() {
                         <h3 className="text-xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
                     <div className="mt-6 border-t border-gray-100">
-                        <dl className="divide-y divide-gray-100">  
+                        <dl className="divide-y divide-gray-100">
                             {/* First Name field */}
                             <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
@@ -173,7 +178,6 @@ export default function EditUserDetails() {
                                     <span className="ml-2">First Name</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {/* using conditional rendering */}
                                     {firstNameInputClicked ? (
                                         <input
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -209,16 +213,6 @@ export default function EditUserDetails() {
                                             <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
                                         </div>
                                     )}
-                                </dd>
-                            </div>
-                            {/* Email field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <Mail />
-                                    <span className="ml-2">Email</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}
                                 </dd>
                             </div>
                             {/* Department field */}
@@ -265,50 +259,61 @@ export default function EditUserDetails() {
                                     )}
                                 </dd>
                             </div>
+                            {/* Email field */}
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <Mail />
+                                    <span className="ml-2">Email</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                </dd>
+                            </div>
+                            {/* Profile Picture field */}
                             <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
                                     <ImageUp />
                                     <span className="ml-2">Profile Picture</span>
                                 </dt>
                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {imageInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={profilePicture}
-                                            onChange={handleInputChange(setProfilePicture)}
-                                            type="file"
-                                            // placeholder= Add a users image name here
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row justify-between'>
-                                            <p>{userDetails.length > 0 ? 'undefined' : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleImageUpload} />
-                                        </div>
-                                    )}
+                                    <div className="flex flex-row justify-between">
+                                        {imageInputClicked ? (
+                                            <input
+                                                type="file"
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                onChange={handleImageUpload}
+                                            />
+                                        ) : (
+                                            <div className="flex items-center">
+                                                {profilePictureURL ? (
+                                                    <img src={profilePictureURL} alt="Profile" className="w-10 h-10 rounded-full mr-4" />
+                                                ) : (
+                                                    <LoaderCircle className='text-gray-500 animate-spin' />
+                                                )}
+                                                <Pencil className="cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
+                                            </div>
+                                        )}
+                                    </div>
                                 </dd>
                             </div>
                         </dl>
                     </div>
-                    {/* Button for Cancel and Update */}
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                         <button
+                            type="button"
+                            className="text-sm font-semibold leading-6 text-gray-900"
                             onClick={handleCancel}
-                            className="flex flex-row rounded-md bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-gray-200 border border-gray-500 border-solid">
+                        >
                             Cancel
                         </button>
-
                         <button
                             type="submit"
-                            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-800"
-                            disabled={isUpdateButtonClicked}
+                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             {isUpdateButtonClicked ? (
-                                <div className='flex flex-row justify-center'>
-                                    <LoaderCircle className='w-4 h-4 animate-spin' />
-                                    <span className="ml-2">Updating...</span>
-                                </div>
+                                <LoaderCircle className='text-gray-500 animate-spin' />
                             ) : (
-                                <div>Update</div>
+                                'Update'
                             )}
                         </button>
                     </div>
