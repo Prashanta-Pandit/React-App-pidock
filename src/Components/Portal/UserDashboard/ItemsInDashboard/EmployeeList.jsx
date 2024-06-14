@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { fireStoreCollectionReference } from '../../../FirebaseInitialisation';
 import { onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-import AddEmployeeButton from './AddEmployeeButton';
 
 export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
@@ -25,18 +24,20 @@ export default function TeamList() {
     return () => unsubscribe(); // clean up the listener.
   }, []);
 
-  const deleteEmployee = (documentId) => {
-    // firebase delete features. 
-    deleteDoc(doc(fireStoreCollectionReference, documentId));
-    console.log(signedInUserId);
-    
-  };
-
-  function detectTheSignInUserDocumentList(){
-    employeeDetails.map(()=>{
-      
-    })
-  }
+  const deleteEmployee = (documentId, employeeLoginId) => {
+    if (employeeLoginId !== signedInUserId) {
+        // Firebase delete feature
+        deleteDoc(doc(fireStoreCollectionReference, documentId))
+            .then(() => {
+                console.log(`Document with ID ${documentId} deleted successfully.`);
+            })
+            .catch((error) => {
+                console.error('Error deleting document:', error);
+            });
+    } else {
+        console.log('This user is Logged in to this portal.');
+    }
+};
 
   return (
     <>
@@ -120,8 +121,8 @@ export default function TeamList() {
                           </td>
                           <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
                             <Trash2 
-                              className='cursor-pointer size-5 text-red-700 hover:text-blue-700' 
-                              onClick={() => deleteEmployee(employee.id)}
+                              className={`cursor-pointer size-5 ${employee.userLoginId === signedInUserId ? 'text-gray-400' : 'text-red-700 hover:text-blue-700'}` }
+                              onClick={() => deleteEmployee(employee.id, employee.userLoginId)}
                             />
                           </td>
                         </tr>
