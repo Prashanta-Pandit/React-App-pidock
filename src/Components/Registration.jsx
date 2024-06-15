@@ -53,7 +53,7 @@ export default function Registration() {
         setErrorMessage('');
     };
 
-    const handleCreateAccountOnSubmit = async (e) => {
+    async function handleCreateAccountOnSubmit(e){
         e.preventDefault();
         setIsCreateButtonClicked(true);
 
