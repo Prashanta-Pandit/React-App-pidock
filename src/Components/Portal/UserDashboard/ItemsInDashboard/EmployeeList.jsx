@@ -96,7 +96,7 @@ export default function TeamList() {
                                 <img
                                   className="h-10 w-10 rounded-full object-cover bg-gray-400"
                                   src={employee.profilePictureURL}
-                                  alt='No image'
+                            
                                 />
                               </div>
                               <div className="ml-4">
