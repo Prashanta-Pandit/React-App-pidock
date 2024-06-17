@@ -23,9 +23,6 @@ export default function Registration() {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [title, setTitle] = useState('');
-    const [department, setDepartment] = useState('');
-    const [role, setRole] = useState('');
     const [emailRegistration, setEmailRegistration] = useState('');
     const [passwordRegistration, setPasswordRegistration] = useState('');
     const [verifyPasswordRegistration, setVerifyPasswordRegistration] = useState('');
@@ -64,9 +61,6 @@ export default function Registration() {
             if (passwordRegistration === verifyPasswordRegistration) {
                 const formattedFirstName = formatInput(firstName);
                 const formattedLastName = formatInput(lastName);
-                const formattedTitle = formatInput(title);
-                const formattedDepartment = formatInput(department);
-                const formattedRole = formatInput(role);
                 const formattedEmail = emailRegistration.toLowerCase();
 
                 try {
@@ -79,9 +73,6 @@ export default function Registration() {
                         firstName: formattedFirstName,
                         lastName: formattedLastName,
                         email: formattedEmail,
-                        department : formattedDepartment,
-                        title : formattedTitle,
-                        role: formattedRole
                     });
 
                     redirectToDashboardPage();
@@ -124,17 +115,6 @@ export default function Registration() {
                         <div>
                             <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
                             <input id="last_name" name="last_name" type="text" required value={lastName} onChange={handleInputChange(setLastName)} className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
-                        </div>
-                    </div>
-                
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">Department</label>
-                            <input id="department" name="department" type="text" required value={department} onChange={handleInputChange(setDepartment)} className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
-                        </div>
-                        <div>
-                            <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">Role</label>
-                            <input id="role" name="role" type="text" required value={role} onChange={handleInputChange(setRole)} className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
                         </div>
                     </div>
                     <div>

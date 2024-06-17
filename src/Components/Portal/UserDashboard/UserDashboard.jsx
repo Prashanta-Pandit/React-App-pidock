@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fireStoreCollectionReference } from '../../FirebaseInitialisation';
-import { onSnapshot, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { LoaderCircle } from 'lucide-react';
 import EmployeesList from './ItemsInDashboard/EmployeeList';
 
