@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { fireStoreCollectionReference } from '../../../FirebaseInitialisation';
+import { fireStoreEmployeeCollectionReference } from '../../../FirebaseInitialisation';
 import { onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import AddEmployeeButton from './AddEmployeeButton';
 
 export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
-  const [signedInUserId, setSignedInUserId] = useState('');
-
-  useEffect(()=>{
-    const userId = localStorage.getItem('signedInUserUid');
-    if(userId){
-      setSignedInUserId(userId);
-    }});
   
   useEffect(() => {
-    const unsubscribe = onSnapshot(fireStoreCollectionReference, (snapshot) => {
+    const unsubscribe = onSnapshot(fireStoreEmployeeCollectionReference, (snapshot) => {
       const details = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -24,10 +18,9 @@ export default function TeamList() {
     return () => unsubscribe(); // clean up the listener.
   }, []);
 
-  const deleteEmployee = (documentId, employeeLoginId) => {
-    if (employeeLoginId !== signedInUserId) {
-        // Firebase delete feature
-        deleteDoc(doc(fireStoreCollectionReference, documentId))
+  const deleteEmployee = (documentId) => {
+
+        deleteDoc(doc(fireStoreEmployeeCollectionReference, documentId))
             .then(() => {
                 console.log(`Document with ID ${documentId} deleted successfully.`);
 
@@ -35,9 +28,6 @@ export default function TeamList() {
             .catch((error) => {
                 console.error('Error deleting document:', error);
             });
-    } else {
-        console.log('This user is Logged in to this portal.');
-    }
 };
 
   return (
@@ -50,9 +40,9 @@ export default function TeamList() {
               This is a list of all employees. You can add new employees, edit or delete existing ones.
             </p>
           </div>
-          {/* <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
+          <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
               <AddEmployeeButton />
-          </div> */}
+          </div>
         </div>
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -100,7 +90,7 @@ export default function TeamList() {
                                 <img
                                   className="h-10 w-10 rounded-full object-cover bg-gray-400"
                                   src={employee.profilePictureURL}
-                            
+                                  alt='no pic'
                                 />
                               </div>
                               <div className="ml-4">
@@ -120,10 +110,10 @@ export default function TeamList() {
                           <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-700 hidden md:table-cell">
                             {employee.role}
                           </td>
-                          <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                          <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium text-red-600">
                             <Trash2 
-                              className={`cursor-pointer size-5 ${employee.userLoginId === signedInUserId ? 'text-gray-400' : 'text-red-700 hover:text-blue-700'}` }
-                              onClick={() => deleteEmployee(employee.id, employee.userLoginId)}
+                              className='cursor-pointer size-5'
+                              onClick={() => deleteEmployee(employee.id)}
                             />
                           </td>
                         </tr>
