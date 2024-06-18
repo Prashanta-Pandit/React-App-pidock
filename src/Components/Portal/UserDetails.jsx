@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, BriefcaseBusiness, Handshake, Landmark } from 'lucide-react';
+import {LoaderCircle} from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-
-import EditUserDetails from './EditUserDetails';
 
 export default function Profile() {
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
-    const [isEditButtonClicked, setIsEditButtonClicked] = useState(false); // the edit button is false by default.
 
     useEffect(() => {
         const userId = localStorage.getItem('signedInUserUid'); // this is user id that is stored after signing in from signin page.
@@ -28,67 +25,35 @@ export default function Profile() {
         }
     }, [signedInUserId]); // Re-run this effect when signedInUserId changes
 
-    function editButtonClick() {
-        setIsEditButtonClicked(true);
-    }
-
     return (
         <>
-            {isEditButtonClicked ? (
-                <EditUserDetails />
-            ) : (
-                <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-                    <div>
-                        <div className="flex flex-row justify-between px-4 sm:px-0">
-                            <h3 className="text-xl font-bold leading-7 text-gray-900">Your details</h3>
-                            <button className="flex flex-row text-sm font-normal leading-6 text-blue-600 hover:underline" onClick={editButtonClick}>
-                                <Pencil className="size-5 mr-1" />
-                                <span>edit</span>
-                            </button>
-                        </div>                             
-                        <div className="mt-6 border-t border-gray-100">
-                            <dl className="divide-y divide-gray-100">
-                                {userDetails.length > 0 ? (
-                                    <>
-                                        <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                                <User />
-                                                <span className="ml-2">Full Name</span>
-                                            </dt>
-                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{`${userDetails[0].firstName} ${userDetails[0].lastName}`}</dd>
-                                        </div>
-                                        <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                                <Mail />
-                                                <span className="ml-2">Email address</span>
-                                            </dt>
-                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails[0].email}</dd>
-                                        </div>
-                                        <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                                <Landmark />
-                                                <span className="ml-2">Department</span>
-                                            </dt>
-                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails[0].department}</dd>
-                                        </div>
-                                        <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                                <BriefcaseBusiness />
-                                                <span className="ml-2">Role</span>
-                                            </dt>
-                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails[0].role}</dd>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div className="flex justify-center py-5">
-                                        <LoaderCircle className="text-gray-500 animate-spin" />
-                                    </div>
-                                )}
-                            </dl>
+            <div className="mt-16 flex min-h-full flex-col justify-center py-12 lg:px-8">
+                {userDetails.length > 0 ? (
+                    <>
+                        <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div className="relative h-48 bg-gray-300">
+                                <img className="absolute inset-0 object-cover w-full h-full" src={userDetails[0].profilePictureURL} alt="Background" />
+                            </div>
+                            <div className="relative flex items-center justify-center lg:justify-start  ml-10 -mt-12">
+                                <img className="h-36 w-36 rounded-full border-4 border-white shadow-lg" src={userDetails[0].profilePictureURL} alt="Profile Picture" />
+                            </div>
+                            <div className="text-center lg:text-left px-6 py-4">
+                                <h2 className="text-2xl font-semibold text-gray-800">{`${userDetails[0].firstName} ${userDetails[0].lastName}`}</h2>
+                                <p className="text-gray-600">{userDetails[0].email}</p>
+                                <p className="text-gray-600">{`${userDetails[0].department} (${userDetails[0].role})`}</p>
+                                <div className="mt-4">
+                                    <button className="bg-black text-white font-medium py-2 px-4 rounded-md">Add profile section</button>
+                                    <button className="bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-md ml-2">More...</button>
+                                </div>
+                            </div>
                         </div>
+                    </>
+                ) : (
+                    <div className="flex justify-center py-5">
+                        <LoaderCircle className="text-gray-500 animate-spin" />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </>
     );
 }
