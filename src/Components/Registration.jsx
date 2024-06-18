@@ -54,7 +54,7 @@ export default function Registration() {
         e.preventDefault();
         setIsCreateButtonClicked(true);
 
-        if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(title) || containsNumber(department) || containsNumber(role)) {
+        if (containsNumber(firstName) || containsNumber(lastName) ) {
             setErrorMessage('Input field should not contain number.');
             setIsCreateButtonClicked(false);
         } else {

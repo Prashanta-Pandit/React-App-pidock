@@ -50,7 +50,7 @@ export default function AddEmployeeModal() {
 
     const formattedFirstName = formatInput(firstName);
     const formattedLastName = formatInput(lastName);
-    const formattedDepartment = formatInput(department);
+    const formattedDepartment = department.toUpperCase();
     const formattedRole = formatInput(role);
     const formattedEmail = email.toLowerCase(); // typically form is formatted in lower case.
 
@@ -122,7 +122,7 @@ export default function AddEmployeeModal() {
                   name="firstName"
                   value={firstName}
                   onChange={handleInputChange(setFirstName)}
-                  className="mt-1 p-2 block w-full border rounded-md"
+                  className="mt-1 p-2 block w-full border rounded-md text-black"
                   required
                 />
               </div>
@@ -133,7 +133,7 @@ export default function AddEmployeeModal() {
                   name="lastName"
                   value={lastName}
                   onChange={handleInputChange(setLastName)}
-                  className="mt-1 p-2 block w-full border rounded-md"
+                  className="mt-1 p-2 block w-full border rounded-mdt text-black"
                   required
                 />
               </div>
@@ -144,7 +144,7 @@ export default function AddEmployeeModal() {
                   name="role"
                   value={role}
                   onChange={handleInputChange(setRole)}
-                  className="mt-1 p-2 block w-full border rounded-md"
+                  className="mt-1 p-2 block w-full border rounded-md text-black"
                   required
                 />
               </div>
@@ -155,7 +155,7 @@ export default function AddEmployeeModal() {
                   name="department"
                   value={department}
                   onChange={handleInputChange(setDepartment)}
-                  className="mt-1 p-2 block w-full border rounded-md"
+                  className="mt-1 p-2 block w-full border rounded-md text-black"
                   required
                 />
               </div>
@@ -166,7 +166,7 @@ export default function AddEmployeeModal() {
                   name="email"
                   value={email}
                   onChange={handleInputChange(setEmail)}
-                  className="mt-1 p-2 block w-full border rounded-md"
+                  className="mt-1 p-2 block w-full border rounded-md text-black"
                   required
                 />
               </div>
@@ -213,7 +213,7 @@ export default function AddEmployeeModal() {
         </div>
       )}
 
-      <button onClick={() => setIsModalVisible(true)}>
+      <button onClick={() => setIsModalVisible(true)} >
         Add Employee
       </button>
     </>

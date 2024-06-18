@@ -128,7 +128,7 @@ export default function EditUserDetails() {
                 const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
                 const formattedFirstName = formatInput(firstName);
                 const formattedLastName = formatInput(lastName);
-                const formattedDepartment = formatInput(department);
+                const formattedDepartment = department.toUpperCase();
                 const formattedRole = formatInput(role);
 
                 const userDataToUpdate = {

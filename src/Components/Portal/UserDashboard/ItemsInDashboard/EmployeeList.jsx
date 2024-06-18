@@ -39,10 +39,23 @@ export default function TeamList() {
     setIsDisplayModalOpen(true);
   }
 
+  // Regular expression to check if the input contains a number.
+  const containsNumber = (str) => /\d/.test(str);
+
+  const formatInput = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   function handleEditButtonClick(event, employee) {
     event.stopPropagation(); // Prevent triggering the row click event
     setSelectedEmployee(employee);
     setIsEditModalOpen(true);
+    setFirstName(employee.firstName);
+    setLastName(employee.lastName);
+    setDepartment(employee.department);
+    setRole(employee.role);
+    setEmail(employee.email);
+    setProfilePictureURL(employee.profilePictureURL);
   }
 
   const closeModal = () => {
@@ -83,28 +96,35 @@ export default function TeamList() {
     e.preventDefault();
     setIsUpdateButtonClicked(true);
 
-    try {
-      let newProfilePictureURL = profilePictureURL;
-      if (profilePicture) {
-        newProfilePictureURL = await handleImageUpload(profilePicture);
-        setProfilePictureURL(newProfilePictureURL);
-      }
-
-      await updateDoc(doc(fireStoreEmployeeCollectionReference, selectedEmployee.id), {
-        firstName: firstName,
-        lastName: lastName,
-        department: department,
-        role: role,
-        email: email,
-        profilePictureURL: newProfilePictureURL
-      });
-
-      setIsEditModalOpen(false);
+    //check for input valiadation.
+    if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
+      setErrorMessage('Input field should not contain number.');
       setIsUpdateButtonClicked(false);
-      setSelectedEmployee(null);
-    } catch (error) {
-      console.error('Error updating document:', error);
-      setErrorMessage('Error updating document');
+    } else {
+
+        try {
+          let newProfilePictureURL = profilePictureURL;
+          if (profilePicture) {
+            newProfilePictureURL = await handleImageUpload(profilePicture);
+            setProfilePictureURL(newProfilePictureURL);
+          }
+
+          await updateDoc(doc(fireStoreEmployeeCollectionReference, selectedEmployee.id), {
+            firstName: formatInput(selectedEmployee.firstName) || selectedEmployee.firstName,  // the default value in a input is : selectedEmployee.firstname if the user dont make any changes. 
+            lastName: formatInput(selectedEmployee.lastName) || selectedEmployee.lastName,
+            department: department.toUpperCase() || selectedEmployee.department,
+            role: formatInput(role) || selectedEmployee.role,
+            email: email.toLowerCase() || selectedEmployee.email,
+            profilePictureURL: newProfilePictureURL
+          });
+
+          setIsEditModalOpen(false);
+          setIsUpdateButtonClicked(false);
+          setSelectedEmployee(null);
+        } catch (error) {
+          console.error('Error updating document:', error);
+          setErrorMessage('Error updating document');
+        }
     }
   }
 
@@ -193,126 +213,109 @@ export default function TeamList() {
           </div>
         </div>
       </section>
-      {/* Display Modal */}
-      {isDisplayModalOpen && selectedEmployee && (
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div className="bg-white rounded-lg p-8 z-50 max-w-lg w-full">
-              <div className='flex flex-row justify-between items-center'>
-                <X className="cursor-pointer text-gray-700 hover:bg-red-600 hover:text-white" onClick={closeModal}/>
-              </div>
-              <div className="flex justify-center mb-4">
-                <img
-                  className="h-32 w-32 rounded-full object-cover border-2 border-gray-300"
-                  src={selectedEmployee.profilePictureURL}
-                  alt='No image'
-                /> 
-              </div>
-              <div className="mb-4 text-center">
-                <h3 className="text-lg font-semibold">{selectedEmployee.firstName} {selectedEmployee.lastName}</h3>
-                <p className="text-sm text-gray-500">{selectedEmployee.department}</p>
-              </div>
-              <div className="mb-4 text-center">
-                <p className="text-sm text-gray-500">{selectedEmployee.role}</p>
-              </div>
-              <div className="mb-4 text-center">
-                <p className="text-sm text-gray-500">{selectedEmployee.email}</p>
-              </div>
+
+      {isDisplayModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg w-96">
+            <div className="flex justify-end">
+              <X className="cursor-pointer" onClick={closeModal} />
+            </div>
+            <div className="flex flex-col items-center">
+              <img className="h-40 w-40 rounded-full object-cover mb-4" src={selectedEmployee.profilePictureURL} alt='No image' />
+              <h2 className="text-2xl font-semibold mb-2">{selectedEmployee.firstName} {selectedEmployee.lastName}</h2>
+              <p className="text-gray-700 mb-2">{selectedEmployee.email}</p>
+              <p className="text-gray-700 mb-2">{selectedEmployee.department}</p>
+              <p className="text-gray-700">{selectedEmployee.role}</p>
             </div>
           </div>
+        </div>
       )}
 
-      {/* Edit Modal */}
-      {isEditModalOpen && selectedEmployee && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-          <div className="bg-white rounded-lg p-6 z-50 max-w-sm w-full relative">
-              <div className='flex flex-row justify-between items-center'>
-                <X className="cursor-pointer text-gray-700 hover:bg-red-600 hover:text-white" onClick={closeModal}/>
-              </div>
-            <h2 className="text-xl font-semibold mb-4 text-center">Edit Details</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="flex justify-center mb-4">
-                <div className="relative">
-                  <img
-                    src={selectedEmployee.profilePictureURL}
-                    alt="No Profile"
-                    className="w-24 h-24 rounded-full object-cover"
-                  />
-                  <input
-                    type="file"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    accept="image/*"
-                    onChange={(e) => setProfilePicture(e.target.files[0])}
-                  />
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">First Name</label>
+      {isEditModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg w-96">
+            <div className="flex justify-end">
+              <X className="cursor-pointer" onClick={closeModal} />
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="firstName" className="block text-m font-medium text-gray-700">First Name</label>
                 <input
-                type="text"
-                className="mt-1 block w-full border-0 border-b-2 border-gray-300 text-black placeholder:text-gray-400 focus:ring-0"
-                placeholder={selectedEmployee.firstName}
-                value={selectedEmployee.firstName}
-                onChange={handleInputChange(setFirstName)}
-              />
-
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                <input
+                  id="firstName"
                   type="text"
-                  className="mt-1 block w-full border-0 border-b-2 border-gray-300 text-black placeholder:text-gray-400 focus:ring-0 "
-                  placeholder={selectedEmployee.lastName}
-                  value={selectedEmployee.lastName}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  value={firstName}
+                  onChange={handleInputChange(setFirstName)}
+                  placeholder={selectedEmployee.firstName}
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName" className="block text-m font-medium text-gray-700">Last Name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  value={lastName}
                   onChange={handleInputChange(setLastName)}
+                  placeholder={selectedEmployee.lastName}
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+              <div>
+                <label htmlFor="department" className="block text-m font-medium text-gray-700">Department</label>
                 <input
+                  id="department"
                   type="text"
-                  className="mt-1 block w-full border-0 border-b-2 border-gray-300 text-black placeholder:text-gray-400 focus:ring-0 "
-                  placeholder={selectedEmployee.email}
-                  value={selectedEmployee.email}
-                  onChange={handleInputChange(setEmail)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Department</label>
-                <input
-                  type="text"
-                  className="mt-1 block w-full border-0 border-b-2 border-gray-300 text-black placeholder:text-gray-400 focus:ring-0 "
-                  placeholder={selectedEmployee.department}
-                  value={selectedEmployee.department}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  value={department}
                   onChange={handleInputChange(setDepartment)}
+                  placeholder={selectedEmployee.department}
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Role</label>
+              <div>
+                <label htmlFor="role" className="block text-m font-medium text-gray-700">Role</label>
                 <input
+                  id="role"
                   type="text"
-                  className="mt-1 block w-full border-0 border-b-2 border-gray-300 text-black placeholder:text-gray-400 focus:ring-0"
-                  placeholder={selectedEmployee.role}
-                  value={selectedEmployee.role}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  value={role}
                   onChange={handleInputChange(setRole)}
+                  placeholder={selectedEmployee.role}
                 />
               </div>
-              <button
-                type="submit"
-                className="mt-4 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-400 hover:text-black w-full"
-                disabled={isUpdateButtonClicked}
-              >
-                Save
-              </button>
-              {errorMessage && (
-                <p className="mt-2 text-red-600 text-center">{errorMessage}</p>
-              )}
+              <div>
+                <label htmlFor="email" className="block text-m font-medium text-gray-700">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  value={email}
+                  onChange={handleInputChange(setEmail)}
+                  placeholder={selectedEmployee.email}
+                />
+              </div>
+              <div>
+                <label htmlFor="profilePicture" className="block text-m font-medium text-gray-700">Profile Picture</label>
+                <input
+                  id="profilePicture"
+                  type="file"
+                  className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  onChange={(e) => setProfilePicture(e.target.files[0])}
+                />
+              </div>
+              {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className={`bg-black text-white px-4 py-2 rounded-md shadow-md hover:bg-slate-400 hover:text-black ${isUpdateButtonClicked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isUpdateButtonClicked}
+                >
+                  {isUpdateButtonClicked ? 'Updating...' : 'Update'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
-     )}
-
+      )}
     </>
   );
 }
