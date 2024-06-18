@@ -240,8 +240,7 @@ export default function TeamList() {
               <img className="h-40 w-40 rounded-full object-cover mb-4" src={selectedEmployee.profilePictureURL} alt='No image' />
               <h2 className="text-2xl font-semibold mb-2">{selectedEmployee.firstName} {selectedEmployee.lastName}</h2>
               <p className="text-gray-700 mb-2">{selectedEmployee.email}</p>
-              <p className="text-gray-700 mb-2">{selectedEmployee.department}</p>
-              <p className="text-gray-700">{selectedEmployee.role}</p>
+              <p className="text-gray-700 mb-2 font-semibold">{`${selectedEmployee.department} (${selectedEmployee.role})`}</p>
             </div>
           </div>
         </div>
@@ -261,7 +260,7 @@ export default function TeamList() {
             <form onSubmit={handleSubmit}>
                 <div className="mb-4 flex space-x-4">
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="firstName">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="firstName">
                       First Name
                     </label>
                     <input
@@ -269,11 +268,11 @@ export default function TeamList() {
                       id="firstName"
                       value={firstName}
                       onChange={handleInputChange(setFirstName)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      className="mt-1 p-2 block w-full border rounded-mdt text-gray-500"
                     />
                   </div>
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="lastName">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="lastName">
                       Last Name
                     </label>
                     <input
@@ -281,13 +280,13 @@ export default function TeamList() {
                       id="lastName"
                       value={lastName}
                       onChange={handleInputChange(setLastName)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      className="mt-1 p-2 block w-full border rounded-mdt text-gray-500"
                     />
                   </div>
                 </div>
                 <div className="mb-4 flex space-x-4">
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="department">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="department">
                       Department
                     </label>
                     <input
@@ -299,7 +298,7 @@ export default function TeamList() {
                     />
                   </div>
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="role">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="role">
                       Role
                     </label>
                     <input
@@ -307,13 +306,13 @@ export default function TeamList() {
                       id="role"
                       value={role}
                       onChange={handleInputChange(setRole)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      className="mt-1 p-2 block w-full border rounded-mdt text-gray-500"
                     />
                   </div>
                 </div>
                 <div className="mb-4 flex space-x-4">
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="email">
                       Email
                     </label>
                     <input
@@ -325,14 +324,14 @@ export default function TeamList() {
                     />
                   </div>
                   <div className="w-1/2">
-                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="profilePicture">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="profilePicture">
                       Profile Picture
                     </label>
                     <input
                       type="file"
                       id="profilePicture"
                       onChange={(e) => setProfilePicture(e.target.files[0])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      className="mt-1 p-2 block w-full border rounded-mdt text-gray-500"
                     />
                   </div>
                 </div>
@@ -342,7 +341,7 @@ export default function TeamList() {
                 <div className="flex justify-end space-x-4">
                   <button
                     type="button"
-                    className="hover:bg-gray-300 hover:text-black text-black py-2 px-4 rounded"
+                    className="mr-2 rounded-md bg-white px-4 py-2 text-sm text-black shadow-sm hover:bg-gray-200 border border-gray-500"
                     onClick={closeModal}
                   >
                     Cancel
