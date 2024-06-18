@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, Pencil, X, LoaderCircle } from 'lucide-react';
+import { Trash2, Pencil, X } from 'lucide-react';
 import { fireStoreEmployeeCollectionReference, firebaseStorage } from '../../../FirebaseInitialisation';
 import { onSnapshot, doc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
@@ -10,16 +10,13 @@ export default function TeamList() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isDisplayModalOpen, setIsDisplayModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const [profilePicture, setProfilePicture] = useState(null);
   const [profilePictureURL, setProfilePictureURL] = useState('');
   const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-<<<<<<< HEAD
 
 
-=======
-  const [isLoading, setIsLoading] = useState(false);
->>>>>>> allowtheUsertoEditEmployeesDetails
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [department, setDepartment] = useState('');
@@ -98,22 +95,13 @@ export default function TeamList() {
   async function handleSubmit(e) {
     e.preventDefault();
     setIsUpdateButtonClicked(true);
-    setIsLoading(true);
 
-    // Check for input validation.
+    //check for input valiadation.
     if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
       setErrorMessage('Input field should not contain number.');
       setIsUpdateButtonClicked(false);
-      setIsLoading(false);
     } else {
-      try {
-        let newProfilePictureURL = profilePictureURL;
-        if (profilePicture) {
-          newProfilePictureURL = await handleImageUpload(profilePicture);
-          setProfilePictureURL(newProfilePictureURL);
-        }
 
-<<<<<<< HEAD
         try {
           let newProfilePictureURL = profilePictureURL;
           if (profilePicture) {
@@ -129,29 +117,14 @@ export default function TeamList() {
             email: email.toLowerCase() || selectedEmployee.email,
             profilePictureURL: newProfilePictureURL
           });
-=======
-        await updateDoc(doc(fireStoreEmployeeCollectionReference, selectedEmployee.id), {
-          firstName: formatInput(firstName) || selectedEmployee.firstName,  // the default value in a input is : selectedEmployee.firstname if the user dont make any changes. 
-          lastName: formatInput(lastName) || selectedEmployee.lastName,
-          department: department.toUpperCase() || selectedEmployee.department,
-          role: formatInput(role) || selectedEmployee.role,
-          email: email.toLowerCase() || selectedEmployee.email,
-          profilePictureURL: newProfilePictureURL
-        });
->>>>>>> allowtheUsertoEditEmployeesDetails
 
-        setTimeout(() => {
-          setIsLoading(false);
           setIsEditModalOpen(false);
           setIsUpdateButtonClicked(false);
           setSelectedEmployee(null);
-        }, 2000);
-      } catch (error) {
-        console.error('Error updating document:', error);
-        setErrorMessage('Error updating document');
-        setIsLoading(false);
-        setIsUpdateButtonClicked(false);
-      }
+        } catch (error) {
+          console.error('Error updating document:', error);
+          setErrorMessage('Error updating document');
+        }
     }
   }
 
@@ -166,7 +139,6 @@ export default function TeamList() {
             </p>
           </div>
           <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
-              {/* {<AddEmployeeButton addSubmitButtonClick={}/> }pass a prop here */}
               <AddEmployeeButton />
           </div>
         </div>
@@ -196,7 +168,6 @@ export default function TeamList() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-<<<<<<< HEAD
                       
                       {employeeDetails.map((employee) => (
                         <tr className='hover:bg-gray-100' key={employee.id} onClick={() => handleTableRowClick(employee)}>
@@ -208,56 +179,33 @@ export default function TeamList() {
                                   src={employee.profilePictureURL}
                                   alt='No image'
                                 />
-=======
-                      {isLoading ? (
-                        <tr>
-                        <td colSpan="5" className="text-center py-4">
-                          <div className="flex justify-center items-center">
-                            <LoaderCircle className='animate-spin' />
-                          </div>
-                        </td>
-                       </tr>
-                      ) : (
-                        employeeDetails.map((employee) => (
-                          <tr className='hover:bg-gray-100' key={employee.id} onClick={() => handleTableRowClick(employee)}>
-                            <td className="whitespace-nowrap px-4 py-4">
-                              <div className="flex items-center">
-                                <div className="h-10 w-10 flex-shrink-0">
-                                  <img
-                                    className="h-10 w-10 rounded-full object-cover bg-gray-400"
-                                    src={employee.profilePictureURL}
-                                    alt='No image'
-                                  />
-                                </div>
-                                <div className="ml-4">
-                                  <div className="text-m font-semibold text-gray-900">{employee.firstName} {employee.lastName}</div>
-                                  <div className="text-sm text-gray-700">{employee.email}</div>
-                                </div>
->>>>>>> allowtheUsertoEditEmployeesDetails
                               </div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <div className="text-sm text-gray-700"> {employee.department}</div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                Active
-                              </span>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <div className="text-sm text-gray-700">{employee.role}</div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 text-right flex pt-7 justify-center space-x-4">
-                              <button className="text-gray-500 hover:text-green-600" onClick={(event) => handleEditButtonClick(event, employee)}>
-                                <Pencil size={18} />
-                              </button>
-                              <button className="text-gray-500 hover:text-red-600" onClick={(event) => deleteEmployee(event, employee.id)}>
-                                <Trash2 size={18} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))
-                      )}
+                              <div className="ml-4">
+                                <div className="text-m font-semibold text-gray-900">{employee.firstName} {employee.lastName}</div>
+                                <div className="text-sm text-gray-700">{employee.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
+                            <div className="text-sm text-gray-700"> {employee.department}</div>
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
+                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                              Active
+                            </span>
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-700 hidden md:table-cell">
+                            {employee.role}
+                          </td>
+                          <td className=" flex flex-row justify-between whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                            <Pencil className='cursor-pointer size-5 text-blue-600' onClick={(event) => handleEditButtonClick(event, employee)}/>
+                            <Trash2 
+                              className='cursor-pointer size-5 text-red-600'
+                              onClick={(event) => deleteEmployee(event, employee.id)}
+                            />
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -284,7 +232,6 @@ export default function TeamList() {
         </div>
       )}
 
-<<<<<<< HEAD
       {isEditModalOpen &&  (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-lg w-96">
@@ -294,132 +241,76 @@ export default function TeamList() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="firstName" className="block text-m font-medium text-gray-700">First Name</label>
-=======
-      {/* Edit Modal */}
-      {isEditModalOpen && selectedEmployee && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={closeModal}
-            >
-              <X size={18} />
-            </button>
-            <h2 className="text-lg font-semibold mb-4">Edit Employee Details</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="firstName">
-                  First Name
-                </label>
->>>>>>> allowtheUsertoEditEmployeesDetails
                 <input
-                  type="text"
                   id="firstName"
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={firstName}
                   onChange={handleInputChange(setFirstName)}
-<<<<<<< HEAD
                   placeholder={firstName}
-=======
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
->>>>>>> allowtheUsertoEditEmployeesDetails
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="lastName">
-                  Last Name
-                </label>
+              <div>
+                <label htmlFor="lastName" className="block text-m font-medium text-gray-700">Last Name</label>
                 <input
-                  type="text"
                   id="lastName"
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={lastName}
                   onChange={handleInputChange(setLastName)}
-<<<<<<< HEAD
                   placeholder={lastName}
-=======
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
->>>>>>> allowtheUsertoEditEmployeesDetails
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="department">
-                  Department
-                </label>
+              <div>
+                <label htmlFor="department" className="block text-m font-medium text-gray-700">Department</label>
                 <input
-                  type="text"
                   id="department"
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={department}
                   onChange={handleInputChange(setDepartment)}
-<<<<<<< HEAD
                   placeholder={department}
-=======
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
->>>>>>> allowtheUsertoEditEmployeesDetails
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="role">
-                  Role
-                </label>
+              <div>
+                <label htmlFor="role" className="block text-m font-medium text-gray-700">Role</label>
                 <input
-                  type="text"
                   id="role"
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={role}
                   onChange={handleInputChange(setRole)}
-<<<<<<< HEAD
                   placeholder={role}
-=======
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
->>>>>>> allowtheUsertoEditEmployeesDetails
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
-                  Email
-                </label>
+              <div>
+                <label htmlFor="email" className="block text-m font-medium text-gray-700">Email</label>
                 <input
-                  type="email"
                   id="email"
+                  type="email"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={email}
                   onChange={handleInputChange(setEmail)}
-<<<<<<< HEAD
                   placeholder={email}
-=======
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
->>>>>>> allowtheUsertoEditEmployeesDetails
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="profilePicture">
-                  Profile Picture
-                </label>
+              <div>
+                <label htmlFor="profilePicture" className="block text-m font-medium text-gray-700">Profile Picture</label>
                 <input
-                  type="file"
                   id="profilePicture"
+                  type="file"
+                  className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   onChange={(e) => setProfilePicture(e.target.files[0])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
                 />
               </div>
-              {errorMessage && (
-                <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
-              )}
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  className="hover:bg-gray-300 hover:text-black text-black py-2 px-4 rounded"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
+              {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+              <div className="flex justify-end">
                 <button
                   type="submit"
-                  className='bg-black hover:bg-gray-500 hover:text-black text-white py-2 px-4 rounded'
+                  className={`bg-black text-white px-4 py-2 rounded-md shadow-md hover:bg-slate-400 hover:text-black ${isUpdateButtonClicked ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={isUpdateButtonClicked}
                 >
-                  {isUpdateButtonClicked ? (
-                                <LoaderCircle className="mr-2 animate-spin" />
-                            ) : (
-                                <>Update</>
-                            )}
+                  {isUpdateButtonClicked ? 'Updating...' : 'Update'}
                 </button>
               </div>
             </form>
