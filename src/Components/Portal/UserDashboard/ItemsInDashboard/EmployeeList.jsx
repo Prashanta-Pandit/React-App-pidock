@@ -9,13 +9,13 @@ export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isDisplayModalOpen, setIsDisplayModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(true);
 
   const [profilePicture, setProfilePicture] = useState(null);
-  const [pictureName, setPictureName] = useState('');
   const [profilePictureURL, setProfilePictureURL] = useState('');
   const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -110,8 +110,8 @@ export default function TeamList() {
           }
 
           await updateDoc(doc(fireStoreEmployeeCollectionReference, selectedEmployee.id), {
-            firstName: formatInput(selectedEmployee.firstName) || selectedEmployee.firstName,  // the default value in a input is : selectedEmployee.firstname if the user dont make any changes. 
-            lastName: formatInput(selectedEmployee.lastName) || selectedEmployee.lastName,
+            firstName: formatInput(firstName) || selectedEmployee.firstName,  // the default value in a input is : selectedEmployee.firstname if the user dont make any changes. 
+            lastName: formatInput(lastName) || selectedEmployee.lastName,
             department: department.toUpperCase() || selectedEmployee.department,
             role: formatInput(role) || selectedEmployee.role,
             email: email.toLowerCase() || selectedEmployee.email,
@@ -168,6 +168,7 @@ export default function TeamList() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
+                      
                       {employeeDetails.map((employee) => (
                         <tr className='hover:bg-gray-100' key={employee.id} onClick={() => handleTableRowClick(employee)}>
                           <td className="whitespace-nowrap px-4 py-4">
@@ -246,7 +247,7 @@ export default function TeamList() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={firstName}
                   onChange={handleInputChange(setFirstName)}
-                  placeholder={selectedEmployee.firstName}
+                  placeholder={firstName}
                 />
               </div>
               <div>
@@ -257,7 +258,7 @@ export default function TeamList() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={lastName}
                   onChange={handleInputChange(setLastName)}
-                  placeholder={selectedEmployee.lastName}
+                  placeholder={lastName}
                 />
               </div>
               <div>
@@ -268,7 +269,7 @@ export default function TeamList() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={department}
                   onChange={handleInputChange(setDepartment)}
-                  placeholder={selectedEmployee.department}
+                  placeholder={department}
                 />
               </div>
               <div>
@@ -279,7 +280,7 @@ export default function TeamList() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={role}
                   onChange={handleInputChange(setRole)}
-                  placeholder={selectedEmployee.role}
+                  placeholder={role}
                 />
               </div>
               <div>
@@ -290,7 +291,7 @@ export default function TeamList() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                   value={email}
                   onChange={handleInputChange(setEmail)}
-                  placeholder={selectedEmployee.email}
+                  placeholder={email}
                 />
               </div>
               <div>
