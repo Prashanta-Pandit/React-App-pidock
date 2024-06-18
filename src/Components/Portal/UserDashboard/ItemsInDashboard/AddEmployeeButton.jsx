@@ -4,7 +4,8 @@ import { X, LoaderCircle } from 'lucide-react';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
 
-export default function AddEmployeeModal() {
+const AddEmployeeButton = () => {
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
   const [pictureName, setPictureName] = useState('');
@@ -174,7 +175,7 @@ export default function AddEmployeeModal() {
                 <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/*"            
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       setProfilePicture(e.target.files[0]);
@@ -219,6 +220,8 @@ export default function AddEmployeeModal() {
     </>
   );
 }
+
+export default AddEmployeeButton ;
 
 
 
