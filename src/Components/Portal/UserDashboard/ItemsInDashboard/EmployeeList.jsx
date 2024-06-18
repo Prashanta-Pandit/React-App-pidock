@@ -9,7 +9,7 @@ export default function TeamList() {
   const [employeeDetails, setEmployeeDetails] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isDisplayModalOpen, setIsDisplayModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [profilePicture, setProfilePicture] = useState(null);
   const [profilePictureURL, setProfilePictureURL] = useState('');
@@ -215,7 +215,7 @@ export default function TeamList() {
         </div>
       </section>
 
-      {isDisplayModalOpen && (
+      {isDisplayModalOpen &&  (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-lg w-96">
             <div className="flex justify-end">
@@ -232,7 +232,7 @@ export default function TeamList() {
         </div>
       )}
 
-      {isEditModalOpen && (
+      {isEditModalOpen &&  (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-lg w-96">
             <div className="flex justify-end">
