@@ -259,101 +259,108 @@ export default function TeamList() {
             </button>
             <h2 className="text-lg font-semibold mb-4">Edit Employee Details</h2>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="firstName">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  value={firstName}
-                  onChange={handleInputChange(setFirstName)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="lastName">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  value={lastName}
-                  onChange={handleInputChange(setLastName)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="department">
-                  Department
-                </label>
-                <input
-                  type="text"
-                  id="department"
-                  value={department}
-                  onChange={handleInputChange(setDepartment)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="role">
-                  Role
-                </label>
-                <input
-                  type="text"
-                  id="role"
-                  value={role}
-                  onChange={handleInputChange(setRole)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={handleInputChange(setEmail)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="profilePicture">
-                  Profile Picture
-                </label>
-                <input
-                  type="file"
-                  id="profilePicture"
-                  onChange={(e) => setProfilePicture(e.target.files[0])}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                />
-              </div>
-              {errorMessage && (
-                <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
-              )}
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  className="hover:bg-gray-300 hover:text-black text-black py-2 px-4 rounded"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className='bg-black hover:bg-gray-500 hover:text-black text-white py-2 px-4 rounded'
-                  disabled={isUpdateButtonClicked}
-                >
-                  {isUpdateButtonClicked ? (
-                                <LoaderCircle className="mr-2 animate-spin" />
-                            ) : (
-                                <>Update</>
-                            )}
-                </button>
-              </div>
-            </form>
+                <div className="mb-4 flex space-x-4">
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="firstName">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      value={firstName}
+                      onChange={handleInputChange(setFirstName)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="lastName">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      value={lastName}
+                      onChange={handleInputChange(setLastName)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                </div>
+                <div className="mb-4 flex space-x-4">
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="department">
+                      Department
+                    </label>
+                    <input
+                      type="text"
+                      id="department"
+                      value={department}
+                      onChange={handleInputChange(setDepartment)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="role">
+                      Role
+                    </label>
+                    <input
+                      type="text"
+                      id="role"
+                      value={role}
+                      onChange={handleInputChange(setRole)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                </div>
+                <div className="mb-4 flex space-x-4">
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={handleInputChange(setEmail)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-semibold mb-2" htmlFor="profilePicture">
+                      Profile Picture
+                    </label>
+                    <input
+                      type="file"
+                      id="profilePicture"
+                      onChange={(e) => setProfilePicture(e.target.files[0])}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                </div>
+                {errorMessage && (
+                  <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+                )}
+                <div className="flex justify-end space-x-4">
+                  <button
+                    type="button"
+                    className="hover:bg-gray-300 hover:text-black text-black py-2 px-4 rounded"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className='bg-black hover:bg-gray-500 hover:text-black text-white py-2 px-4 rounded'
+                    disabled={isUpdateButtonClicked}
+                  >
+                    {isUpdateButtonClicked ? (
+                      <LoaderCircle className="mr-2 animate-spin" />
+                    ) : (
+                      <>Update</>
+                    )}
+                  </button>
+                </div>
+              </form>
+
           </div>
         </div>
       )}
