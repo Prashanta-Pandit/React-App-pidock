@@ -38,13 +38,13 @@ export default function Profile() {
                                 <img className="h-36 w-36 rounded-full border-4 border-white shadow-lg" src={userDetails[0].profilePictureURL} alt="Profile Picture" />
                             </div>
                             <div className="text-center lg:text-left px-6 py-4">
-                                <h2 className="text-2xl font-semibold text-gray-800">{`${userDetails[0].firstName} ${userDetails[0].lastName}`}</h2>
+                                <h2 className=" text-2xl font-semibold text-gray-800">{`${userDetails[0].firstName} ${userDetails[0].lastName}`}</h2>
                                 <p className="text-gray-600">{userDetails[0].email}</p>
                                 <p className="text-gray-600">{`${userDetails[0].department} (${userDetails[0].role})`}</p>
-                                <div className="mt-4">
+                                {/* <div className="mt-4">
                                     <button className="bg-black text-white font-medium py-2 px-4 rounded-md">Add profile section</button>
                                     <button className="bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-md ml-2">More...</button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </>

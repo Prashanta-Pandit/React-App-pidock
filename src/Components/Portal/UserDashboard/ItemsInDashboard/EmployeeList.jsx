@@ -135,100 +135,102 @@ export default function TeamList() {
   return (
     <>
       <section className="mx-auto w-full max-w-7xl px-4 py-4">
-        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div>
-            <h2 className="text-lg font-semibold">Employees</h2>
-            <p className="mt-1 text-sm text-gray-700">
-              This is a list of all employees. You can add new employees, edit or delete existing ones.
-            </p>
-          </div>
-          <div className='bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white'>
-              {/* {<AddEmployeeButton addSubmitButtonClick={}/> }pass a prop here */}
-              <AddEmployeeButton />
-          </div>
-        </div>
-        <div className="mt-6 flex flex-col">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div className="border border-gray-300 md:rounded-lg">
-                <div className="max-h-96 overflow-y-auto">
-                  <table className="min-w-full divide-y divide-gray-200 relative">
-                    <thead className="bg-gray-300 sticky top-0 z-10">
-                      <tr>
-                        <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black">
-                          <span>Employee</span>
-                        </th>
-                        <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
-                          Department
-                        </th>
-                        <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
-                          Status
-                        </th>
-                        <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
-                          Role
-                        </th>
-                        <th scope="col" className="relative px-4 py-3.5">
-                          <span className="sr-only"></span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {isLoading ? (
-                        <tr>
-                        <td colSpan="5" className="text-center py-4">
-                          <div className="flex justify-center items-center">
-                            <LoaderCircle className='animate-spin' />
-                          </div>
-                        </td>
-                       </tr>
-                      ) : (
-                        employeeDetails.map((employee) => (
-                          <tr className='hover:bg-gray-100' key={employee.id} onClick={() => handleTableRowClick(employee)}>
-                            <td className="whitespace-nowrap px-4 py-4">
-                              <div className="flex items-center">
-                                <div className="h-10 w-10 flex-shrink-0">
-                                  <img
-                                    className="h-10 w-10 rounded-full object-cover bg-gray-400"
-                                    src={employee.profilePictureURL}
-                                    alt='No image'
-                                  />
-                                </div>
-                                <div className="ml-4">
-                                  <div className="text-m font-semibold text-gray-900">{employee.firstName} {employee.lastName}</div>
-                                  <div className="text-sm text-gray-700">{employee.email}</div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <div className="text-sm text-gray-700"> {employee.department}</div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                Active
-                              </span>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
-                              <div className="text-sm text-gray-700">{employee.role}</div>
-                            </td>
-                            <td className="whitespace-nowrap px-4 py-4 text-right flex pt-7 justify-center space-x-4">
-                              <button className="text-gray-500 hover:text-green-600" onClick={(event) => handleEditButtonClick(event, employee)}>
-                                <Pencil size={18} />
-                              </button>
-                              <button className="text-gray-500 hover:text-red-600" onClick={(event) => deleteEmployee(event, employee.id)}>
-                                <Trash2 size={18} />
-                              </button>
-                            </td>
+            <div className="employee-section flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-semibold">Employees</h2>
+                <p className="mt-1 text-sm text-gray-700">
+                  This is a list of all employees. You can add new employees, edit or delete existing ones.
+                </p>
+              </div>
+              <div className="flex justify-end">
+                <AddEmployeeButton />
+              </div>
+            </div>
+            <div className="mt-6 flex flex-col">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                  <div className="border border-gray-300 md:rounded-lg">
+                    <div className="max-h-96 overflow-y-auto">
+                      <table className="min-w-full divide-y divide-gray-200 relative">
+                        <thead className="bg-gray-300 sticky top-0 z-10">
+                          <tr>
+                            <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black">
+                              <span>Employee</span>
+                            </th>
+                            <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
+                              Department
+                            </th>
+                            <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
+                              Status
+                            </th>
+                            <th scope="col" className="px-4 py-3.5 text-left text-sm font-normal text-black hidden md:table-cell">
+                              Role
+                            </th>
+                            <th scope="col" className="relative px-4 py-3.5">
+                              <span className="sr-only"></span>
+                            </th>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                          {isLoading ? (
+                            <tr>
+                              <td colSpan="5" className="text-center py-4">
+                                <div className="flex justify-center items-center">
+                                  <LoaderCircle className='animate-spin' />
+                                </div>
+                              </td>
+                            </tr>
+                          ) : (
+                            employeeDetails.map((employee) => (
+                              <tr className='hover:bg-gray-100' key={employee.id} onClick={() => handleTableRowClick(employee)}>
+                                <td className="whitespace-nowrap px-4 py-4">
+                                  <div className="flex items-center">
+                                    <div className="h-10 w-10 flex-shrink-0">
+                                      <img
+                                        className="h-10 w-10 rounded-full object-cover bg-gray-400"
+                                        src={employee.profilePictureURL}
+                                        alt='No image'
+                                      />
+                                    </div>
+                                    <div className="ml-4">
+                                      <div className="text-m font-semibold text-gray-900">{employee.firstName} {employee.lastName}</div>
+                                      <div className="text-sm text-gray-700">{employee.email}</div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
+                                  <div className="text-sm text-gray-700"> {employee.department}</div>
+                                </td>
+                                <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
+                                  <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                    Active
+                                  </span>
+                                </td>
+                                <td className="whitespace-nowrap px-4 py-4 hidden md:table-cell">
+                                  <div className="text-sm text-gray-700">{employee.role}</div>
+                                </td>
+                                <td className="whitespace-nowrap px-4 py-4 text-right flex pt-7 justify-center space-x-4">
+                                  <button className="text-gray-500 hover:text-green-600" onClick={(event) => handleEditButtonClick(event, employee)}>
+                                    <Pencil size={18} />
+                                  </button>
+                                  <button className="text-gray-500 hover:text-red-600" onClick={(event) => deleteEmployee(event, employee.id)}>
+                                    <Trash2 size={18} />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
 
       {isDisplayModalOpen &&  (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

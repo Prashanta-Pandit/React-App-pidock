@@ -213,9 +213,9 @@ const AddEmployeeButton = () => {
           </div>
         </div>
       )}
-
-      <button onClick={() => setIsModalVisible(true)} >
-        Add Employee
+      <button className="add-employee-button bg-black text-white rounded-md shadow-md p-2 hover:bg-green-800 hover:text-white" onClick={() => setIsModalVisible(true)}>
+        <span className="hidden sm:inline">Add Employee</span>
+        <span className="inline sm:hidden">+</span>
       </button>
     </>
   );

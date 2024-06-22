@@ -295,13 +295,6 @@ export default function EditUserDetails() {
                     </div>
                     <div className="flex items-center justify-end space-x-4">
                         <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-white py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-slate-300 focus:outline-none"
-                            onClick={handleCancel}
-                        >
-                            <ArrowLeft className="mr-2 text-black" /> back
-                        </button>
-                        <button
                             type="submit"
                             className="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-black"
                         >
