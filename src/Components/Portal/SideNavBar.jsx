@@ -75,7 +75,7 @@ export default function SidebarNav() {
                     </div>
 
                 {/* Right Container with details*/}
-                <div className="flex-1 flex flex-col ml-4 lg:ml-64">
+                <div className="flex-1 flex flex-col ml-10 lg:ml-64 ">
                     {showProfile && <UserDetails />}
                     {showUserDashboard && <UserDashboard />}
                     {showUserSettings && <UserSettings />}
