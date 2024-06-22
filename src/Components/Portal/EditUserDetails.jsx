@@ -19,6 +19,9 @@ export default function EditUserDetails() {
     const [profilePicture, setProfilePicture] = useState('');
     const [profilePictureURL, setProfilePictureURL] = useState('');
 
+    const [coverPicture, setCoverPicture] = useState(null);
+    const [coverPictureURL, setCoverPictureURL] = useState(null);
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [department, setDepartment] = useState('');
@@ -112,6 +115,21 @@ export default function EditUserDetails() {
             });
     }
 
+    async function handleCoverPictureUpload(image){
+        const imageRef = ref(firebaseStorage, `employeeCoverPictures/${image.name}`);
+        try{
+          await uploadBytes(imageRef, image);
+          const downloadURL = await getDownloadURL(imageRef);
+          return downloadURL;
+    
+        }catch{
+          console.error('Error uploading image:', error);
+          throw error;
+    
+        }
+    
+      }
+
     // Function to handle form submission and update user details
     async function handleOnSubmitEditUserDetails(e) {
         e.preventDefault();
@@ -122,6 +140,12 @@ export default function EditUserDetails() {
             if (profilePicture) {
                 newProfilePictureURL = await handleImageUpload(profilePicture);
                 setProfilePictureURL(newProfilePictureURL);
+            }
+
+            let newCoverPictureURL = coverPictureURL;
+            if (coverPicture) {
+              newCoverPictureURL = await handleCoverPictureUpload(coverPicture);
+              setCoverPictureURL(newCoverPictureURL);
             }
 
             if (userDetails.length > 0) {
@@ -136,7 +160,8 @@ export default function EditUserDetails() {
                     lastName: formattedLastName,
                     department: formattedDepartment,
                     role: formattedRole,
-                    profilePictureURL: newProfilePictureURL // Update the URL in Firestore
+                    profilePictureURL: newProfilePictureURL, // Update the URL in Firestore
+                    coverPictureURL: newCoverPictureURL
                 };
 
                 if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
@@ -286,6 +311,31 @@ export default function EditUserDetails() {
                                     ) : (
                                         <div className='flex flex-row'>
                                             <p>{profilePictureURL ? <img src={profilePictureURL} alt="Profile" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
+                                        </div>
+                                    )}
+                                </dd>
+                            </div>
+                            {/* Cover Picture field */}
+                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
+                                    <ImageUp />
+                                    <span className="ml-2">Cover Picture</span>
+                                </dt>
+                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                    {imageInputClicked ? (
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setCoverPicture(e.target.files[0]);
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className='flex flex-row'>
+                                            <p>{coverPictureURL ? <img src={coverPictureURL} alt="Profile" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
                                         </div>
                                     )}

@@ -21,6 +21,7 @@ export default function TeamList() {
   const [role, setRole] = useState('');
   const [email, setEmail] = useState('');
 
+
   useEffect(() => {
     const unsubscribe = onSnapshot(fireStoreEmployeeCollectionReference, (snapshot) => {
       const details = snapshot.docs.map(doc => ({
@@ -78,12 +79,12 @@ export default function TeamList() {
     setErrorMessage('');
   };
 
-  async function handleImageUpload(image) {
+  async function handleProfilePictureUpload(image) {
     const imageRef = ref(firebaseStorage, `employeeProfilePictures/${image.name}`);
     try {
       await uploadBytes(imageRef, image);
       const downloadURL = await getDownloadURL(imageRef);
-      return downloadURL;
+      return downloadURL;  // this function returns a URL from the Firebase storage.
     } catch (error) {
       console.error('Error uploading image:', error);
       throw error;
@@ -104,7 +105,7 @@ export default function TeamList() {
       try {
         let newProfilePictureURL = profilePictureURL;
         if (profilePicture) {
-          newProfilePictureURL = await handleImageUpload(profilePicture);
+          newProfilePictureURL = await handleProfilePictureUpload(profilePicture);
           setProfilePictureURL(newProfilePictureURL);
         }
 
@@ -114,7 +115,7 @@ export default function TeamList() {
           department: department.toUpperCase() || selectedEmployee.department,
           role: formatInput(role) || selectedEmployee.role,
           email: email.toLowerCase() || selectedEmployee.email,
-          profilePictureURL: newProfilePictureURL
+          profilePictureURL: newProfilePictureURL,
         });
 
         setTimeout(() => {

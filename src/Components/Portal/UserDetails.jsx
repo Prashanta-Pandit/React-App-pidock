@@ -32,7 +32,7 @@ export default function Profile() {
                     <>
                         <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
                             <div className="relative h-48 bg-gray-300">
-                                <img className="absolute inset-0 object-cover w-full h-full" src={userDetails[0].profilePictureURL} alt="Background" />
+                                <img className="absolute inset-0 object-cover w-full h-full" src={userDetails[0].coverPictureURL} alt="Background" />
                             </div>
                             <div className="relative flex items-center justify-center lg:justify-start  ml-10 -mt-12">
                                 <img className="h-36 w-36 rounded-full border-4 border-white shadow-lg" src={userDetails[0].profilePictureURL} alt="Profile Picture" />
