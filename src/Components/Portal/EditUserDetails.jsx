@@ -181,7 +181,7 @@ export default function EditUserDetails() {
         isCancelButtonClicked ? (
             <UserDetails /> // Render UserDetails component if cancel button is clicked
         ) : (
-            <div className="mt-16 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
                     {errorMessage && (
                         <div className="text-red-500 text-sm">{errorMessage}</div>
@@ -310,7 +310,7 @@ export default function EditUserDetails() {
                                         />
                                     ) : (
                                         <div className='flex flex-row'>
-                                            <p>{profilePictureURL ? <img src={profilePictureURL} alt="Profile" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <p>{userDetails.length > 0  ? <img src={userDetails[0].profilePictureURL} alt="Profile Pic" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
                                         </div>
                                     )}
@@ -335,7 +335,7 @@ export default function EditUserDetails() {
                                         />
                                     ) : (
                                         <div className='flex flex-row'>
-                                            <p>{coverPictureURL ? <img src={coverPictureURL} alt="Profile" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
+                                            <p>{userDetails.length > 0 ? <img src={userDetails[0].coverPictureURL} alt="Cover Pic" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
                                             <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setImageInputClicked(true)} />
                                         </div>
                                     )}
