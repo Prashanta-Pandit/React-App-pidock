@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { LoaderCircle, ChevronUp, ChevronDown } from 'lucide-react';
+import { LoaderCircle, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+
+import EditUserDetails from './EditUserDetails';
 
 export default function Profile() {
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
     const [expandedSection, setExpandedSection] = useState(null); // State to manage expanded section
+    const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
+    const [isModelOpen, setIsModelOpen] = useState(false);
 
     useEffect(() => {
         const userId = localStorage.getItem('signedInUserUid'); // this is user id that is stored after signing in from signin page.
@@ -30,6 +34,15 @@ export default function Profile() {
         setExpandedSection(expandedSection === section ? null : section);
     };
 
+    function handleUpdateButtonClick(){
+        setIsModelOpen(true);
+        setIsUpdateButtonClicked(true);
+    }
+
+    function handleCloseModal() {
+        setIsModelOpen(false);
+      }
+
     return (
         <>  
             <div className="mt-16 flex min-h-full flex-col justify-center py-12 px-4 lg:px-8">
@@ -48,7 +61,7 @@ export default function Profile() {
                                 <p className="text-gray-600">{userDetails[0].email}</p>
                                 <p className="text-gray-600">{`${userDetails[0].department} (${userDetails[0].role})`}</p>
                                 <div className="mt-4 flex justify-end">
-                                    <button className="bg-black text-white text-sm font-medium p-2 rounded-md">Update</button>
+                                    <button className="bg-black text-white text-sm font-medium p-2 rounded-md" onClick={handleUpdateButtonClick}>Update</button>
                                     <button className="bg-gray-200 text-gray-700 text-sm font-medium p-2 rounded-md ml-2">More...</button>
                                 </div>
                             </div>
@@ -109,7 +122,21 @@ export default function Profile() {
                     </div>
                 )}
             </div>
+
+            {
+                isModelOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+                    <div className="bg-white p-3 rounded-md shadow-md max-w-3xl overflow-y-auto" style={{ maxHeight: '80vh' }}>
+                        <div className="flex justify-end">
+                            <X className=' cursor-pointer hover:bg-red-600 hover:text-white' onClick={handleCloseModal}/>
+                        </div>
+                        {/** If Update button */}
+                        {isUpdateButtonClicked && (<EditUserDetails />)}
+                    </div>
+                </div> )
+            }
         </>
     );
 }
+
 
