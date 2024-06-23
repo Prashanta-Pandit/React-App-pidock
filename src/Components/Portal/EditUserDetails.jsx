@@ -7,7 +7,6 @@ import UserDetails from './UserDetails';
 export default function EditUserDetails() {
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
-    const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
 
     const [profilePicture, setProfilePicture] = useState('');
     const [profilePictureURL, setProfilePictureURL] = useState('');
@@ -63,11 +62,6 @@ export default function EditUserDetails() {
     };
 
     const containsNumber = (str) => /\d/.test(str);
-
-    function handleCancel(e) {
-        e.preventDefault();
-        setIsCancelButtonClicked(true);
-    }
 
     const handleInputChange = (setter) => (e) => {
         setter(e.target.value);
@@ -148,9 +142,6 @@ export default function EditUserDetails() {
     
 
     return (
-        isCancelButtonClicked ? (
-            <UserDetails />
-        ) : (
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
                     {errorMessage && (
@@ -252,7 +243,6 @@ export default function EditUserDetails() {
                 </form>
             </div>
         )
-    );
 }
 
 
