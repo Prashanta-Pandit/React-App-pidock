@@ -96,7 +96,7 @@ export default function Profile() {
                                         {expandedSection === 'contactDetails' && (
                                             <div className="px-4 pb-5 sm:px-6 sm:pb-6">
                                                 <p className="text-gray-500">
-                                                   Please finc your contact details.
+                                                   Please find your contact details.
                                                 </p>
                                             </div>
                                         )}

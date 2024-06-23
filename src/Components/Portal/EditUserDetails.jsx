@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, User, Pencil, LoaderCircle, ArrowLeft, Ban, ImageUp, BriefcaseBusiness, Landmark } from 'lucide-react'; // Import the Loader icon from lucide-react
 import { fireStoreCollectionReference, firebaseStorage } from '../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
 import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
-    // State variables to manage user details and UI state
     const [signedInUserId, setSignedInUserId] = useState('');
     const [userDetails, setUserDetails] = useState([]);
     const [isCancelButtonClicked, setIsCancelButtonClicked] = useState(false);
-    const [firstNameInputClicked, setFirstNameInputClicked] = useState(false);
-    const [lastNameInputClicked, setLastNameInputClicked] = useState(false);
-    const [departmentInputClicked, setDepartmentInputClicked] = useState(false);
-    const [roleInputClicked, setRoleInputClicked] = useState(false);
 
-    const [profilePictureInputClicked, setProfilePictureInputClicked] = useState(false);
-    const [coverPictureInputClicked, setCoverPictureInputClicked] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
     const [profilePictureURL, setProfilePictureURL] = useState('');
 
@@ -31,7 +23,6 @@ export default function EditUserDetails() {
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Effect to retrieve signed-in user ID from local storage
     useEffect(() => {
         const userId = localStorage.getItem('signedInUserUid');
         if (userId) {
@@ -39,7 +30,6 @@ export default function EditUserDetails() {
         }
     }, []);
 
-    // Effect to fetch user details from Firestore when signed-in user ID is set
     useEffect(() => {
         if (signedInUserId) {
             const q = query(fireStoreCollectionReference, where("userLoginId", "==", signedInUserId));
@@ -68,44 +58,22 @@ export default function EditUserDetails() {
         }
     }, [isUpdateButtonClicked]);
 
-    // Format the user input to proper form
     const formatInput = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
-    // Regular expression to handle if the input consists of a number
     const containsNumber = (str) => /\d/.test(str);
 
-    // Function to handle cancel button click
     function handleCancel(e) {
         e.preventDefault();
-        setIsCancelButtonClicked(true); // Navigate back to UserDetails component
+        setIsCancelButtonClicked(true);
     }
 
-    // Handlers to manage input field clicks
-    function handleFirstNameInputClicked() {
-        setFirstNameInputClicked(true);
-    }
-
-    function handleLastNameInputClicked() {
-        setLastNameInputClicked(true);
-    }
-
-    function handleDepartmentInputClicked() {
-        setDepartmentInputClicked(true);
-    }
-
-    function handleRoleInputClicked() {
-        setRoleInputClicked(true);
-    }
-
-    // Function to handle input changes and reset error message
     const handleInputChange = (setter) => (e) => {
         setter(e.target.value);
-        setErrorMessage(''); // Clear the error message
+        setErrorMessage('');
     };
 
-    // Function to handle file upload for profile picture
     function handleProfilePictureUpload(image) {
         const imageRef = ref(firebaseStorage, `profilePictures/${image.name}`);
         return uploadBytes(imageRef, image)
@@ -119,52 +87,52 @@ export default function EditUserDetails() {
     async function handleCoverPictureUpload(image){
         const imageRef = ref(firebaseStorage, `employeeCoverPictures/${image.name}`);
         try{
-          await uploadBytes(imageRef, image);
-          const downloadURL = await getDownloadURL(imageRef);
-          return downloadURL;
-    
+            await uploadBytes(imageRef, image);
+            const downloadURL = await getDownloadURL(imageRef);
+            return downloadURL;
         }catch{
-          console.error('Error uploading image:', error);
-          throw error;
-    
+            console.error('Error uploading image:', error);
+            throw error;
         }
-    
-      }
+    }
 
-    // Function to handle form submission and update user details
     async function handleOnSubmitEditUserDetails(e) {
         e.preventDefault();
-        setIsUpdateButtonClicked(true); // Indicate update in progress
-
+        setIsUpdateButtonClicked(true);
+    
         try {
             let newProfilePictureURL = profilePictureURL;
+            // make sure that the both profile picture and cover picture run the code is they are not null. If no changes is done, the values are null. 
             if (profilePicture) {
                 newProfilePictureURL = await handleProfilePictureUpload(profilePicture);
                 setProfilePictureURL(newProfilePictureURL);
             }
-
+    
             let newCoverPictureURL = coverPictureURL;
             if (coverPicture) {
-              newCoverPictureURL = await handleCoverPictureUpload(coverPicture);
-              setCoverPictureURL(newCoverPictureURL);
+                newCoverPictureURL = await handleCoverPictureUpload(coverPicture);
+                setCoverPictureURL(newCoverPictureURL);
             }
-
+    
             if (userDetails.length > 0) {
                 const userDoc = doc(fireStoreCollectionReference, userDetails[0].id);
                 const formattedFirstName = formatInput(firstName);
                 const formattedLastName = formatInput(lastName);
                 const formattedDepartment = department.toUpperCase();
                 const formattedRole = formatInput(role);
-
+    
                 const userDataToUpdate = {
                     firstName: formattedFirstName,
                     lastName: formattedLastName,
                     department: formattedDepartment,
                     role: formattedRole,
-                    profilePictureURL: newProfilePictureURL, // Update the URL in Firestore
-                    coverPictureURL: newCoverPictureURL
+                    profilePictureURL: newProfilePictureURL
                 };
-
+    
+                if (coverPicture) {
+                    userDataToUpdate.coverPictureURL = newCoverPictureURL;
+                }
+    
                 if (containsNumber(firstName) || containsNumber(lastName) || containsNumber(department) || containsNumber(role)) {
                     setErrorMessage('Input field should not contain number.');
                 } else {
@@ -177,10 +145,11 @@ export default function EditUserDetails() {
             setIsUpdateButtonClicked(false);
         }
     }
+    
 
     return (
         isCancelButtonClicked ? (
-            <UserDetails /> // Render UserDetails component if cancel button is clicked
+            <UserDetails />
         ) : (
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <form className="space-y-6" onSubmit={handleOnSubmitEditUserDetails}>
@@ -190,159 +159,83 @@ export default function EditUserDetails() {
                     <div className="px-4 sm:px-0">
                         <h3 className="text-xl font-bold leading-7 text-gray-900">Update your details</h3>
                     </div>
-                    <div className="mt-6 border-t border-gray-100">
-                        <dl className="divide-y divide-gray-100">
-                            {/* First Name field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <User />
-                                    <span className="ml-2">First Name</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {firstNameInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={firstName}
-                                            onChange={handleInputChange(setFirstName)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].firstName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleFirstNameInputClicked} />
-                                        </div>
-                                    )}
-                                </dd>
+                    <div className="mt-6 border-t border-gray-100 space-y-4">
+                        {/* First Name and Last Name fields */}
+                        <div className="flex flex-row space-x-4">
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">First Name</label>
+                                    <input
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        value={firstName}
+                                        onChange={handleInputChange(setFirstName)}
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].firstName}` : 'No data'}
+                                    />
                             </div>
-                            {/* Last Name field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <User />
-                                    <span className="ml-2">Last Name</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {lastNameInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={lastName}
-                                            onChange={handleInputChange(setLastName)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].lastName}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleLastNameInputClicked} />
-                                        </div>
-                                    )}
-                                </dd>
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">Last Name</label>
+                                    <input
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        value={lastName}
+                                        onChange={handleInputChange(setLastName)}
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].lastName}` : 'No data'}
+                                    />
                             </div>
-                            {/* Department field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <Landmark />
-                                    <span className="ml-2">Department</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {departmentInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={department}
-                                            onChange={handleInputChange(setDepartment)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].department}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].department}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleDepartmentInputClicked} />
-                                        </div>
-                                    )}
-                                </dd>
+                        </div>
+                        {/* Department and Role fields */}
+                        <div className="flex flex-row space-x-4">
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">Department</label>
+                                    <input
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        value={department}
+                                        onChange={handleInputChange(setDepartment)}
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].department}` : 'No data'}
+                                    />
                             </div>
-                            {/* Role field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <BriefcaseBusiness />
-                                    <span className="ml-2">Role</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {roleInputClicked ? (
-                                        <input
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            value={role}
-                                            onChange={handleInputChange(setRole)}
-                                            placeholder={userDetails.length > 0 ? `${userDetails[0].role}` : 'No data'}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0 ? `${userDetails[0].role}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={handleRoleInputClicked} />
-                                        </div>
-                                    )}
-                                </dd>
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">Role</label>
+                                    <input
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        value={role}
+                                        onChange={handleInputChange(setRole)}
+                                        placeholder={userDetails.length > 0 ? `${userDetails[0].role}` : 'No data'}
+                                    />
                             </div>
-                            {/* Email field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <Mail />
-                                    <span className="ml-2">Email</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    <div className='flex flex-row'>
-                                        <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                    </div>
-                                </dd>
+                        </div>
+                        {/* Email field */}
+                        <div className="flex flex-col">
+                            <label className="text-sm font-bold leading-6 text-gray-900">Email</label>
+                            <div className='flex flex-row'>
+                                <p>{userDetails.length > 0 ? `${userDetails[0].email}` : <span className='text-gray-500'>Loading...</span>}</p>
                             </div>
-                            {/* Profile Picture field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <ImageUp />
-                                    <span className="ml-2">Profile Picture</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {profilePictureInputClicked ? (
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                if (e.target.files && e.target.files[0]) {
-                                                    setProfilePicture(e.target.files[0]);
-                                                }
-                                            }}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0  ? <img src={userDetails[0].profilePictureURL} alt="Profile Pic" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setProfilePictureInputClicked(true)} />
-                                        </div>
-                                    )}
-                                </dd>
+                        </div>
+                        {/* Profile Picture and Cover Picture fields */}
+                        <div className="flex flex-row space-x-4">
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">Profile Picture</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setProfilePicture(e.target.files[0]);
+                                            }
+                                        }}
+                                    />
                             </div>
-                            {/* Cover Picture field */}
-                            <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="flex flex-row text-sm font-bold leading-6 text-gray-900">
-                                    <ImageUp />
-                                    <span className="ml-2">Cover Picture</span>
-                                </dt>
-                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                    {coverPictureInputClicked ? (
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                if (e.target.files && e.target.files[0]) {
-                                                    setCoverPicture(e.target.files[0]);
-                                                }
-                                            }}
-                                        />
-                                    ) : (
-                                        <div className='flex flex-row'>
-                                            <p>{userDetails.length > 0 ? <img src={userDetails[0].coverPictureURL} alt="Cover Pic" className="h-10 w-10 rounded-full" /> : <LoaderCircle className='text-gray-500 animate-spin' />}</p>
-                                            <Pencil className=" ml-2 cursor-pointer size-4 text-blue-500 hover:animate-bounce" onClick={() => setCoverPictureInputClicked(true)} />
-                                        </div>
-                                    )}
-                                </dd>
+                            <div className="flex flex-col w-1/2">
+                                <label className="text-sm font-bold leading-6 text-gray-900">Cover Picture</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setCoverPicture(e.target.files[0]);
+                                            }
+                                        }}
+                                    />
                             </div>
-                        </dl>
+                        </div>
                     </div>
                     <div className="flex items-center justify-end space-x-4">
                         <button
@@ -350,7 +243,7 @@ export default function EditUserDetails() {
                             className="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-black"
                         >
                             {isUpdateButtonClicked ? (
-                                <LoaderCircle className="mr-2 animate-spin" />
+                                <span className="mr-2">Updating...</span>
                             ) : (
                                 <>Update</>
                             )}
@@ -361,6 +254,8 @@ export default function EditUserDetails() {
         )
     );
 }
+
+
 
 
 
