@@ -76,6 +76,7 @@ export default function Profile() {
                                     className="flex w-full items-center justify-between px-4 py-5 sm:p-6"
                                 >
                                     <span className="flex text-lg font-semibold text-black">Documents</span>
+                                    {/* toggle Up or down when clicked. */}
                                     {expandedSection === 'documents' ? 
                                         <ChevronUp className="h-5 w-5 text-gray-500" /> : 
                                         <ChevronDown className="h-5 w-5 text-gray-500" />
