@@ -240,7 +240,7 @@ export default function TeamList() {
               <X className="cursor-pointer" onClick={closeModal} />
             </div>
             <div className="flex flex-col items-center">
-              <img className="h-40 w-40 rounded-full object-cover mb-4" src={selectedEmployee.profilePictureURL} alt='No image' />
+              <img className="h-40 w-40 border border-gray-400 rounded-full object-cover mb-4" src={selectedEmployee.profilePictureURL} alt='No image' />
               <h2 className="text-2xl font-semibold mb-2">{selectedEmployee.firstName} {selectedEmployee.lastName}</h2>
               <p className="text-gray-700 mb-2">{selectedEmployee.email}</p>
               <p className="text-gray-700 mb-2 font-semibold">{`${selectedEmployee.department} (${selectedEmployee.role})`}</p>

@@ -69,7 +69,7 @@ export default function Profile() {
                         </div>
                         <section className="mt-4 space-y-4">
                             <div
-                                className="cursor-pointer border border-gray-300  rounded-md shadow-lg transition-all duration-200"
+                                className="cursor-pointer border border-gray-300 hover:border-gray-500 rounded-md shadow-lg transition-all duration-200"
                                 onClick={() => toggleSection('documents')}
                             >
                                 <button
@@ -91,7 +91,7 @@ export default function Profile() {
                                 )}
                             </div>
                             <div
-                                className="cursor-pointer border border-gray-300  rounded-md shadow-lg transition-all duration-200"
+                                className="cursor-pointer border border-gray-300 hover:border-gray-500 rounded-md shadow-lg transition-all duration-200"
                                 onClick={() => toggleSection('contactDetails')}
                             >
                                 <button
