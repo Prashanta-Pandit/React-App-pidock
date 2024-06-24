@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoaderCircle } from 'lucide-react';
-import SideNavBar from './SideNavBar';
-import ProfileTab from './ProfileTab';
+import SideNavBar from './SideNavBar/SideNavBar';
+import ProfileTab from './ProfileIcon/ProfileTab';
 import { auth } from '../FirebaseInitialisation';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { auth } from './FirebaseInitialisation';
+import { auth } from '../FirebaseInitialisation';
 import { sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 // import to manage the page navigation. 

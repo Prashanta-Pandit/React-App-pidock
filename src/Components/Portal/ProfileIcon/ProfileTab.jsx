@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { CircleUserRound, Headset, UserCog, LogOut, X } from 'lucide-react';
-import SignoutButton from '../SignOut/SignoutButton';
+import SignoutButton from '../../Authentication/SignOut/SignoutButton';
 import EditUserDetails from './EditUserDetails';
-import Help from '../Help';
+import Help from '../../TopNavBar/Help';
 import SupportChat from './SupportChat';
 
 export default function ProfileTab() {

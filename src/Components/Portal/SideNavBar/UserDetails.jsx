@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { LoaderCircle, ChevronUp, ChevronDown, X } from 'lucide-react';
-import { fireStoreCollectionReference } from '../FirebaseInitialisation';
+import { fireStoreCollectionReference } from '../../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
-
-import EditUserDetails from './EditUserDetails';
+import EditUserDetails from '../ProfileIcon/EditUserDetails';
 
 export default function Profile() {
     const [signedInUserId, setSignedInUserId] = useState('');

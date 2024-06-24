@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BarChart, UserRound, Settings, Menu } from 'lucide-react'; 
 import UserDetails from './UserDetails';
 import UserSettings from './Settings';
-import UserDashboard from './UserDashboard/UserDashboard';
+import UserDashboard from '../UserDashboard/UserDashboard';
 
 
 export default function SidebarNav() {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { fireStoreCollectionReference, firebaseStorage } from '../FirebaseInitialisation';
+import { fireStoreCollectionReference, firebaseStorage } from '../../FirebaseInitialisation';
 import { onSnapshot, query, where, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js';
-import UserDetails from './UserDetails';
 
 export default function EditUserDetails() {
     const [signedInUserId, setSignedInUserId] = useState('');

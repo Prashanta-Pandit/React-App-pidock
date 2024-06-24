@@ -1,15 +1,15 @@
 import './App.css';
 import Layout from './Components/Layout';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SignIn from './Components/SignIn';
-import Registration from './Components/Registration';
-import ForgotPassword from './Components/ForgotPassword';
+import SignIn from './Components/Authentication/SignIn';
+import Registration from './Components/Authentication/Registration';
+import ForgotPassword from './Components/Authentication/ForgotPassword';
 import Dashboard from './Components/Portal/PortalLayout';
-import Signout from './Components/SignOut/Signout';
-import UserDetails from './Components/Portal/UserDetails';
-import UserNotSignedIn from './Components/Portal/UserNotSignedIn';
-import EditUserDetails from './Components/Portal/EditUserDetails';
-import SidebarNav from './Components/Portal/SideNavBar';
+import Signout from './Components/Authentication/SignOut/Signout';
+import UserDetails from './Components/Portal/SideNavBar/UserDetails';
+import UserNotSignedIn from './Components/Authentication/UserNotSignedIn';
+import EditUserDetails from './Components/Portal/ProfileIcon/EditUserDetails';
+import SidebarNav from './Components/Portal/SideNavBar/SideNavBar';
 import Portal from './Components/Portal/PortalLayout';
 
 export default function App() {

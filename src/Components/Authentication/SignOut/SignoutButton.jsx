@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {auth} from '../FirebaseInitialisation';
+import {auth} from '../../FirebaseInitialisation';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function SignoutButton(){

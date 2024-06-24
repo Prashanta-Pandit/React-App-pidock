@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, fireStoreCollectionReference } from './FirebaseInitialisation';
+import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 import { addDoc } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { LoaderCircle } from 'lucide-react';
