@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { auth, fireStoreCollectionReference } from '../FirebaseInitialisation';
 import { signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
-import { onSnapshot, addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
+import { addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { LoaderCircle } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -19,7 +19,7 @@ export default function SignIn() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                redirectToDashboard(user);
+                redirectToDashboard();
             } else {
                 console.log('No user is signed in.');
             }
@@ -38,8 +38,7 @@ export default function SignIn() {
         navigate('/forgotPassword');
     }
 
-    function redirectToDashboard(signedInUser) {
-        localStorage.setItem('signedInUserUid', signedInUser.uid);
+    function redirectToDashboard() {
         navigate('/portal/dashboard');
     }
 

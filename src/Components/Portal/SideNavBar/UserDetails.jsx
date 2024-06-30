@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { LoaderCircle, ChevronUp, ChevronDown, X } from 'lucide-react';
-import { fireStoreCollectionReference } from '../../FirebaseInitialisation';
+import {auth, fireStoreCollectionReference } from '../../FirebaseInitialisation';
 import { onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import EditUserDetails from '../ProfileIcon/EditUserDetails';
+import { onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function Profile() {
     const [signedInUserId, setSignedInUserId] = useState('');
@@ -11,11 +12,15 @@ export default function Profile() {
     const [isUpdateButtonClicked, setIsUpdateButtonClicked] = useState(false);
     const [isModelOpen, setIsModelOpen] = useState(false);
 
-    useEffect(() => {
-        const userId = localStorage.getItem('signedInUserUid');
-        if (userId) {
-            setSignedInUserId(userId);
-        }
+    useEffect(()=>{
+        //setting the user ID for user who logged in.
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setSignedInUserId(user.uid);
+            } 
+        });
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {

@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { fireStoreCollectionReference } from '../../FirebaseInitialisation';
+import {auth, fireStoreCollectionReference } from '../../FirebaseInitialisation';
 import { query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
 import { LoaderCircle } from 'lucide-react';
 import EmployeesList from './ItemsInDashboard/EmployeeList';
+import { onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js';
 
 export default function UserDashboard() {
   const [signedInUserId, setSignedInUserId] = useState('');
   const [userDetails, setUserDetails] = useState([]); // the data receiver from Firebase is as a JSON format.
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const userId = localStorage.getItem('signedInUserUid'); // Get the user ID from local storage
-    if (userId) {
-      setSignedInUserId(userId);
-    }
-  }, []); // Empty dependency array means this runs once on mount
+  useEffect(()=>{
+    //setting the user ID for user who logged in.
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            setSignedInUserId(user.uid);
+        } 
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
