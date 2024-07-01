@@ -7,5 +7,5 @@ exports.randomNumber = functions.https.onRequest((request, response) => {
 });
 
 exports.toMagpies = functions.https.onRequest((request, response)=>{
-  response.redirect('https://magpies.online/');
+  response.redirect("https://magpies.online/");
 });
